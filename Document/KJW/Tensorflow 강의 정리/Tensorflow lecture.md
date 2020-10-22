@@ -13,7 +13,7 @@
     - 손 색상이 다르고 가위, 바위 보를 내는 방식이 모두 다름. (누구는 엄지와 검지를 이용해 가위를 새끼나와 약지를 이용해 가위를 냄.) 
     - 사람이 인식하는 것과 같은 방식으로 컴퓨터가 인식하면 어떨까가 머신러닝과 인공지능의 방향임.
 
-    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922150949635.png" alt="image-20200922150949635" style="zoom:80%;" />
+    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922150949635.png" alt="image-20200922150949635" style="zoom:80%;" />
 
 
 
@@ -23,7 +23,7 @@
 
   2. 이러한 규칙이 데이터를 처리하고 우리에게 답을 줌. (가위,바위, 보를 인식)
 
-     <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922151531042.png" alt="image-20200922151531042" style="zoom: 67%;" />
+     <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922151531042.png" alt="image-20200922151531042" style="zoom: 67%;" />
 
 - 머신러닝
 
@@ -31,19 +31,19 @@
 
   2. 이를 통해서 컴퓨터가 알아서 규칙을 알아냄.
 
-     <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922151633471.png" alt="image-20200922151633471" style="zoom:67%;" />
+     <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922151633471.png" alt="image-20200922151633471" style="zoom:67%;" />
 
   3. 데이터와 라벨을 통해서 가위,바위,보가 뭔지 알려줌. 그리고 컴퓨터가 패턴을 알아내도록 해서 서로 일치하는 것을 찾도록 함. 그러면 컴퓨터에서 가위, 바위, 보를 인식하는 걸 배움.
 
      - 즉, 패턴을 담고 있는 일련의 데이터를 제공하고 컴퓨터가 그러한 패턴을 배우도록 함.
 
-     <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922152134459.png" alt="image-20200922152134459" style="zoom:67%;" />
+     <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922152134459.png" alt="image-20200922152134459" style="zoom:67%;" />
 
      - 더 간단한 예시
 
        - x와 y사이에는 관계가 있음.  y=2x-1 이라는 걸 숫자들을 통해서 알게됌. 그리고 이를 다른 숫자에도 적용해보니 예상이 맞다는 걸 알 수 있음.
 
-       <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922152349653.png" alt="image-20200922152349653" style="zoom:67%;" />
+       <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922152349653.png" alt="image-20200922152349653" style="zoom:67%;" />
 
        - 아래에 있는 코드는 머신러닝 모델을 만드는 데 사용할 수 있음.
 
@@ -70,7 +70,7 @@
            - 답인 19에는 가깝지만 맞는 답은 아님. 그 이유는 훈련시킨 케이스가 6개밖에 안 되기 때문인데 이 케이스만으로는 일직선 관계로 보이지만 그 밖에 있는 값은 일직선 관계가 아닐 수 있음. 일직선이라는 매우 높은 확률은 있지만 확신할 수 없음.
                - 이럴 경우 확률이 예측으로 이어짐. 값이 19에 매우 가깝지만 정확히 19는 아님. 머신러닝에서 많이 볼 수 있는 예시임. (예측이기때문에  완벽한 정답이 아닌 정답에 가까울 확률로 예측을 한다? 이런 느낌인듯?)
        
-         <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922152629059.png" alt="image-20200922152629059" style="zoom:80%;" />
+         <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922152629059.png" alt="image-20200922152629059" style="zoom:80%;" />
 
 
 
@@ -96,7 +96,7 @@
 
   - 아래처럼 화질이 저래도 신발인걸 알 수 있으니 문제없음.
 
-    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922201607585.png" alt="image-20200922201607585" style="zoom:80%;" />
+    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922201607585.png" alt="image-20200922201607585" style="zoom:80%;" />
 
 
 
@@ -116,7 +116,7 @@
 
       2. 컴퓨터가 잘못 판단하는 걸 막기 위함.  특히 영어로 ankle boots 라고 달아놓으면 영어에 편향된 경향을 나타내게 됌. 하지만 숫자를 사용하면 나타나는 모든 언어를 이용해서 텍스트를 설명할 수 있음.
 
-    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922203852027.png" alt="image-20200922203852027" style="zoom:80%;" />
+    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922203852027.png" alt="image-20200922203852027" style="zoom:80%;" />
 
     ```python
     import tensorflow as tf
@@ -166,19 +166,19 @@
 
     - 뉴런의 개수를 증가시키면 학습하는 데 좀 더 오래 걸리지만 더 정확한 예측 결과를 얻을 수 있음.
 
-      <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922210118070.png" alt="image-20200922210118070" style="zoom:80%;" />
+      <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922210118070.png" alt="image-20200922210118070" style="zoom:80%;" />
 
   - `activation=tf.nn.relu` 의미: relu라고 부르며 128개 함수의 레이어에 있음. `정류 선형 유닛(rectified linear unit)`이라고도 불림. 
 
     - relu의 역할은 0보다 크면 해당 값을 return 하고 0보다 작으면 0을 return 함. 즉, 0보다 작은 값을 필터링 하는 역할을 함.
 
-    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922213218828.png" alt="image-20200922213218828" style="zoom:67%;" />
+    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922213218828.png" alt="image-20200922213218828" style="zoom:67%;" />
 
   - `activation=tf.nn.softmax`의미: 아까 열개의 카테고리(의류의 종류)로 나눴는데 10개중에서 속할 확률 중에서 가장 큰 확률을 뽑아냄. 즉, `softmax 함수`는 한 세트안에서 가장 큰 숫자를 골라냄.
 
     - 이 신경망 내의 출력 레이어는 10개 항목을 포함하는데 의류의 특정 항목에 속할 확률을 나타내는 역할을 함. 이 경우에는 9번 항목(앵클 부츠)에 가장 큰 확률을 보이고 있음. softmax 함수는 가장 큰 확률을 골라내서 해당 항목을 1로 설정하고 나머지는 0으로 설정함.
 
-      <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922214145981.png" alt="image-20200922214145981" style="zoom:80%;" />
+      <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922214145981.png" alt="image-20200922214145981" style="zoom:80%;" />
 
   - `model.compile(optimizer=tf.train.AdamOptimizer(), loss='sparse_categorical_crossentropy')` : 이 코드를 통해서 신경망은 임의의 값으로 초기화 됌. 
 
@@ -207,7 +207,7 @@
     - 6번째줄에서는 loss 즉, 현재까지 만들어진 모델이 정확하게 예측(구분)했는지 정도를 판단함. 
     - 7번째줄에서는 6번째줄의 loss를 바탕으로 함수안에 새로운 파라미터를 생성하여 해당 모델을 개선함. 
 
-  <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922211236860.png" alt="image-20200922211236860" style="zoom:80%;" />
+  <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922211236860.png" alt="image-20200922211236860" style="zoom:80%;" />
 
 ```python
 #1
@@ -266,17 +266,17 @@ model = tf.keras.models.Sequential([tf.keras.layers.Flatten(),
 
     1. 예를 들어서 192라는 값을 가진 픽셀 하나를 본다고 한다면 필터는 빨강색 상자에 있는 값들임.
 
-       <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922230808581.png" alt="image-20200922230808581" style="zoom:67%;" />
+       <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922230808581.png" alt="image-20200922230808581" style="zoom:67%;" />
 
     2.  그리고 사진과 필터(빨강색 상자)의 같은 행과 열에 있는 값들을 서로 곱함. 그리고 모두 더해서 픽셀에 대한 새로운 값을 구함.
 
-       <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922230940635.png" alt="image-20200922230940635" style="zoom: 67%;" />
+       <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922230940635.png" alt="image-20200922230940635" style="zoom: 67%;" />
 
     3. 다른 필터에 대한 예시를 보면 첫번째 예시에서 앞의 과정처럼 `필터가 적용된(필터와 곱한)` 사진을 보면 `세로선`만 제외하고 거의 모든 선이 지워진걸 확인할 수 있음. 두번째 예시는 필터가 적용되었을때 `수평선`만 제외하고 거의 모든 선이 지워진걸 확인할 수 있음.
 
-      <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922231456179.png" alt="image-20200922231456179" style="zoom: 67%;" />
+      <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922231456179.png" alt="image-20200922231456179" style="zoom: 67%;" />
 
-      <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922231708515.png" alt="image-20200922231708515" style="zoom:67%;" />
+      <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922231708515.png" alt="image-20200922231708515" style="zoom:67%;" />
 
   - 다음으로 풀링(pooling)이라는 것과 결합될 수 있는데 이는 이미지 픽셀과 필터를 묶어 부분 집합으로 만들어 주는 기능임.
 
@@ -284,13 +284,13 @@ model = tf.keras.models.Sequential([tf.keras.layers.Flatten(),
       - 예를 들어서 2x2 맥스 풀링을 하게 되면 이미지를 2x2 픽셀로 묶어주고 그 픽셀 중 최대값을 선택해줌.
       - 그리고 다시 합침. 따라서 이미지는 원본의 1/4로 줄어들지만 가장 눈에 띄는  특징은 그대로 남아있게 됌.
 
-    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922232202399.png" alt="image-20200922232202399" style="zoom:67%;" />
+    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922232202399.png" alt="image-20200922232202399" style="zoom:67%;" />
 
     - 앞서 필터를 적용했던 이미지에 맥스 풀링을 하면 아래와 같이 됌.
 
       - 오른쪽 이미지는 왼쪽의 1/4 사이즈이지만 수직선 특징은 그대로 남아 있으면서 오히려 더 강조 됌.
 
-      <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922232359001.png" alt="image-20200922232359001" style="zoom:67%;" />
+      <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922232359001.png" alt="image-20200922232359001" style="zoom:67%;" />
 
 - 해당 필터는 어떻게 만들까?
 
@@ -300,17 +300,17 @@ model = tf.keras.models.Sequential([tf.keras.layers.Flatten(),
 
   - 이미지를 CNN에 넣으면 임의로 초기화 된 여러 필터가 이미지에 적용됌. 이후 그 결과가 다음 레이어에 입력되고 신경망은 매칭을 수행함. 이런 작업이 반복되면서 최상의 매치를 보인 이미지 필터들을 학습하게 됌. 이런 과정을 `특징 추출`이라고 함.
 
-    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922233215382.png" alt="image-20200922233215382" style="zoom:50%;" />
+    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922233215382.png" alt="image-20200922233215382" style="zoom:50%;" />
 
-    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922233239677.png" alt="image-20200922233239677" style="zoom:50%;" />
+    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922233239677.png" alt="image-20200922233239677" style="zoom:50%;" />
 
-    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922233310214.png" alt="image-20200922233310214" style="zoom:50%;" />
+    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922233310214.png" alt="image-20200922233310214" style="zoom:50%;" />
 
   - 아래는 나선형 필터 레이어가 어떻게 컴퓨터가 물체를 visualize 하는 것을 돕는 지에 대한 예시
 
   - 신발 사진들이 있는데 가장 윗줄을 보면 신발 이미지가 있는데 신발의 밑창과 실루엣만 남아있는 것을 볼 수 있음. 필터는 신발이 어떻게 생겼는지 학습한 상태임.
 
-    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200922233659800.png" alt="image-20200922233659800" style="zoom:67%;" />
+    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200922233659800.png" alt="image-20200922233659800" style="zoom:67%;" />
 
 - 위의 과정을 코드로 구현하는 방법(즉, 나선형 신경망을 만드는 코드)
 
@@ -320,7 +320,7 @@ model = tf.keras.models.Sequential([tf.keras.layers.Flatten(),
 
   - 이전 강의 코드와의 유일한 차이점은 입력값 형태(28x28)를 설정하지 않았다는 것. 왜냐하면 추가로 나선형 레이어를 넣어줄것이기 때문에
 
-    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200923014416099.png" alt="image-20200923014416099" style="zoom:67%;" />
+    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200923014416099.png" alt="image-20200923014416099" style="zoom:67%;" />
 
   	```python
   model = tf.keras.models.Sequential([
@@ -349,7 +349,7 @@ model = tf.keras.models.Sequential([tf.keras.layers.Flatten(),
     ])
     ```
     
-    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200923020009200.png" alt="image-20200923020009200" style="zoom: 80%;" />
+    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200923020009200.png" alt="image-20200923020009200" style="zoom: 80%;" />
     
   - 나선형 레이어를 계속해서 쌓아 올림. 
 
@@ -370,7 +370,7 @@ model = tf.keras.models.Sequential([tf.keras.layers.Flatten(),
     ])
     ```
 
-![image-20200923020403417](C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow 공식채널 강의.assets\image-20200923020403417.png)
+![image-20200923020403417](C:\Users\multicampus\Documents\s03p31c203\Document\KJW\Tensorflow 강의 정리\Tensorflow lecture.assets\image-20200923020403417.png)
 
 
 
