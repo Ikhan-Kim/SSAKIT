@@ -38,6 +38,10 @@ def create_root(treeview, startpath):
             values=[dfpath, "directory"], open=True)
     fill_tree(treeview, node)
 
+def OnDoubleClick(self):
+    item = treeview.selection()[0]
+    print("you clicked on", treeview.item(item,"text"))
+
 # 폴더를 선택하고 폴더 주소를 저장
 root = tkinter.Tk()
 root.filename =  filedialog.askdirectory()
@@ -47,5 +51,6 @@ treeview = ttk.Treeview(columns=("fullpath", "type"), displaycolumns='')
 treeview.pack(fill='both', expand=True)
 create_root(treeview, path)
 treeview.bind('<<TreeviewOpen>>', update_tree)
+treeview.bind("<Double-1>", OnDoubleClick)
 
 root.mainloop()
