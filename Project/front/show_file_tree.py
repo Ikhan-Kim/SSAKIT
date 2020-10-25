@@ -11,11 +11,14 @@ def fill_tree(treeview, node):
 
     path = treeview.set(node, "fullpath")
     # Delete the possibly 'dummy' node present.
+    # print(treeview.get_children(node))
     treeview.delete(*treeview.get_children(node))
+    # print(treeview.get_children(node))
 
     parent = treeview.parent(node)
     for p in os.listdir(path):
         p = os.path.join(path, p)
+        print(p)
         ptype = None
         if os.path.isdir(p):
             ptype = 'directory'
@@ -35,13 +38,13 @@ def create_root(treeview, startpath):
             values=[dfpath, "directory"], open=True)
     fill_tree(treeview, node)
 
-
+# 폴더를 선택하고 폴더 주소를 저장
 root = tkinter.Tk()
 root.filename =  filedialog.askdirectory()
 path = os.path.realpath(root.filename)
+
 treeview = ttk.Treeview(columns=("fullpath", "type"), displaycolumns='')
 treeview.pack(fill='both', expand=True)
-print(sys.argv)
 create_root(treeview, path)
 treeview.bind('<<TreeviewOpen>>', update_tree)
 
