@@ -113,6 +113,8 @@ class WindowClass(QMainWindow, form_class) :
             
         # 폴더를 선택하고 폴더 주소를 저장
         root = tkinter.Tk()
+        root.title("selected directory")
+        root.geometry("400x800")
         root.filename =  filedialog.askdirectory()
         path = os.path.realpath(root.filename)
 
