@@ -140,78 +140,70 @@ class WindowClass(QMainWindow, form_class) :
         else:
             self.learnSettingDisplay.show()
 
-    def training(self):
-        LEARN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        LEARN_DIR += "\\front"
-        print(LEARN_DIR)
+    def training(self):        
+        #path
+        TRAIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-        train_dir = os.path.join(LEARN_DIR, 'eyes_distance/train')
-        val_dir = os.path.join(LEARN_DIR, 'eyes_distance/validation')
+        # Define hyperparameter
+        INPUT_SIZE = 32
+        CHANNELS = 3
+        NUM_CLASSES = 10
+        NUM_TRAIN_IMGS = 50000
+        NUM_TEST_IMGS = 10000
 
-        # label
-        training_datagen = ImageDataGenerator(rescale = 1./255)
-        validation_datagen = ImageDataGenerator(rescale = 1./255)
+        BATCH_SIZE = 128
+        train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
+        val_steps_per_epoch = NUM_TEST_IMGS // BATCH_SIZE
 
-        train_generator = training_datagen.flow_from_directory(
-            train_dir,
-            target_size=(224, 224),
-            class_mode='categorical',
-            batch_size= 16
-        )
+        # Data Preprocessing
+        (X_train, Y_train), (X_test, Y_test) = tf.keras.datasets.cifar10.load_data()
+        X_train = X_train/255.0
+        X_test = X_test/255.0
 
-        validation_generator = validation_datagen.flow_from_directory(
-            val_dir,
-            target_size=(224, 224),
-            class_mode='categorical',
-            batch_size= 16
-        )
+        # Load pre-trained model
+        base_model = tf.keras.applications.VGG16(include_top=False, 
+                                                weights='imagenet', 
+                                                input_shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS),)
 
-        # define model
-        model = tf.keras.models.Sequential([
-            #1
-            tf.keras.layers.Conv2D(64, (3,3), activation='relu', input_shape=(224, 224, 3)),
-            tf.keras.layers.MaxPooling2D(2,2),
-            #2
-            tf.keras.layers.Conv2D(64, (3,3), activation='relu'),
-            tf.keras.layers.MaxPooling2D(2,2),
-            #3
-            tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
-            tf.keras.layers.MaxPooling2D(2,2),
-            #4
-            tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
-            tf.keras.layers.MaxPooling2D(2,2),
-            #5
-            tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
-            tf.keras.layers.MaxPooling2D(2,2),
-            #6
-            tf.keras.layers.Conv2D(128, (3,3), activation='relu'),
-            tf.keras.layers.MaxPooling2D(2,2),
-            # Flatten the results to feed into a DNN
-            tf.keras.layers.Flatten(),
-            tf.keras.layers.Dropout(0.5),
-            # 512 neuron hidden layer
-            tf.keras.layers.Dense(512, activation='relu'),
-            tf.keras.layers.Dense(3, activation='softmax')
-        ])
+        # Freeze the pre-trained layers
+        base_model.trainable = False
+
+        # Add a fully connected layer
+        model_input = tf.keras.Input(shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS))
+        model_output = tf.keras.layers.Flatten()(model_input)
+        model_output = tf.keras.layers.Dense(512, activation='relu')(model_output)
+        model_output = tf.keras.layers.Dropout(0.2)(model_output)
+        model_output = tf.keras.layers.Dense(256, activation='relu')(model_output)
+        model_output = tf.keras.layers.Dropout(0.2)(model_output)
+        model_output = tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')(model_output)
+        model = tf.keras.Model(model_input, model_output)
 
         model.summary()
 
-        # model.compile(loss = 'categorical_crossentropy', optimizer='rmsprop', metrics=['accuracy'])
-        model.compile(loss = 'categorical_crossentropy', optimizer='Adam', metrics=['accuracy'])
+        # Compile
+        model.compile(optimizer = 'adam',
+                    loss = 'sparse_categorical_crossentropy',
+                    metrics = ['accuracy'])
 
-        checkpoint_path = os.path.join(LEARN_DIR, 'training_eyes_distance_logs/cp-{epoch:04d}.ckpt')
-        checkpoint_dir = os.path.dirname(checkpoint_path)
+        # Callbacks
+        checkpoint_filepath = os.path.join(TRAIN_DIR, 'learning_test/checkpoint/VGG16_cifar10.h5')
+        callbacks = [
+            tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_accuracy',
+                                            #  restore_best_weights=True
+                                            ),
+            tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
+                                                monitor='val_accuracy',
+                                                mode='max',
+                                                save_best_only=True,
+                                                # save_weights_only=True,
+                                            ),
+            # PlotLossesKeras(),
+        ]
 
-        ckpt_callback = tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_path, save_weights_only=True, verbose=1, period=30)
+        # training model
+        history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=100, steps_per_epoch=train_steps_per_epoch, validation_data = (X_test, Y_test), validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
 
-        history = model.fit(train_generator, epochs=150, steps_per_epoch=8, validation_data = validation_generator, verbose = 1, validation_steps=3, callbacks=[ckpt_callback])
-
-        # model.save("model_eyes_size.h5")
-
-        save_path = os.path.join(LEARN_DIR,'training_eyes_distance_logs/model_eyes_distance.h5')
-        model.save(save_path)
-
-        # 정확도 그래프
+        # 정확도 그래프 (임시) 
         import matplotlib.pyplot as plt
         acc = history.history['accuracy']
         val_acc = history.history['val_accuracy']
@@ -222,7 +214,7 @@ class WindowClass(QMainWindow, form_class) :
 
         plt.plot(epochs, acc, 'r', label='Training accuracy')
         plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
-        plt.title('Eyes_distance Training and validation accuracy')
+        plt.title('Training and validation accuracy')
         plt.legend(loc=0)
         plt.figure()
 
