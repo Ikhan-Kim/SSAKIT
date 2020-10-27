@@ -684,7 +684,7 @@ x_test = x_test.reshape(x_test.shape[0], *input_shape)
 
 
 
-
+ 
 
 ### 4장 분류를 위한 신경망 아키텍처
 
