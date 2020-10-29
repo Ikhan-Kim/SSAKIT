@@ -1,12 +1,12 @@
 import sys
-from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5 import QtWidgets
+from PyQt5.QtWidgets import *
 
 
-# # 연결할 ui 파일의 경로 설정
-# UI_Path = './ClassEdit.ui'
-# form_class = uic.loadUiType(UI_Path)[0]
+# 연결할 ui 파일의 경로 설정
+UI_Path = './ClassEdit.ui'
+form_class = uic.loadUiType(UI_Path)[0]
 
 class ClassEdit(QDialog):
     def __init__(self):
@@ -15,7 +15,7 @@ class ClassEdit(QDialog):
 
     def editUI(self):
         self.setWindowTitle('Class Edit')
-        self.setGeometry(100, 100, 200, 100)
+        # self.setGeometry(100, 100, 200, 100)
 
         layout = QVBoxLayout()
         layout.addStretch(1)
@@ -52,3 +52,10 @@ class ClassEdit(QDialog):
 
     def showModal(self):
         return super().exec_()
+
+    
+# if __name__ == "__main__" :
+#     app = QApplication(sys.argv) 
+#     myWindow = WindowClass()
+#     myWindow.show()
+#     app.exec_()

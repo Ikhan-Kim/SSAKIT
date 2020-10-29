@@ -3,6 +3,7 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
 from PyQt5 import QtGui, QtCore
+# from pyQt5.QtCore import *
 from ClassEdit import ClassEdit
 
 # 연결할 ui 파일의 경로 설정
@@ -26,7 +27,10 @@ class WindowClass(QMainWindow, form_class) :
         self.loadclass()
 
         # class Edit btn
-        self.classEditBtu.clicked.connect(self.classEditBtuFunc)
+        self.classEditBtn.clicked.connect(self.ClassEditBtnFunc)
+
+        # QDialog 설정
+        self.dialog = QDialog()
         
         #########################################3
         # Navigator
@@ -50,14 +54,26 @@ class WindowClass(QMainWindow, form_class) :
     #     dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./", QFileDialog.ShowDirsOnly)
     #     print(dirName)
 
-    def classEditBtuFunc(self):
+    def ClassEditBtnFunc(self):
         print('class Edit bnt')
-        win = ClassEdit()
-        r = win.showModal()
 
-        if r:
-            text = win.edit.text()
-            self.labelTest.setText(text)
+        # dialog open
+        self.dialog.setWindowTitle('클래스 수정 하즈앙')
+        # self.dialog.setWindowModality(Qt.ApplicationModal)
+        self.dialog.resize(300,200)
+        self.dialog.show()
+
+        # 버튼 이벤트 함수
+        btnDialog = QPushButton("OK", self.dialog)
+        btnDialog.move(100,100)
+        btnDialog.clicked.connect(self.dialog_close)
+
+        # win = ClassEdit()
+        # r = win.showModal()
+
+        # if r:
+        #     text = win.edit.text()
+        #     self.labelTest.setText(text)
             
         
         # color picker widget
@@ -72,19 +88,34 @@ class WindowClass(QMainWindow, form_class) :
     #     color = QtGui.QcolorDialog.getColor()
     #     self.styleChoice.setStyleSheet("Qwidget { background-color: %s}" % color.name() )
     
+    def dialog_close(self):
+        self.dialog.close()
+    
     def loadclass(self):
         #dummy data
         classes = [
-            {"color": "red", "label": "12R0", "train":50, "val":30, "test": 30},
-            {"color": "pink", "label": "4300", "train":50, "val":30, "test": 30},
-            {"color": "blue", "label": "4301", "train":50, "val":30, "test": 30},
-             {"color": "green", "label": "7501", "train":50, "val":30, "test": 30},
+            {"color": "", "label": "12R0", "train":50, "val":30, "test": 30},
+            {"color": "", "label": "4300", "train":50, "val":30, "test": 30},
+            {"color": "", "label": "4301", "train":50, "val":30, "test": 30},
+            {"color": "", "label": "7501", "train":50, "val":30, "test": 30},
         ]
+
         row = 0
         self.classType.setRowCount(len(classes))
 
+        colors = [
+            [255, 0, 0],
+            [255,192,203],
+            [0, 0, 255],
+            [0, 255, 0],
+             ]
         for cType in classes:
+            red = colors[row][0]
+            green = colors[row][1]
+            blue = colors[row][2]
+
             self.classType.setItem(row, 0, QtWidgets.QTableWidgetItem(cType["color"]))
+            self.classType.item(row, 0).setBackground(QtGui.QColor(red, green, blue))
             self.classType.setItem(row, 1, QtWidgets.QTableWidgetItem(cType["label"]))
             self.classType.setItem(row, 2, QtWidgets.QTableWidgetItem(str(cType["train"])))
             self.classType.setItem(row, 3, QtWidgets.QTableWidgetItem(str(cType["val"])))
@@ -93,10 +124,10 @@ class WindowClass(QMainWindow, form_class) :
 
     def loadNavi(self):
         # dummydata
-        self.wValue.setText("0w")
-        self.hValue.setText("0h")
-        self.xValue.setText("0x")
-        self.yValue.setText("0y")
+        self.wValue.setText("너비")
+        self.hValue.setText("높이")
+        self.xValue.setText("0")
+        self.yValue.setText("0")
 
         self.fileName.setText("파일명")
         self.fileSize.setText("파일사이즈")

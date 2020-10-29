@@ -360,7 +360,7 @@
      <string>class</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="classEditBtu">
+   <widget class="QPushButton" name="classEditBtn">
     <property name="geometry">
      <rect>
       <x>1180</x>
@@ -381,6 +381,9 @@
       <width>261</width>
       <height>192</height>
      </rect>
+    </property>
+    <property name="editTriggers">
+     <set>QAbstractItemView::NoEditTriggers</set>
     </property>
     <column>
      <property name="text">
@@ -702,8 +705,8 @@
    <widget class="QLabel" name="labelTest">
     <property name="geometry">
      <rect>
-      <x>1080</x>
-      <y>120</y>
+      <x>940</x>
+      <y>40</y>
       <width>64</width>
       <height>15</height>
      </rect>
