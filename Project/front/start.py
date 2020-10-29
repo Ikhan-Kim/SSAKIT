@@ -1,7 +1,7 @@
 import sys
 import os
 from PyQt5.QtWidgets import *
-from PyQt5 import uic
+from PyQt5 import uic, QtCore
 from PIL import Image
 
 import tkinter
@@ -66,7 +66,10 @@ class AnotherFormLayout(QDialog):
         print('hi')
         print(self.lineTarget.text(), self.lineBatch.text(), self.lineRgb.text())
 
+#### 메인
 class WindowClass(QMainWindow, form_class) :
+    errorSignal = QtCore.pyqtSignal(str) 
+    outputSignal = QtCore.pyqtSignal(str)
     def __init__(self) :
         super().__init__()
         self.setupUi(self)
@@ -74,7 +77,14 @@ class WindowClass(QMainWindow, form_class) :
         self.pushButton.clicked.connect(self.pushButton1)
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.btnTraining.clicked.connect(self.training)
-        
+        # 터미널
+        self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1280,190))
+        self.textBox_terminal.setText("asdf")
+        self.process = QtCore.QProcess()
+        self.process.readyReadStandardError.connect(self.onReadyReadStandardError)
+        self.process.readyReadStandardOutput.connect(self.onReadyReadStandardOutput)
+
+
     # 더블클릭했을경우 실행되는 함수
     def OnDoubleClick(self, event):
         item = self.treeview.selection()[0]
@@ -140,6 +150,18 @@ class WindowClass(QMainWindow, form_class) :
         else:
             self.learnSettingDisplay.show()
 
+    # 터미널 출력 메소드
+    def onReadyReadStandardError(self):
+        error = self.process.readAllStandardError().data().decode()
+        self.textBox_terminal.append(error)
+        self.errorSignal.emit(error)
+
+    def onReadyReadStandardOutput(self):
+        result = self.process.readAllStandardOutput().data().decode()
+        self.textBox_terminal.append(result)
+        self.outputSignal.emit(result)
+
+    #모델 학습하기
     def training(self):        
         #path
         TRAIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -178,7 +200,8 @@ class WindowClass(QMainWindow, form_class) :
         model_output = tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')(model_output)
         model = tf.keras.Model(model_input, model_output)
 
-        model.summary()
+        # model.summary()
+        self.process.start(model.summary())
 
         # Compile
         model.compile(optimizer = 'adam',
@@ -202,6 +225,11 @@ class WindowClass(QMainWindow, form_class) :
 
         # training model
         history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=100, steps_per_epoch=train_steps_per_epoch, validation_data = (X_test, Y_test), validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
+
+        loss_history = history.history["loss"] #type is list
+        for i in range(len(loss_history)):
+            self.textBox_terminal.append("Epoch {} : lose = {}".format(i, loss_history[i]))
+
 
         # 정확도 그래프 (임시) 
         import matplotlib.pyplot as plt
