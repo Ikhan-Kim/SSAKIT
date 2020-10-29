@@ -81,8 +81,8 @@ class ProgBarDialog(QDialog):
 
     def initUI(self):
         self.setFixedWidth(400)
-        self.setWindowFlag(Qt.WindowCloseButtonHint, False)
-        self.setWindowFlag(Qt.WindowMinimizeButtonHint, False)
+        self.setWindowFlags(Qt.WindowCloseButtonHint)
+        self.setWindowFlags(Qt.WindowMinimizeButtonHint)
 
         self.statusLabel = QLabel()
         self.placeHolder = QLabel()

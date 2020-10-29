@@ -1,7 +1,7 @@
 import sys
 import os
 from PyQt5.QtWidgets import *
-from PyQt5 import uic
+from PyQt5 import uic, QtCore
 from PIL import Image
 
 import tkinter
@@ -66,6 +66,7 @@ class AnotherFormLayout(QDialog):
         print('hi')
         print(self.lineTarget.text(), self.lineBatch.text(), self.lineRgb.text())
 
+#### 메인
 class WindowClass(QMainWindow, form_class) :
     def __init__(self) :
         super().__init__()
@@ -74,7 +75,10 @@ class WindowClass(QMainWindow, form_class) :
         self.pushButton.clicked.connect(self.pushButton1)
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.btnTraining.clicked.connect(self.training)
-        
+
+        self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1280,190))
+        self.textBox_terminal.setText("asdf")
+
     # 더블클릭했을경우 실행되는 함수
     def OnDoubleClick(self, event):
         item = self.treeview.selection()[0]
@@ -178,7 +182,9 @@ class WindowClass(QMainWindow, form_class) :
         model_output = tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')(model_output)
         model = tf.keras.Model(model_input, model_output)
 
-        model.summary()
+        # model.summary()
+        self.textBox_terminal.append("test")
+        self.textBox_terminal.append(model.summary())
 
         # Compile
         model.compile(optimizer = 'adam',
