@@ -1,16 +1,10 @@
 import sys
 import os
 from PyQt5.QtWidgets import *
-from PyQt5 import uic, QtCore
+from PyQt5 import uic
 from PIL import Image
 
-import tkinter
-from  tkinter import filedialog
-import tkinter as tk
-from tkinter import ttk
-
 from django.conf import settings
-
 import numpy as np
 import tensorflow as tf
 import keras_preprocessing
@@ -66,102 +60,21 @@ class AnotherFormLayout(QDialog):
         print('hi')
         print(self.lineTarget.text(), self.lineBatch.text(), self.lineRgb.text())
 
-#### 메인
 class WindowClass(QMainWindow, form_class) :
-    errorSignal = QtCore.pyqtSignal(str) 
-    outputSignal = QtCore.pyqtSignal(str)
     def __init__(self) :
         super().__init__()
         self.setupUi(self)
         self.learnSettingDisplay = AnotherFormLayout()
-        self.pushButton.clicked.connect(self.pushButton1)
+        # self.pushButton.clicked.connect(self.pushButton1)
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.btnTraining.clicked.connect(self.training)
-        # 터미널
-        self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1280,190))
-        self.textBox_terminal.setText("asdf")
-        self.process = QtCore.QProcess()
-        self.process.readyReadStandardError.connect(self.onReadyReadStandardError)
-        self.process.readyReadStandardOutput.connect(self.onReadyReadStandardOutput)
-
-
-    # 더블클릭했을경우 실행되는 함수
-    def OnDoubleClick(self, event):
-        item = self.treeview.selection()[0]
-        # print("you clicked on", self.treeview.item(item,"text"))
-        # with open(self.fullpath + "\\" + self.treeview.item(item,"text"), "r") as f:
-        #     for line in f:
-        #         print(line)
-        im = Image.open(self.fullpath + "\\" + self.treeview.item(item,"text"))
-        print(im.format, im.size, im.mode)
-        im.show()
-
-    def pushButton1(self):
-        def fill_tree(treeview, node):
-            if treeview.set(node, "type") != 'directory':
-                return
-
-            path = treeview.set(node, "fullpath")
-            # Delete the possibly 'dummy' node present.
-            treeview.delete(*treeview.get_children(node))
-
-            parent = treeview.parent(node)
-            for p in os.listdir(path):
-                self.fullpath = path
-                p = os.path.join(path, p)
-                # print(p)
-                treeview.bind("<Double-1>", self.OnDoubleClick)
-                ptype = None
-                if os.path.isdir(p):
-                    ptype = 'directory'
-
-                fname = os.path.split(p)[1]
-                oid = treeview.insert(node, 'end', text=fname, values=[p, ptype])
-                if ptype == 'directory':
-                    treeview.insert(oid, 0, text='dummy')
-
-        def update_tree(event):
-            treeview = event.widget
-            fill_tree(treeview, treeview.focus())
-
-        def create_root(treeview, startpath):
-            dfpath = os.path.abspath(startpath)
-            node = treeview.insert('', 'end', text=dfpath,
-                    values=[dfpath, "directory"], open=True)
-            fill_tree(treeview, node)
-            
-        # 폴더를 선택하고 폴더 주소를 저장
-        root = tkinter.Tk()
-        root.title("selected directory")
-        root.geometry("400x800")
-        root.filename =  filedialog.askdirectory()
-        path = os.path.realpath(root.filename)
-
-        self.treeview = ttk.Treeview(columns=("fullpath", "type"), displaycolumns='')
-        self.treeview.pack(fill='both', expand=True)
-        create_root(self.treeview, path)
-        self.treeview.bind('<<TreeviewOpen>>', update_tree)
-
-        root.mainloop()
-
+        
     def learnSettingsFn(self, checked):
         if self.learnSettingDisplay.isVisible():
             self.learnSettingDisplay.hide()
         else:
             self.learnSettingDisplay.show()
 
-    # 터미널 출력 메소드
-    def onReadyReadStandardError(self):
-        error = self.process.readAllStandardError().data().decode()
-        self.textBox_terminal.append(error)
-        self.errorSignal.emit(error)
-
-    def onReadyReadStandardOutput(self):
-        result = self.process.readAllStandardOutput().data().decode()
-        self.textBox_terminal.append(result)
-        self.outputSignal.emit(result)
-
-    #모델 학습하기
     def training(self):        
         #path
         TRAIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -200,8 +113,7 @@ class WindowClass(QMainWindow, form_class) :
         model_output = tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')(model_output)
         model = tf.keras.Model(model_input, model_output)
 
-        # model.summary()
-        self.process.start(model.summary())
+        model.summary()
 
         # Compile
         model.compile(optimizer = 'adam',
@@ -225,11 +137,6 @@ class WindowClass(QMainWindow, form_class) :
 
         # training model
         history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=100, steps_per_epoch=train_steps_per_epoch, validation_data = (X_test, Y_test), validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
-
-        loss_history = history.history["loss"] #type is list
-        for i in range(len(loss_history)):
-            self.textBox_terminal.append("Epoch {} : lose = {}".format(i, loss_history[i]))
-
 
         # 정확도 그래프 (임시) 
         import matplotlib.pyplot as plt
