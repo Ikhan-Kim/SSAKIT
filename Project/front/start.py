@@ -1,7 +1,8 @@
 import sys
 import os
+from PyQt5 import uic, QtGui
+from PyQt5.QtCore import QDir
 from PyQt5.QtWidgets import *
-from PyQt5 import uic
 from PIL import Image
 
 from django.conf import settings
@@ -64,7 +65,7 @@ class WindowClass(QMainWindow, form_class) :
     def __init__(self) :
         super().__init__()
         self.setupUi(self)
-        # 기본 설정 위치
+        # 기본 설정?>
         self.learnSettingDisplay = AnotherFormLayout()
         # 버튼별 함수 실행
         self.btnDataLoad.clicked.connect(self.dataLoadFn)
@@ -74,7 +75,10 @@ class WindowClass(QMainWindow, form_class) :
     def dataLoadFn(self):
         self.dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
                                                   QFileDialog.ShowDirsOnly)
-        # self.dirWidget = Main(self.dirName)
+        treeModel = QFileSystemModel()
+        self.dirTreeView.setModel(treeModel)
+        treeModel.setRootPath(QDir.rootPath())
+        self.dirTreeView.setRootIndex(treeModel.index(self.dirName))
         # if self.dirWidget.isVisible():
         #     self.dirWidget.hide()
         # else:
