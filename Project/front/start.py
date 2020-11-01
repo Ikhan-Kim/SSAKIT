@@ -67,9 +67,12 @@ class WindowClass(QMainWindow, form_class) :
         self.setupUi(self)
         # 기본 설정?>
         self.learnSettingDisplay = AnotherFormLayout()
+        pixmap = QtGui.QPixmap("test_img\\test1.png")
+        self.imgLabel.setPixmap(pixmap)
         # 버튼별 함수 실행
         self.btnDataLoad.clicked.connect(self.dataLoadFn)
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
+        self.dirTreeView.doubleClicked.connect(self.printFileFn)
         # self.btnTraining.clicked.connect(self.training)
 
     def dataLoadFn(self):
@@ -89,6 +92,14 @@ class WindowClass(QMainWindow, form_class) :
             self.learnSettingDisplay.hide()
         else:
             self.learnSettingDisplay.show()
+
+    def printFileFn(self, index):
+        # item = self.dirTreeView.selectedIndexes()[0]
+        # print (item.model().itemFromIndex(index).text())
+        print('이게 됨?')
+        a = self.dirTreeView.model()
+        print(a)
+        print(a.filePath(index))
 
     # def training(self):        
     #     #path

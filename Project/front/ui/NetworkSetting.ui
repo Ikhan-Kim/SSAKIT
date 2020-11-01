@@ -130,6 +130,19 @@
      </rect>
     </property>
    </widget>
+   <widget class="QLabel" name="imgLabel">
+    <property name="geometry">
+     <rect>
+      <x>193</x>
+      <y>90</y>
+      <width>891</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>이미지 출력 위치</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
