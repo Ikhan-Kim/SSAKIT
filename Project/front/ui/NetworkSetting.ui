@@ -120,12 +120,12 @@
      <string>학습하기</string>
     </property>
    </widget>
-   <widget class="QTreeWidget" name="treeWidget">
+   <widget class="QTreeView" name="dirTreeView">
     <property name="geometry">
      <rect>
       <x>0</x>
       <y>90</y>
-      <width>211</width>
+      <width>191</width>
       <height>421</height>
      </rect>
     </property>
