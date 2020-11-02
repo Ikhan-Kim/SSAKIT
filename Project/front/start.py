@@ -75,15 +75,16 @@ class WindowClass(QMainWindow, form_class) :
         self.btnDataLoad.clicked.connect(self.dataLoadFn)
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
-        # self.btnTraining.clicked.connect(self.training)
+        self.btnTraining.clicked.connect(self.training)
+        self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
 
     def dataLoadFn(self):
-     self.dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
-                          QFileDialog.ShowDirsOnly)
-     treeModel = QFileSystemModel()
-     self.dirTreeView.setModel(treeModel)
-     treeModel.setRootPath(QDir.rootPath())
-     self.dirTreeView.setRootIndex(treeModel.index(self.dirName))
+        self.dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
+                            QFileDialog.ShowDirsOnly)
+        treeModel = QFileSystemModel()
+        self.dirTreeView.setModel(treeModel)
+        treeModel.setRootPath(QDir.rootPath())
+        self.dirTreeView.setRootIndex(treeModel.index(self.dirName))
 
     def learnSettingsFn(self, checked):
         if self.learnSettingDisplay.isVisible():
