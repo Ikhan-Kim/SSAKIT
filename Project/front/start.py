@@ -85,7 +85,7 @@ class AnotherFormLayout(QDialog):
         self.formLearn.setLayout(layoutLS)
         
     def accept(self):
-        print('hi')
+        WindowClass.settingsData.append(self.comboBoxNN.currentText())
         if self.checkBoxHorizantal.isChecked() == True:
             WindowClass.settingsData.append("Horizantal Flip")
         if self.checkBoxVertical.isChecked() == True:
@@ -94,7 +94,6 @@ class AnotherFormLayout(QDialog):
             WindowClass.settingsData.append("Rotation 90")
         if self.checkBoxRotation180.isChecked() == True:
             WindowClass.settingsData.append("Rotation 180")
-        WindowClass.settingsData.append(self.comboBoxNN.currentText())
         WindowClass.settingsData.append(self.lineEpochs.text())
         print(WindowClass.settingsData)
 
@@ -140,13 +139,14 @@ class WindowClass(QMainWindow, form_class):
             self.projectNameDisplay.show()
 
     def dataLoadFn(self):
-        self.dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
+        self.pathName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
                                                         QFileDialog.ShowDirsOnly)
+        self.dirName = self.pathName.split('/')[-1]
         treeModel = QFileSystemModel()
         self.dirTreeView.setModel(treeModel)
         treeModel.setRootPath(QDir.rootPath())
-        self.dirTreeView.setRootIndex(treeModel.index(self.dirName))
-        self.setWindowTitle(self.projectName)
+        self.dirTreeView.setRootIndex(treeModel.index(self.pathName))
+        # self.setWindowTitle(self.projectName)
 
     def learnSettingsFn(self, checked):
         if self.learnSettingDisplay.isVisible():
@@ -156,11 +156,9 @@ class WindowClass(QMainWindow, form_class):
 
     def fileViewFn(self, index):
         self.mainImg = self.dirTreeView.model().filePath(index)
-        print(self.dirTreeView.columnWidth(1))
         self.dirTreeView.hideColumn(1)
         self.dirTreeView.hideColumn(2)
         self.dirTreeView.hideColumn(3)
-        print(self.mainImg)
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
 
