@@ -81,8 +81,6 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
-<<<<<<< HEAD
-=======
    <widget class="QTabWidget" name="tabWidget_2">
     <property name="geometry">
      <rect>
@@ -1303,7 +1301,6 @@ p, li { white-space: pre-wrap; }
      </widget>
     </widget>
    </widget>
->>>>>>> feature/training_process_print_live
    <widget class="Line" name="line_8">
     <property name="geometry">
      <rect>
@@ -1343,7 +1340,6 @@ p, li { white-space: pre-wrap; }
      <string>학습하기</string>
     </property>
    </widget>
-<<<<<<< HEAD
    <widget class="QTreeView" name="dirTreeView">
     <property name="geometry">
      <rect>
@@ -1365,7 +1361,6 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="text">
      <string>이미지 출력 위치</string>
-=======
    <widget class="QLabel" name="result_figure">
     <property name="geometry">
      <rect>
@@ -1377,7 +1372,6 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="text">
      <string>TextLabel</string>
->>>>>>> feature/training_process_print_live
     </property>
    </widget>
   </widget>
