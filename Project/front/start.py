@@ -30,49 +30,82 @@ class AnotherFormLayout(QDialog):
         buttonBox.rejected.connect(self.reject)
         
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.formDataPreprocessing)
+        mainLayout.addWidget(self.formAugmentation)
+        # mainLayout.addWidget(self.formDataPreprocessing)
         mainLayout.addWidget(self.formNueralNetwork)
         mainLayout.addWidget(self.formLearn)
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
         
-        self.setWindowTitle("Nueral Network Settings")
+        self.setWindowTitle("Train Settings")
         
     def createFormGroupBox(self):
-        # data preprocessing
-        self.formDataPreprocessing = QGroupBox("Data Preprocessing")
+        # Augmentation
+        self.formAugmentation = QGroupBox("Augmentation")
         layout = QFormLayout()
-        self.lineTarget = QLineEdit()
-        layout.addRow(QLabel("target size:"), self.lineTarget)
-        layout.addRow(QLabel("class mode:"), QComboBox())
-        self.lineBatch = QLineEdit()
-        layout.addRow(QLabel("batch size:"), self.lineBatch)
-        self.lineRgb = QLineEdit()
-        layout.addRow(QLabel("rgb:"), self.lineRgb)
-        self.formDataPreprocessing.setLayout(layout)
+        self.checkBoxHorizantal = QCheckBox("Horizantal Flip", self)
+        layout.addRow(self.checkBoxHorizantal)
+        self.checkBoxVertical = QCheckBox("Vertical Flip", self)
+        layout.addRow(self.checkBoxVertical)
+        self.checkBoxRotation90 = QCheckBox("Rotation 90", self)
+        layout.addRow(self.checkBoxRotation90)
+        self.checkBoxRotation180 = QCheckBox("Rotation 180", self)
+        layout.addRow(self.checkBoxRotation180)
+        self.formAugmentation.setLayout(layout)
+        # data preprocessing
+        # self.formDataPreprocessing = QGroupBox("Data Preprocessing")
+        # layout = QFormLayout()
+        # self.lineTarget = QLineEdit()
+        # layout.addRow(QLabel("target size:"), self.lineTarget)
+        # layout.addRow(QLabel("class mode:"), QComboBox())
+        # self.lineBatch = QLineEdit()
+        # layout.addRow(QLabel("batch size:"), self.lineBatch)
+        # self.lineRgb = QLineEdit()
+        # layout.addRow(QLabel("rgb:"), self.lineRgb)
+        # self.formDataPreprocessing.setLayout(layout)
         # nn setting
         self.formNueralNetwork = QGroupBox("Nueral Network")
         layoutNN = QFormLayout()
-        layoutNN.addRow(QLabel("select NN:"), QComboBox())
+        self.comboBoxNN = QComboBox()
+        self.comboBoxNN.addItems(["VGG", "InceptionV3", "ResNet152"])
+        layoutNN.addRow(QLabel("select NN:"), self.comboBoxNN)
         self.formNueralNetwork.setLayout(layoutNN)
         # Learn Settings
         self.formLearn = QGroupBox("Learn Settings")
+        layoutLS = QFormLayout()
+        self.lineEpochs = QLineEdit()
+        # onlyInt = QIntValidator()
+        # self.lineEpochs.setValidator(onlyInt)
+        layoutLS.addRow(QLabel("Epochs"), self.lineEpochs)
+        self.formLearn.setLayout(layoutLS)
         
     def accept(self):
         print('hi')
-        WindowClass.settingsData.extend([self.lineTarget.text(), self.lineBatch.text(), self.lineRgb.text()])
-        print(self.lineTarget.text(), self.lineBatch.text(), self.lineRgb.text())
+        if self.checkBoxHorizantal.isChecked() == True:
+            WindowClass.settingsData.append("Horizantal Flip")
+        if self.checkBoxVertical.isChecked() == True:
+            WindowClass.settingsData.append("Vertical Flip")
+        if self.checkBoxRotation90.isChecked() == True:
+            WindowClass.settingsData.append("Rotation 90")
+        if self.checkBoxRotation180.isChecked() == True:
+            WindowClass.settingsData.append("Rotation 180")
+        WindowClass.settingsData.append(self.comboBoxNN.currentText())
+        WindowClass.settingsData.append(self.lineEpochs.text())
+        print(WindowClass.settingsData)
 
 class ProjectNameClass(QDialog):
     def __init__(self):
         super().__init__()
         self.lineName = QLineEdit()
-        self.lineName.setGeometry(10, 10, 100, 100)
-        self.btnOk = QPushButton()
+        self.btnOk = QPushButton('OK')
         self.btnOk.clicked.connect(self.projectNameFn)
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.lineName)
+        mainLayout.addWidget(self.btnOk)
+        self.setLayout(mainLayout)
 
-        def projectNameFn(self):
-            WindowClass.projectName = self.lineName.text()
+    def projectNameFn(self):
+        WindowClass.projectName = self.lineName.text()
 
 class WindowClass(QMainWindow, form_class) :
     mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
@@ -83,18 +116,22 @@ class WindowClass(QMainWindow, form_class) :
         self.setupUi(self)
         # 기본 설정?>
         self.learnSettingDisplay = AnotherFormLayout()
+        self.projectNameDisplay = ProjectNameClass()
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
         # 버튼별 함수 실행
-        # self.btnCreateProject.connect(self.createProjectFn)
+        self.btnCreateProject.clicked.connect(self.createProjectFn)
         self.btnDataLoad.clicked.connect(self.dataLoadFn)
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         # self.btnTraining.clicked.connect(self.training)
         self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
 
-    # def createProjectFn(self):
-    #     self.projectName = ''
+    def createProjectFn(self):
+        if self.projectNameDisplay.isVisible():
+            self.projectNameDisplay.hide()
+        else:
+            self.projectNameDisplay.show()
 
     def dataLoadFn(self):
         self.dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
@@ -103,6 +140,7 @@ class WindowClass(QMainWindow, form_class) :
         self.dirTreeView.setModel(treeModel)
         treeModel.setRootPath(QDir.rootPath())
         self.dirTreeView.setRootIndex(treeModel.index(self.dirName))
+        self.setWindowTitle(self.projectName)
 
     def learnSettingsFn(self, checked):
         if self.learnSettingDisplay.isVisible():
