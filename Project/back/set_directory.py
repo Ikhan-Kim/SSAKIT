@@ -8,20 +8,26 @@ import random
 
 
 def set_directory(dataset_name, class_name, copy_path):
-    train_path = "./" + dataset_name + "/train/" + class_name
-    validation_path = "./" + dataset_name + "/validation/" + class_name
-    test_path = "./" + dataset_name + "/test/" + class_name
-    os.makedirs(train_path)
-    os.makedirs(validation_path)
-    os.makedirs(test_path)
-              #복사 경로                        붙여넣기 경로
+    train_path = "../back/" + dataset_name + "/train/" + class_name + '/'
+    validation_path = "../back/" + dataset_name + "/validation/" + class_name + '/'
+    test_path = "../back/" + dataset_name + "/test/" + class_name + '/'
+    os.makedirs(train_path, exist_ok=True)
+    os.makedirs(validation_path, exist_ok=True)
+    os.makedirs(test_path, exist_ok=True)
+    test1 = []
+    test2 = []
     copy_tree(copy_path, train_path)
     file_list = os.listdir(train_path)
-    file_len = int(len(file_list)) * 0.2) 
+    file_len = int(len(file_list) * 0.2)
     for file_name in random.sample(file_list, file_len):
+        test1.append(file_name)
         shutil.move(train_path + file_name, validation_path)
     file_list = os.listdir(train_path)
+    print(test1)
     for file_name in random.sample(file_list, file_len):
+        # test2.append(file_name)
         shutil.move(train_path + file_name, test_path)
 
-    
+
+def name():
+    print('set_directory')
