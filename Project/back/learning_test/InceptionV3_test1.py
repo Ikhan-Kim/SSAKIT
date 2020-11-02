@@ -11,9 +11,9 @@ INPUT_SIZE = 299
 CHANNELS = 3
 INPUT_SHAPE = (INPUT_SIZE, INPUT_SIZE, CHANNELS)
 NUM_CLASSES = 10
-NUM_TRAIN_IMGS = 50000
-NUM_TEST_IMGS = 10000
-BATCH_SIZE = 128
+NUM_TRAIN_IMGS = 500
+NUM_VAL_IMGS = 100
+BATCH_SIZE = 64
 
 
 HORIZONTAL_FLIP = False
@@ -23,7 +23,7 @@ ROTATION_RANGE = 0
 
 EPOCHS = 10
 train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
-val_steps_per_epoch = NUM_TEST_IMGS // BATCH_SIZE
+val_steps_per_epoch = NUM_VAL_IMGS // BATCH_SIZE
 
 # Data Preprocessing
 training_datagen = ImageDataGenerator(
@@ -80,7 +80,7 @@ model.compile(optimizer = 'adam',
               metrics = ['accuracy'])
 
 # Callbacks
-checkpoint_filepath = os.path.join(TRAIN_DIR, 'learning_test/checkpoint/InceptionV3_cifar10.h5')
+checkpoint_filepath = os.path.join(BASE_DIR, 'learning_test/checkpoint/InceptionV3_cifar10.h5')
 
 
 callbacks = [
@@ -98,7 +98,7 @@ callbacks = [
 
 
 # training model
-history = model.fit(train_generator, epochs=50, steps_per_epoch=train_steps_per_epoch, validation_data = validation_generator, validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
+history = model.fit(train_generator, epochs=EPOCHS, steps_per_epoch=train_steps_per_epoch, validation_data = validation_generator, validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
 
 
 
