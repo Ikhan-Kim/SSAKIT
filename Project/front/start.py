@@ -15,6 +15,7 @@ from keras_preprocessing.image import ImageDataGenerator
 
 from IPython.display import clear_output
 import matplotlib.pyplot as plt
+import pyqtgraph as pg
 
 # 연결할 ui 파일의 경로 설정
 UI_Path = './ui/NetworkSetting.ui'
@@ -172,6 +173,7 @@ class WindowClass(QMainWindow, form_class):
         class PlotLosses(keras.callbacks.Callback):
             def __init__(self, tbt):
                 self.textBox_terminal = tbt
+                self.win = WindowClass()
                 print("textBox copied")
                 # plt.ion()
 
@@ -207,9 +209,17 @@ class WindowClass(QMainWindow, form_class):
                 ax2.plot(self.x, self.val_acc, label="validation accuracy")
                 ax2.legend()
 
-                plt.draw()
-                plt.pause(0.01)
-                plt.clf()
+                # plt.draw()
+                # plt.pause(0.01)
+                # plt.clf()
+
+                hbox = QHBoxLayout()
+                self.win.p = pg.PlotWidget(title="loss")
+                hbox.addWidget(self.win.p)
+                self.win.setLayout(hbox)
+                self.win.pl = self.win.p.plot(pen='g')
+                self.win.pl.setData(x=self.x, y=self.losses)
+                self.win.show()
 
                 # self.textBox_terminal.append(str(self.losses[-1]))
                 self.textBox_terminal.append(
