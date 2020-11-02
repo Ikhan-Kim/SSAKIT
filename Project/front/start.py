@@ -89,15 +89,17 @@ class AnotherFormLayout(QDialog):
         
     def accept(self):
         WindowClass.settingsData.append(self.comboBoxNN.currentText())
+        aug = [False, False, 0]
         if self.checkBoxHorizantal.isChecked() == True:
-            WindowClass.settingsData.append("Horizantal Flip")
+            aug[0] = True
         if self.checkBoxVertical.isChecked() == True:
-            WindowClass.settingsData.append("Vertical Flip")
+            aug[1] = True
         if self.checkBoxRotation90.isChecked() == True:
-            WindowClass.settingsData.append("Rotation 90")
-        if self.checkBoxRotation180.isChecked() == True:
-            WindowClass.settingsData.append("Rotation 180")
-        WindowClass.settingsData.append(self.lineEpochs.text())
+            aug[2] = 90
+        # if self.checkBoxRotation180.isChecked() == True:
+        #     WindowClass.settingsData.append("Rotation 180")
+        WindowClass.settingsData.append(aug)
+        WindowClass.settingsData.append(int(self.lineEpochs.text()))
         print(WindowClass.settingsData)
 
 class ProjectNameClass(QDialog):
@@ -152,6 +154,8 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
         create_dir.create_dir_flow(self.projectName)
         set_directory.set_directory(self.projectName, self.dirName, self.pathName)
+        self.learn_train_path = "../back/" + self.projectName + "/train/"
+        self.learn_val_path = "../back/" + self.projectName + "/val/"
         # self.setWindowTitle(self.projectName)
 
     def learnSettingsFn(self, checked):
@@ -170,11 +174,11 @@ class WindowClass(QMainWindow, form_class):
 
     def training(self):
         if self.settingsData[0] == 'VGG':
-            Vgg16_test1.
+            Vgg16_test1.Learn(self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path)
         elif self.settingsData[0] == 'InceptionV3':
-            InceptionV3_test1.
+            InceptionV3_test1.Learn(self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path)
         elif self.settingsData[0] == 'ResNet152':
-            ResNet152_test1.
+            ResNet152_test1.Learn(self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path)
         # # path
         # TRAIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
