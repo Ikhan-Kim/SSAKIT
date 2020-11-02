@@ -2,19 +2,12 @@ import os
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
-# import keras
-
-# from livelossplot import PlotLossesKeras
-
-
 
 #path
 TRAIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-
-
 # Define hyperparameter
-INPUT_SIZE = 32
+INPUT_SIZE = 299
 CHANNELS = 3
 INPUT_SHAPE = (INPUT_SIZE, INPUT_SIZE, CHANNELS)
 NUM_CLASSES = 10
@@ -22,6 +15,7 @@ NUM_TRAIN_IMGS = 50000
 NUM_TEST_IMGS = 10000
 BATCH_SIZE = 128
 EPOCHS = 10
+
 
 train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
 val_steps_per_epoch = NUM_TEST_IMGS // BATCH_SIZE
@@ -37,23 +31,23 @@ X_test = X_test/255.0
 
 
 # Load pre-trained model
-base_model = tf.keras.applications.VGG16(include_top=False, 
+base_model = tf.keras.applications.InceptionV3(include_top=False, 
                                         weights='imagenet', 
-                                        input_shape=INPUT_SHAPE ,)
+                                        input_shape=INPUT_SHAPE,)
 
 # Freeze the pre-trained layers
 base_model.trainable = False
 
 # Add a fully connected layer
-model_input = tf.keras.Input(shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS))
-model_output = base_model(model_input)
-model_output = tf.keras.layers.Flatten()(model_output)
-model_output = tf.keras.layers.Dense(512, activation='relu')(model_output)
-model_output = tf.keras.layers.Dropout(0.2)(model_output)
-model_output = tf.keras.layers.Dense(256, activation='relu')(model_output)
-model_output = tf.keras.layers.Dropout(0.2)(model_output)
-model_output = tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')(model_output)
-model = tf.keras.Model(model_input, model_output)
+model = tf.keras.Sequential()
+model.add(base_model)
+model.add(tf.keras.layers.GlobalAveragePooling2D())
+model.add(tf.keras.layers.Flatten())
+model.add(tf.keras.layers.Dense(512, activation='relu'))
+model.add(tf.keras.layers.Dropout(0.2))
+model.add(tf.keras.layers.Dense(256, activation='relu'))
+model.add(tf.keras.layers.Dropout(0.2))
+model.add(tf.keras.layers.Dense(NUM_CLASSES, activation='softmax'))
 
 model.summary()
 
@@ -63,7 +57,7 @@ model.compile(optimizer = 'adam',
               metrics = ['accuracy'])
 
 # Callbacks
-checkpoint_filepath = os.path.join(TRAIN_DIR, 'learning_test/checkpoint/VGG16_cifar10.h5')
+checkpoint_filepath = os.path.join(TRAIN_DIR, 'learning_test/checkpoint/InceptionV3_cifar10.h5')
 
 
 callbacks = [
@@ -76,12 +70,12 @@ callbacks = [
                                         save_best_only=True,
                                         # save_weights_only=True,
                                     ),
-    # PlotLossesKeras(),
+
 ]
 
 
 # training model
-history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=50, steps_per_epoch=train_steps_per_epoch, validation_data = (X_test, Y_test), validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
+history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=EPOCHS, steps_per_epoch=train_steps_per_epoch, validation_data = (X_test, Y_test), validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
 
 
 
