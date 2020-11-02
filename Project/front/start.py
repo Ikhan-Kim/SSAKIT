@@ -6,6 +6,7 @@ from PyQt5 import uic, QtCore, QtGui
 from PIL import Image
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from back import create_dir, set_directory
+from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1
 import time
 
 import numpy as np
