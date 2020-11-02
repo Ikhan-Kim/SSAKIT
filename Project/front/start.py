@@ -78,28 +78,12 @@ class WindowClass(QMainWindow, form_class) :
         # self.btnTraining.clicked.connect(self.training)
 
     def dataLoadFn(self):
-        self.dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
-                                                  QFileDialog.ShowDirsOnly)
-        treeModel = QFileSystemModel()
-        self.dirTreeView.setModel(treeModel)
-        treeModel.setRootPath(QDir.rootPath())
-        self.dirTreeView.setRootIndex(treeModel.index(self.dirName))
-        # if self.dirWidget.isVisible():
-        #     self.dirWidget.hide()
-        # else:
-        #     self.dirWidget.show()
-        
-        self.btnTraining.clicked.connect(self.training)
-        # 터미널
-        self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1280,190))
-        self.textBox_terminal.setText("asdf")
-        self.process = QtCore.QProcess()
-        self.process.readyReadStandardError.connect(self.onReadyReadStandardError)
-        self.process.readyReadStandardOutput.connect(self.onReadyReadStandardOutput)
-        # 결과 로그
-        pixmap = QtGui.QPixmap("result_logs\\20201117177.png")
-        pixmap = pixmap.scaledToWidth(480)
-        self.result_figure.setPixmap(pixmap)
+     self.dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
+                          QFileDialog.ShowDirsOnly)
+     treeModel = QFileSystemModel()
+     self.dirTreeView.setModel(treeModel)
+     treeModel.setRootPath(QDir.rootPath())
+     self.dirTreeView.setRootIndex(treeModel.index(self.dirName))
 
     def learnSettingsFn(self, checked):
         if self.learnSettingDisplay.isVisible():
