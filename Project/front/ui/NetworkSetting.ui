@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="btnDataLoad">
     <property name="geometry">
      <rect>
       <x>10</x>
@@ -86,7 +86,7 @@
      <rect>
       <x>190</x>
       <y>90</y>
-      <width>1091</width>
+      <width>401</width>
       <height>421</height>
      </rect>
     </property>
@@ -1338,6 +1338,29 @@ p, li { white-space: pre-wrap; }
     </property>
     <property name="text">
      <string>학습하기</string>
+    </property>
+   </widget>
+   <widget class="QTreeView" name="dirTreeView">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>90</y>
+      <width>191</width>
+      <height>421</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="imgLabel">
+    <property name="geometry">
+     <rect>
+      <x>193</x>
+      <y>90</y>
+      <width>891</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>이미지 출력 위치</string>
     </property>
    </widget>
   </widget>
