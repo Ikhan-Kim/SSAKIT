@@ -139,13 +139,14 @@ class WindowClass(QMainWindow, form_class):
             self.projectNameDisplay.show()
 
     def dataLoadFn(self):
-        self.dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
+        self.pathName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
                                                         QFileDialog.ShowDirsOnly)
+        self.dirName = self.pathName.split('/')[-1]
         treeModel = QFileSystemModel()
         self.dirTreeView.setModel(treeModel)
         treeModel.setRootPath(QDir.rootPath())
-        self.dirTreeView.setRootIndex(treeModel.index(self.dirName))
-        self.setWindowTitle(self.projectName)
+        self.dirTreeView.setRootIndex(treeModel.index(self.pathName))
+        # self.setWindowTitle(self.projectName)
 
     def learnSettingsFn(self, checked):
         if self.learnSettingDisplay.isVisible():
