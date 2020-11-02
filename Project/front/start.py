@@ -4,6 +4,8 @@ from PyQt5.QtCore import QDir
 from PyQt5.QtWidgets import *
 from PyQt5 import uic, QtCore, QtGui
 from PIL import Image
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+from back import create_dir, set_directory
 import time
 
 import numpy as np
@@ -111,7 +113,6 @@ class ProjectNameClass(QDialog):
     def projectNameFn(self):
         WindowClass.projectName = self.lineName.text()
 
-
 class WindowClass(QMainWindow, form_class):
     mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
     settingsData = []
@@ -131,6 +132,7 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         # self.btnTraining.clicked.connect(self.training)
         self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
+        self.setWindowTitle('SSAKIT')
 
     def createProjectFn(self):
         if self.projectNameDisplay.isVisible():
@@ -142,10 +144,13 @@ class WindowClass(QMainWindow, form_class):
         self.pathName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
                                                         QFileDialog.ShowDirsOnly)
         self.dirName = self.pathName.split('/')[-1]
+        self.testPath = '../back/' + self.projectName
         treeModel = QFileSystemModel()
         self.dirTreeView.setModel(treeModel)
         treeModel.setRootPath(QDir.rootPath())
-        self.dirTreeView.setRootIndex(treeModel.index(self.pathName))
+        self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
+        create_dir.create_dir_flow(self.projectName)
+        set_directory.set_directory(self.projectName, self.dirName, self.pathName)
         # self.setWindowTitle(self.projectName)
 
     def learnSettingsFn(self, checked):

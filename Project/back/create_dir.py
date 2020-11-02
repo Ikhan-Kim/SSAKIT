@@ -2,11 +2,12 @@ import os
 
 
 def create_dir_flow(dataset_name):
-    os.makedirs("./"+ dataset_name + "/train")
-    os.makedirs("./"+ dataset_name + "/validation")
-    os.makedirs("./"+ dataset_name + "/test")
+    os.makedirs("../back/"+ dataset_name + "/train", exist_ok=True)
+    os.makedirs("../back/"+ dataset_name + "/validation", exist_ok=True)
+    os.makedirs("../back/"+ dataset_name + "/test", exist_ok=True)
 
-
+def name():
+    print('create_dir')
 
 
 
