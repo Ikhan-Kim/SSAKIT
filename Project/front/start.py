@@ -63,9 +63,21 @@ class AnotherFormLayout(QDialog):
         WindowClass.settingsData.extend([self.lineTarget.text(), self.lineBatch.text(), self.lineRgb.text()])
         print(self.lineTarget.text(), self.lineBatch.text(), self.lineRgb.text())
 
+class ProjectNameClass(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.lineName = QLineEdit()
+        self.lineName.setGeometry(10, 10, 100, 100)
+        self.btnOk = QPushButton()
+        self.btnOk.clicked.connect(self.projectNameFn)
+
+        def projectNameFn(self):
+            WindowClass.projectName = self.lineName.text()
+
 class WindowClass(QMainWindow, form_class) :
     mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
     settingsData = []
+    projectName = ''
     def __init__(self) :
         super().__init__()
         self.setupUi(self)
@@ -74,11 +86,15 @@ class WindowClass(QMainWindow, form_class) :
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
         # 버튼별 함수 실행
+        # self.btnCreateProject.connect(self.createProjectFn)
         self.btnDataLoad.clicked.connect(self.dataLoadFn)
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         # self.btnTraining.clicked.connect(self.training)
         self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
+
+    # def createProjectFn(self):
+    #     self.projectName = ''
 
     def dataLoadFn(self):
         self.dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
