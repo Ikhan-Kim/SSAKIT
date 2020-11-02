@@ -1,8 +1,9 @@
 import sys
 import os
 from PyQt5.QtWidgets import *
-from PyQt5 import uic, QtCore
+from PyQt5 import uic, QtCore, QtGui
 from PIL import Image
+import time
 
 import tkinter
 from  tkinter import filedialog
@@ -83,6 +84,10 @@ class WindowClass(QMainWindow, form_class) :
         self.process = QtCore.QProcess()
         self.process.readyReadStandardError.connect(self.onReadyReadStandardError)
         self.process.readyReadStandardOutput.connect(self.onReadyReadStandardOutput)
+        # 결과 로그
+        pixmap = QtGui.QPixmap("result_logs\\20201117177.png")
+        pixmap = pixmap.scaledToWidth(480)
+        self.result_figure.setPixmap(pixmap)
 
 
     # 더블클릭했을경우 실행되는 함수
@@ -224,8 +229,9 @@ class WindowClass(QMainWindow, form_class) :
         ]
 
         # training model
-        history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=100, steps_per_epoch=train_steps_per_epoch, validation_data = (X_test, Y_test), validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
+        history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=5, steps_per_epoch=train_steps_per_epoch, validation_data = (X_test, Y_test), validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
 
+        # 터미널에 히스토리 출력
         loss_history = history.history["loss"] #type is list
         for i in range(len(loss_history)):
             self.textBox_terminal.append("Epoch {} : lose = {}".format(i, loss_history[i]))
@@ -244,9 +250,11 @@ class WindowClass(QMainWindow, form_class) :
         plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
         plt.title('Training and validation accuracy')
         plt.legend(loc=0)
-        plt.figure()
 
-        plt.show()
+        # plt.show()
+        now = time.gmtime(time.time())
+        file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
+        plt.savefig('result_logs\\'+file_name)
 
 
 if __name__ == "__main__" :
