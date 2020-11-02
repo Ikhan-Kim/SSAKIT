@@ -169,145 +169,151 @@ class WindowClass(QMainWindow, form_class):
         self.imgLabel.setPixmap(pixmap)
 
     def training(self):
-        # path
-        TRAIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        if self.settingsData[0] == 'VGG':
+            Vgg16_test1.
+        elif self.settingsData[0] == 'InceptionV3':
+            InceptionV3_test1.
+        elif self.settingsData[0] == 'ResNet152':
+            ResNet152_test1.
+        # # path
+        # TRAIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-        # Define hyperparameter
-        INPUT_SIZE = 32
-        CHANNELS = 3
-        NUM_CLASSES = 10
-        NUM_TRAIN_IMGS = 50000
-        NUM_TEST_IMGS = 10000
+        # # Define hyperparameter
+        # INPUT_SIZE = 32
+        # CHANNELS = 3
+        # NUM_CLASSES = 10
+        # NUM_TRAIN_IMGS = 50000
+        # NUM_TEST_IMGS = 10000
 
-        BATCH_SIZE = 128
-        train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
-        val_steps_per_epoch = NUM_TEST_IMGS // BATCH_SIZE
+        # BATCH_SIZE = 128
+        # train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
+        # val_steps_per_epoch = NUM_TEST_IMGS // BATCH_SIZE
 
-        # Data Preprocessing
-        (X_train, Y_train), (X_test, Y_test) = tf.keras.datasets.cifar10.load_data()
-        X_train = X_train/255.0
-        X_test = X_test/255.0
+        # # Data Preprocessing
+        # (X_train, Y_train), (X_test, Y_test) = tf.keras.datasets.cifar10.load_data()
+        # X_train = X_train/255.0
+        # X_test = X_test/255.0
 
-        # Load pre-trained model
-        base_model = tf.keras.applications.VGG16(include_top=False,
-                                                 weights='imagenet',
-                                                 input_shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS),)
+        # # Load pre-trained model
+        # base_model = tf.keras.applications.VGG16(include_top=False,
+        #                                          weights='imagenet',
+        #                                          input_shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS),)
 
-        # Freeze the pre-trained layers
-        base_model.trainable = False
+        # # Freeze the pre-trained layers
+        # base_model.trainable = False
 
-        # Add a fully connected layer
-        model_input = tf.keras.Input(shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS))
-        model_output = tf.keras.layers.Flatten()(model_input)
-        model_output = tf.keras.layers.Dense(
-            512, activation='relu')(model_output)
-        model_output = tf.keras.layers.Dropout(0.2)(model_output)
-        model_output = tf.keras.layers.Dense(
-            256, activation='relu')(model_output)
-        model_output = tf.keras.layers.Dropout(0.2)(model_output)
-        model_output = tf.keras.layers.Dense(
-            NUM_CLASSES, activation='softmax')(model_output)
-        model = tf.keras.Model(model_input, model_output)
+        # # Add a fully connected layer
+        # model_input = tf.keras.Input(shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS))
+        # model_output = tf.keras.layers.Flatten()(model_input)
+        # model_output = tf.keras.layers.Dense(
+        #     512, activation='relu')(model_output)
+        # model_output = tf.keras.layers.Dropout(0.2)(model_output)
+        # model_output = tf.keras.layers.Dense(
+        #     256, activation='relu')(model_output)
+        # model_output = tf.keras.layers.Dropout(0.2)(model_output)
+        # model_output = tf.keras.layers.Dense(
+        #     NUM_CLASSES, activation='softmax')(model_output)
+        # model = tf.keras.Model(model_input, model_output)
 
-        model.summary()
+        # model.summary()
 
-        # Compile
-        model.compile(optimizer='adam',
-                      loss='sparse_categorical_crossentropy',
-                      metrics=['accuracy'])
+        # # Compile
+        # model.compile(optimizer='adam',
+        #               loss='sparse_categorical_crossentropy',
+        #               metrics=['accuracy'])
 
-        # Callbacks
-        checkpoint_filepath = os.path.join(
-            TRAIN_DIR, 'learning_test/checkpoint/VGG16_cifar10.h5')
-        callbacks = [
-            tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_accuracy',
-                                             #  restore_best_weights=True
-                                             ),
-            tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
-                                               monitor='val_accuracy',
-                                               mode='max',
-                                               save_best_only=True,
-                                               # save_weights_only=True,
-                                               ),
-            # PlotLossesKeras(),
-        ]
+        # # Callbacks
+        # checkpoint_filepath = os.path.join(
+        #     TRAIN_DIR, 'learning_test/checkpoint/VGG16_cifar10.h5')
+        # callbacks = [
+        #     tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_accuracy',
+        #                                      #  restore_best_weights=True
+        #                                      ),
+        #     tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
+        #                                        monitor='val_accuracy',
+        #                                        mode='max',
+        #                                        save_best_only=True,
+        #                                        # save_weights_only=True,
+        #                                        ),
+        #     # PlotLossesKeras(),
+        # ]
 
-        class PlotLosses(keras.callbacks.Callback):
-            def __init__(self, tbt):
-                self.textBox_terminal = tbt
-                print("textBox copied")
-                # plt.ion()
+        # class PlotLosses(keras.callbacks.Callback):
+        #     def __init__(self, tbt):
+        #         self.textBox_terminal = tbt
+        #         print("textBox copied")
+        #         # plt.ion()
 
-            def on_train_begin(self, logs={}):
-                self.i = 0
-                self.x = []
-                self.losses = []
-                self.val_losses = []
-                self.acc = []
-                self.val_acc = []
-                self.fig = plt.figure()
+        #     def on_train_begin(self, logs={}):
+        #         self.i = 0
+        #         self.x = []
+        #         self.losses = []
+        #         self.val_losses = []
+        #         self.acc = []
+        #         self.val_acc = []
+        #         self.fig = plt.figure()
 
-                self.logs = []
+        #         self.logs = []
 
-            def on_epoch_end(self, epoch, logs={}):
-                self.logs.append(logs)
-                self.x.append(self.i)
-                self.losses.append(logs.get('loss'))
-                self.val_losses.append(logs.get('val_loss'))
-                self.acc.append(logs.get('accuracy'))
-                self.val_acc.append(logs.get('val_accuracy'))
-                self.i += 1
-                f, (ax1, ax2) = plt.subplots(1, 2, sharex=True)
+        #     def on_epoch_end(self, epoch, logs={}):
+        #         self.logs.append(logs)
+        #         self.x.append(self.i)
+        #         self.losses.append(logs.get('loss'))
+        #         self.val_losses.append(logs.get('val_loss'))
+        #         self.acc.append(logs.get('accuracy'))
+        #         self.val_acc.append(logs.get('val_accuracy'))
+        #         self.i += 1
+        #         f, (ax1, ax2) = plt.subplots(1, 2, sharex=True)
 
-                clear_output(wait=True)
+        #         clear_output(wait=True)
 
-                ax1.set_yscale('log')
-                ax1.plot(self.x, self.losses, label="loss")
-                ax1.plot(self.x, self.val_losses, label="val_loss")
-                ax1.legend()
+        #         ax1.set_yscale('log')
+        #         ax1.plot(self.x, self.losses, label="loss")
+        #         ax1.plot(self.x, self.val_losses, label="val_loss")
+        #         ax1.legend()
 
-                ax2.plot(self.x, self.acc, label="accuracy")
-                ax2.plot(self.x, self.val_acc, label="validation accuracy")
-                ax2.legend()
+        #         ax2.plot(self.x, self.acc, label="accuracy")
+        #         ax2.plot(self.x, self.val_acc, label="validation accuracy")
+        #         ax2.legend()
 
-                plt.draw()
-                plt.pause(0.01)
-                plt.clf()
+        #         plt.draw()
+        #         plt.pause(0.01)
+        #         plt.clf()
 
-                # self.textBox_terminal.append(str(self.losses[-1]))
-                self.textBox_terminal.append(
-                    "Epoch {} : lose = {}".format(self.i, self.losses[-1]))
-                # plt.show()
+        #         # self.textBox_terminal.append(str(self.losses[-1]))
+        #         self.textBox_terminal.append(
+        #             "Epoch {} : lose = {}".format(self.i, self.losses[-1]))
+        #         # plt.show()
 
-        plot_losses = PlotLosses(self.textBox_terminal)
+        # plot_losses = PlotLosses(self.textBox_terminal)
 
-        # training model
-        history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=5, steps_per_epoch=train_steps_per_epoch, validation_data=(
-            X_test, Y_test), validation_steps=val_steps_per_epoch, verbose=1,  callbacks=plot_losses)
+        # # training model
+        # history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=5, steps_per_epoch=train_steps_per_epoch, validation_data=(
+        #     X_test, Y_test), validation_steps=val_steps_per_epoch, verbose=1,  callbacks=plot_losses)
 
-        # 터미널에 히스토리 출력
-        # loss_history = history.history["loss"]  # type is list
-        # for i in range(len(loss_history)):
-        #     self.textBox_terminal.append(
-        #         "Epoch {} : lose = {}".format(i, loss_history[i]))
+        # # 터미널에 히스토리 출력
+        # # loss_history = history.history["loss"]  # type is list
+        # # for i in range(len(loss_history)):
+        # #     self.textBox_terminal.append(
+        # #         "Epoch {} : lose = {}".format(i, loss_history[i]))
 
-        # 정확도 그래프 (임시)
-        acc = history.history['accuracy']
-        val_acc = history.history['val_accuracy']
-        loss = history.history['loss']
-        val_loss = history.history['val_loss']
+        # # 정확도 그래프 (임시)
+        # acc = history.history['accuracy']
+        # val_acc = history.history['val_accuracy']
+        # loss = history.history['loss']
+        # val_loss = history.history['val_loss']
 
-        epochs = range(len(acc))
+        # epochs = range(len(acc))
 
-        plt.plot(epochs, acc, 'r', label='Training accuracy')
-        plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
-        plt.title('Training and validation accuracy')
-        plt.legend(loc=0)
+        # plt.plot(epochs, acc, 'r', label='Training accuracy')
+        # plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
+        # plt.title('Training and validation accuracy')
+        # plt.legend(loc=0)
 
-        now = time.gmtime(time.time())
-        file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
-            str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
-        plt.savefig('result_logs\\'+file_name)
+        # now = time.gmtime(time.time())
+        # file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
+        #     str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
+        # plt.savefig('result_logs\\'+file_name)
 
 
 if __name__ == "__main__":
