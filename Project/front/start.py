@@ -173,6 +173,7 @@ class WindowClass(QMainWindow, form_class):
             def __init__(self, tbt):
                 self.textBox_terminal = tbt
                 print("textBox copied")
+                # plt.ion()
 
             def on_train_begin(self, logs={}):
                 self.i = 0
@@ -190,8 +191,8 @@ class WindowClass(QMainWindow, form_class):
                 self.x.append(self.i)
                 self.losses.append(logs.get('loss'))
                 self.val_losses.append(logs.get('val_loss'))
-                self.acc.append(logs.get('acc'))
-                self.val_acc.append(logs.get('val_acc'))
+                self.acc.append(logs.get('accuracy'))
+                self.val_acc.append(logs.get('val_accuracy'))
                 self.i += 1
                 f, (ax1, ax2) = plt.subplots(1, 2, sharex=True)
 
@@ -206,8 +207,13 @@ class WindowClass(QMainWindow, form_class):
                 ax2.plot(self.x, self.val_acc, label="validation accuracy")
                 ax2.legend()
 
-                self.textBox_terminal.append(str(self.losses[-1]))
-                print("~~~~epoch~~~~")
+                plt.draw()
+                plt.pause(0.01)
+                plt.clf()
+
+                # self.textBox_terminal.append(str(self.losses[-1]))
+                self.textBox_terminal.append(
+                    "Epoch {} : lose = {}".format(self.i, self.losses[-1]))
                 # plt.show()
 
         plot_losses = PlotLosses(self.textBox_terminal)
@@ -217,10 +223,10 @@ class WindowClass(QMainWindow, form_class):
             X_test, Y_test), validation_steps=val_steps_per_epoch, verbose=1,  callbacks=plot_losses)
 
         # 터미널에 히스토리 출력
-        loss_history = history.history["loss"]  # type is list
-        for i in range(len(loss_history)):
-            self.textBox_terminal.append(
-                "Epoch {} : lose = {}".format(i, loss_history[i]))
+        # loss_history = history.history["loss"]  # type is list
+        # for i in range(len(loss_history)):
+        #     self.textBox_terminal.append(
+        #         "Epoch {} : lose = {}".format(i, loss_history[i]))
 
         # 정확도 그래프 (임시)
         acc = history.history['accuracy']
