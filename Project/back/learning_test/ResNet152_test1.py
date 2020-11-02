@@ -2,6 +2,7 @@ import os
 import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
+from keras_preprocessing.image import ImageDataGenerator
 
 #path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -11,9 +12,9 @@ INPUT_SIZE = 224
 CHANNELS = 3
 INPUT_SHAPE = (INPUT_SIZE, INPUT_SIZE, CHANNELS)
 NUM_CLASSES = 10
-NUM_TRAIN_IMGS = 500
-NUM_VAL_IMGS = 100
-BATCH_SIZE = 64
+NUM_TRAIN_IMGS = 5000
+NUM_VAL_IMGS = 1000
+BATCH_SIZE = 128
 
 HORIZONTAL_FLIP = False
 VERTICAL_FLIP = False
@@ -27,10 +28,10 @@ val_steps_per_epoch = NUM_VAL_IMGS // BATCH_SIZE
 # Data Preprocessing
 training_datagen = ImageDataGenerator(
                         rescale = 1./255,
-                        horizontal_flip = HORIZONTAL_FLIP
-                        vertical_flip = VERTICAL_FLIP
-                        brightness_range = BRIGHTNESS_RANGE
-                        rotation_range = ROTATION_RANGE
+                        horizontal_flip = HORIZONTAL_FLIP,
+                        vertical_flip = VERTICAL_FLIP,
+                        brightness_range = BRIGHTNESS_RANGE,
+                        rotation_range = ROTATION_RANGE,
                         )
 validation_datagen = ImageDataGenerator(
                         rescale = 1./255
