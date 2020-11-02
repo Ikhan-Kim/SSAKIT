@@ -35,55 +35,109 @@ class AnotherFormLayout(QDialog):
         buttonBox.rejected.connect(self.reject)
 
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.formDataPreprocessing)
+        mainLayout.addWidget(self.formAugmentation)
+        # mainLayout.addWidget(self.formDataPreprocessing)
         mainLayout.addWidget(self.formNueralNetwork)
         mainLayout.addWidget(self.formLearn)
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
-
-        self.setWindowTitle("Nueral Network Settings")
-
+        
+        self.setWindowTitle("Train Settings")
+        
     def createFormGroupBox(self):
-        # data preprocessing
-        self.formDataPreprocessing = QGroupBox("Data Preprocessing")
+        # Augmentation
+        self.formAugmentation = QGroupBox("Augmentation")
         layout = QFormLayout()
-        self.lineTarget = QLineEdit()
-        layout.addRow(QLabel("target size:"), self.lineTarget)
-        layout.addRow(QLabel("class mode:"), QComboBox())
-        self.lineBatch = QLineEdit()
-        layout.addRow(QLabel("batch size:"), self.lineBatch)
-        self.lineRgb = QLineEdit()
-        layout.addRow(QLabel("rgb:"), self.lineRgb)
-        self.formDataPreprocessing.setLayout(layout)
+        self.checkBoxHorizantal = QCheckBox("Horizantal Flip", self)
+        layout.addRow(self.checkBoxHorizantal)
+        self.checkBoxVertical = QCheckBox("Vertical Flip", self)
+        layout.addRow(self.checkBoxVertical)
+        self.checkBoxRotation90 = QCheckBox("Rotation 90", self)
+        layout.addRow(self.checkBoxRotation90)
+        self.checkBoxRotation180 = QCheckBox("Rotation 180", self)
+        layout.addRow(self.checkBoxRotation180)
+        self.formAugmentation.setLayout(layout)
+        # data preprocessing
+        # self.formDataPreprocessing = QGroupBox("Data Preprocessing")
+        # layout = QFormLayout()
+        # self.lineTarget = QLineEdit()
+        # layout.addRow(QLabel("target size:"), self.lineTarget)
+        # layout.addRow(QLabel("class mode:"), QComboBox())
+        # self.lineBatch = QLineEdit()
+        # layout.addRow(QLabel("batch size:"), self.lineBatch)
+        # self.lineRgb = QLineEdit()
+        # layout.addRow(QLabel("rgb:"), self.lineRgb)
+        # self.formDataPreprocessing.setLayout(layout)
         # nn setting
         self.formNueralNetwork = QGroupBox("Nueral Network")
         layoutNN = QFormLayout()
-        layoutNN.addRow(QLabel("select NN:"), QComboBox())
+        self.comboBoxNN = QComboBox()
+        self.comboBoxNN.addItems(["VGG", "InceptionV3", "ResNet152"])
+        layoutNN.addRow(QLabel("select NN:"), self.comboBoxNN)
         self.formNueralNetwork.setLayout(layoutNN)
         # Learn Settings
         self.formLearn = QGroupBox("Learn Settings")
-
+        layoutLS = QFormLayout()
+        self.lineEpochs = QLineEdit()
+        # onlyInt = QIntValidator()
+        # self.lineEpochs.setValidator(onlyInt)
+        layoutLS.addRow(QLabel("Epochs"), self.lineEpochs)
+        self.formLearn.setLayout(layoutLS)
+        
     def accept(self):
         print('hi')
-        print(self.lineTarget.text(), self.lineBatch.text(), self.lineRgb.text())
+        if self.checkBoxHorizantal.isChecked() == True:
+            WindowClass.settingsData.append("Horizantal Flip")
+        if self.checkBoxVertical.isChecked() == True:
+            WindowClass.settingsData.append("Vertical Flip")
+        if self.checkBoxRotation90.isChecked() == True:
+            WindowClass.settingsData.append("Rotation 90")
+        if self.checkBoxRotation180.isChecked() == True:
+            WindowClass.settingsData.append("Rotation 180")
+        WindowClass.settingsData.append(self.comboBoxNN.currentText())
+        WindowClass.settingsData.append(self.lineEpochs.text())
+        print(WindowClass.settingsData)
+
+class ProjectNameClass(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.lineName = QLineEdit()
+        self.btnOk = QPushButton('OK')
+        self.btnOk.clicked.connect(self.projectNameFn)
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.lineName)
+        mainLayout.addWidget(self.btnOk)
+        self.setLayout(mainLayout)
+
+    def projectNameFn(self):
+        WindowClass.projectName = self.lineName.text()
 
 
 class WindowClass(QMainWindow, form_class):
     mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
-
-    def __init__(self):
+    settingsData = []
+    projectName = ''
+    def __init__(self) :
         super().__init__()
         self.setupUi(self)
         # 기본 설정?>
         self.learnSettingDisplay = AnotherFormLayout()
+        self.projectNameDisplay = ProjectNameClass()
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
         # 버튼별 함수 실행
+        self.btnCreateProject.clicked.connect(self.createProjectFn)
         self.btnDataLoad.clicked.connect(self.dataLoadFn)
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
-        self.btnTraining.clicked.connect(self.training)
+        # self.btnTraining.clicked.connect(self.training)
         self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
+
+    def createProjectFn(self):
+        if self.projectNameDisplay.isVisible():
+            self.projectNameDisplay.hide()
+        else:
+            self.projectNameDisplay.show()
 
     def dataLoadFn(self):
         self.dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
@@ -92,6 +146,7 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.setModel(treeModel)
         treeModel.setRootPath(QDir.rootPath())
         self.dirTreeView.setRootIndex(treeModel.index(self.dirName))
+        self.setWindowTitle(self.projectName)
 
     def learnSettingsFn(self, checked):
         if self.learnSettingDisplay.isVisible():
@@ -101,6 +156,10 @@ class WindowClass(QMainWindow, form_class):
 
     def fileViewFn(self, index):
         self.mainImg = self.dirTreeView.model().filePath(index)
+        print(self.dirTreeView.columnWidth(1))
+        self.dirTreeView.hideColumn(1)
+        self.dirTreeView.hideColumn(2)
+        self.dirTreeView.hideColumn(3)
         print(self.mainImg)
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
@@ -173,6 +232,7 @@ class WindowClass(QMainWindow, form_class):
             def __init__(self, tbt):
                 self.textBox_terminal = tbt
                 print("textBox copied")
+                # plt.ion()
 
             def on_train_begin(self, logs={}):
                 self.i = 0
@@ -190,8 +250,8 @@ class WindowClass(QMainWindow, form_class):
                 self.x.append(self.i)
                 self.losses.append(logs.get('loss'))
                 self.val_losses.append(logs.get('val_loss'))
-                self.acc.append(logs.get('acc'))
-                self.val_acc.append(logs.get('val_acc'))
+                self.acc.append(logs.get('accuracy'))
+                self.val_acc.append(logs.get('val_accuracy'))
                 self.i += 1
                 f, (ax1, ax2) = plt.subplots(1, 2, sharex=True)
 
@@ -206,8 +266,13 @@ class WindowClass(QMainWindow, form_class):
                 ax2.plot(self.x, self.val_acc, label="validation accuracy")
                 ax2.legend()
 
-                self.textBox_terminal.append(str(self.losses[-1]))
-                print("~~~~epoch~~~~")
+                plt.draw()
+                plt.pause(0.01)
+                plt.clf()
+
+                # self.textBox_terminal.append(str(self.losses[-1]))
+                self.textBox_terminal.append(
+                    "Epoch {} : lose = {}".format(self.i, self.losses[-1]))
                 # plt.show()
 
         plot_losses = PlotLosses(self.textBox_terminal)
@@ -217,10 +282,10 @@ class WindowClass(QMainWindow, form_class):
             X_test, Y_test), validation_steps=val_steps_per_epoch, verbose=1,  callbacks=plot_losses)
 
         # 터미널에 히스토리 출력
-        loss_history = history.history["loss"]  # type is list
-        for i in range(len(loss_history)):
-            self.textBox_terminal.append(
-                "Epoch {} : lose = {}".format(i, loss_history[i]))
+        # loss_history = history.history["loss"]  # type is list
+        # for i in range(len(loss_history)):
+        #     self.textBox_terminal.append(
+        #         "Epoch {} : lose = {}".format(i, loss_history[i]))
 
         # 정확도 그래프 (임시)
         acc = history.history['accuracy']

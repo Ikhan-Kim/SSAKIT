@@ -4,30 +4,53 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 
 #path
-TRAIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Define hyperparameter
 INPUT_SIZE = 299
 CHANNELS = 3
 INPUT_SHAPE = (INPUT_SIZE, INPUT_SIZE, CHANNELS)
 NUM_CLASSES = 10
-NUM_TRAIN_IMGS = 50000
-NUM_TEST_IMGS = 10000
-BATCH_SIZE = 128
+NUM_TRAIN_IMGS = 500
+NUM_VAL_IMGS = 100
+BATCH_SIZE = 64
+
+
+HORIZONTAL_FLIP = False
+VERTICAL_FLIP = False
+BRIGHTNESS_RANGE = None
+ROTATION_RANGE = 0
+
 EPOCHS = 10
-
-
 train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
-val_steps_per_epoch = NUM_TEST_IMGS // BATCH_SIZE
+val_steps_per_epoch = NUM_VAL_IMGS // BATCH_SIZE
 
 # Data Preprocessing
-(X_train, Y_train), (X_test, Y_test) = tf.keras.datasets.cifar10.load_data()
+training_datagen = ImageDataGenerator(
+                        rescale = 1./255,
+                        horizontal_flip = HORIZONTAL_FLIP
+                        vertical_flip = VERTICAL_FLIP
+                        brightness_range = BRIGHTNESS_RANGE
+                        rotation_range = ROTATION_RANGE
+                        )
+validation_datagen = ImageDataGenerator(
+                        rescale = 1./255
+                        )
 
-X_train = X_train/255.0
-X_test = X_test/255.0
 
-# X_train = X_train.reshape(X_train.shape[0], *INPUT_SHAPE)
-# X_test = X_test.reshape(X_test.shape[0], *INPUT_SHAPE)
+train_generator = training_datagen.flow_from_directory(
+	train_dir,
+	target_size=(INPUT_SIZE, INPUT_SIZE),
+	class_mode='categorical',
+    batch_size= BATCH_SIZE
+)
+
+validation_generator = validation_datagen.flow_from_directory(
+	val_dir,
+	target_size=(INPUT_SIZE, INPUT_SIZE),
+	class_mode='categorical',
+    batch_size= BATCH_SIZE
+)
 
 
 # Load pre-trained model
@@ -53,11 +76,11 @@ model.summary()
 
 # Compile
 model.compile(optimizer = 'adam',
-              loss = 'sparse_categorical_crossentropy',
+              loss = 'categorical_crossentropy',
               metrics = ['accuracy'])
 
 # Callbacks
-checkpoint_filepath = os.path.join(TRAIN_DIR, 'learning_test/checkpoint/InceptionV3_cifar10.h5')
+checkpoint_filepath = os.path.join(BASE_DIR, 'learning_test/checkpoint/InceptionV3_cifar10.h5')
 
 
 callbacks = [
@@ -75,7 +98,7 @@ callbacks = [
 
 
 # training model
-history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=EPOCHS, steps_per_epoch=train_steps_per_epoch, validation_data = (X_test, Y_test), validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
+history = model.fit(train_generator, epochs=EPOCHS, steps_per_epoch=train_steps_per_epoch, validation_data = validation_generator, validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
 
 
 
