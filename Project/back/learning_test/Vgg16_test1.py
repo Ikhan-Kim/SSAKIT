@@ -45,7 +45,8 @@ base_model.trainable = False
 
 # Add a fully connected layer
 model_input = tf.keras.Input(shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS))
-model_output = tf.keras.layers.Flatten()(model_input)
+model_output = base_model(model_input)
+model_output = tf.keras.layers.Flatten()(model_output)
 model_output = tf.keras.layers.Dense(512, activation='relu')(model_output)
 model_output = tf.keras.layers.Dropout(0.2)(model_output)
 model_output = tf.keras.layers.Dense(256, activation='relu')(model_output)
@@ -79,7 +80,7 @@ callbacks = [
 
 
 # training model
-history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=100, steps_per_epoch=train_steps_per_epoch, validation_data = (X_test, Y_test), validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
+history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=50, steps_per_epoch=train_steps_per_epoch, validation_data = (X_test, Y_test), validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
 
 
 
@@ -96,6 +97,6 @@ plt.plot(epochs, acc, 'r', label='Training accuracy')
 plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
 plt.title('Training and validation accuracy')
 plt.legend(loc=0)
-plt.figure()
+# plt.figure()
 
 plt.show()
