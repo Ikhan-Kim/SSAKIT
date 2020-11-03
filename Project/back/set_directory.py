@@ -14,18 +14,13 @@ def set_directory(dataset_name, class_name, copy_path):
     os.makedirs(train_path, exist_ok=True)
     os.makedirs(validation_path, exist_ok=True)
     os.makedirs(test_path, exist_ok=True)
-    test1 = []
-    test2 = []
     copy_tree(copy_path, train_path)
     file_list = os.listdir(train_path)
     file_len = int(len(file_list) * 0.2)
     for file_name in random.sample(file_list, file_len):
-        test1.append(file_name)
         shutil.move(train_path + file_name, validation_path)
     file_list = os.listdir(train_path)
-    print(test1)
     for file_name in random.sample(file_list, file_len):
-        # test2.append(file_name)
         shutil.move(train_path + file_name, test_path)
 
 
