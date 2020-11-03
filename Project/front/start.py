@@ -103,6 +103,7 @@ class AnotherFormLayout(QDialog):
         settings_data.append(int(self.lineEpochs.text()))
         WindowClass.settingsData = settings_data
         print(WindowClass.settingsData)
+        self.hide()
 
 class ProjectNameClass(QDialog):
     def __init__(self):
