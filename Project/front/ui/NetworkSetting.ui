@@ -1363,6 +1363,17 @@ p, li { white-space: pre-wrap; }
      <string>이미지 출력 위치</string>
     </property>
    </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>620</x>
+      <y>110</y>
+      <width>421</width>
+      <height>341</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="testLayout"/>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

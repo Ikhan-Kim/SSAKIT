@@ -213,13 +213,16 @@ class WindowClass(QMainWindow, form_class):
                 # plt.pause(0.01)
                 # plt.clf()
 
-                hbox = QHBoxLayout()
-                self.win.p = pg.PlotWidget(title="loss")
-                hbox.addWidget(self.win.p)
-                self.win.setLayout(hbox)
-                self.win.pl = self.win.p.plot(pen='g')
-                self.win.pl.setData(x=self.x, y=self.losses)
-                self.win.show()
+                # hbox = QHBoxLayout()
+                # self.win.p = pg.PlotWidget(title="loss")
+                # hbox.addWidget(self.win.p)
+                # self.setLayout(hbox)
+                # self.pl = self.win.p.plot(pen='g')
+                # self.pl.setData(x=self.x, y=self.losses)
+                # self.win.show()
+                my_plot = pg.PlotWidget()
+                self.win.testLayout.addWidget(my_plot)
+                my_plot.plot(self.x, self.losses)
 
                 # self.textBox_terminal.append(str(self.losses[-1]))
                 self.textBox_terminal.append(
