@@ -165,8 +165,8 @@ class WindowClass(QMainWindow, form_class):
             self.learnSettingDisplay.hide()
         else:
             self.learnSettingDisplay.show()
-        self.learn_train_path = self.projectName + "\\train"
-        self.learn_val_path = self.projectName + "\\val"
+        self.learn_train_path = self.projectName + "/train"
+        self.learn_val_path = self.projectName + "/validation"
 
     def fileViewFn(self, index):
         self.mainImg = self.dirTreeView.model().filePath(index)

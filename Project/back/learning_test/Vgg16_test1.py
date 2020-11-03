@@ -11,9 +11,10 @@ from keras_preprocessing.image import ImageDataGenerator
 def Learn(augmentation, input_epochs, train_path, val_path):
     #path
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    train_dir = BASE_DIR + '\\' + train_path
-    val_dir = BASE_DIR + '\\' + val_path
+    train_dir = os.path.join(BASE_DIR, train_path)
+    val_dir = os.path.join(BASE_DIR, val_path)
     print(train_dir)
+    print(val_dir)
     # Define hyperparameter
     INPUT_SIZE = 200
     CHANNELS = 3
@@ -125,4 +126,4 @@ def Learn(augmentation, input_epochs, train_path, val_path):
 
     plt.show()
 
-# Learn([False, False, 0], 30, 'final1/train/', 'final1/val/')
+# Learn([False, False, 0], 30, 'final1/train', 'final1/validation')
