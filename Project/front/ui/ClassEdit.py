@@ -17,6 +17,11 @@ class ClassEdit(QDialog):
         self.setWindowTitle('Class Edit')
         # self.setGeometry(100, 100, 200, 100)
 
+        textLabel = QLabel(self)
+        textLabel.setText("CLASS EDIT")
+
+        label = QLabel("<h2><i>Hello</i> <font color=red>Qt!</h2>",self)
+
         layout = QVBoxLayout()
         layout.addStretch(1)
 
@@ -28,10 +33,10 @@ class ClassEdit(QDialog):
         
         subLayout = QHBoxLayout()
         
-        btnOK = QPushButton("확인")
+        btnOK = QPushButton("Save")
         btnOK.clicked.connect(self.onOKButtonClicked)
         
-        btnCancel = QPushButton("취소")
+        btnCancel = QPushButton("Cancel")
         btnCancel.clicked.connect(self.onCancelButtonClicked)
         
         layout.addWidget(edit)
