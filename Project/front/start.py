@@ -88,7 +88,8 @@ class AnotherFormLayout(QDialog):
         self.formLearn.setLayout(layoutLS)
         
     def accept(self):
-        WindowClass.settingsData.append(self.comboBoxNN.currentText())
+        settings_data = []
+        settings_data.append(self.comboBoxNN.currentText())
         aug = [False, False, 0]
         if self.checkBoxHorizantal.isChecked() == True:
             aug[0] = True
@@ -98,8 +99,9 @@ class AnotherFormLayout(QDialog):
             aug[2] = 90
         # if self.checkBoxRotation180.isChecked() == True:
         #     WindowClass.settingsData.append("Rotation 180")
-        WindowClass.settingsData.append(aug)
-        WindowClass.settingsData.append(int(self.lineEpochs.text()))
+        settings_data.append(aug)
+        settings_data.append(int(self.lineEpochs.text()))
+        WindowClass.settingsData = settings_data
         print(WindowClass.settingsData)
 
 class ProjectNameClass(QDialog):
@@ -120,6 +122,8 @@ class WindowClass(QMainWindow, form_class):
     mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
     settingsData = []
     projectName = ''
+    # learn_train_path = ''
+    # learn_val_path = ''
     def __init__(self) :
         super().__init__()
         self.setupUi(self)
@@ -133,7 +137,7 @@ class WindowClass(QMainWindow, form_class):
         self.btnDataLoad.clicked.connect(self.dataLoadFn)
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
-        # self.btnTraining.clicked.connect(self.training)
+        self.btnTraining.clicked.connect(self.training)
         self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
         self.setWindowTitle('SSAKIT')
 
@@ -154,8 +158,6 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
         create_dir.create_dir_flow(self.projectName)
         set_directory.set_directory(self.projectName, self.dirName, self.pathName)
-        self.learn_train_path = "../back/" + self.projectName + "/train/"
-        self.learn_val_path = "../back/" + self.projectName + "/val/"
         # self.setWindowTitle(self.projectName)
 
     def learnSettingsFn(self, checked):
@@ -163,6 +165,8 @@ class WindowClass(QMainWindow, form_class):
             self.learnSettingDisplay.hide()
         else:
             self.learnSettingDisplay.show()
+        self.learn_train_path = self.projectName + "\\train"
+        self.learn_val_path = self.projectName + "\\val"
 
     def fileViewFn(self, index):
         self.mainImg = self.dirTreeView.model().filePath(index)
@@ -173,11 +177,16 @@ class WindowClass(QMainWindow, form_class):
         self.imgLabel.setPixmap(pixmap)
 
     def training(self):
+        print('train')
         if self.settingsData[0] == 'VGG':
+            print('VGG')
+            print(self.learn_train_path, self.learn_val_path)
             Vgg16_test1.Learn(self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path)
         elif self.settingsData[0] == 'InceptionV3':
+            print('Inception')
             InceptionV3_test1.Learn(self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path)
         elif self.settingsData[0] == 'ResNet152':
+            print('ResNet')
             ResNet152_test1.Learn(self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path)
         # # path
         # TRAIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))

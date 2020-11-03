@@ -4,10 +4,12 @@ import tensorflow as tf
 import matplotlib.pyplot as plt
 from keras_preprocessing.image import ImageDataGenerator
 
-def Learn(argu):
+def Learn(augmentation, input_epochs, train_path, val_path):
     #path
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+    print(BASE_DIR)
+    train_dir = BASE_DIR + train_path
+    val_dir = BASE_DIR + val_path
     # Define hyperparameter
     INPUT_SIZE = 224
     CHANNELS = 3
@@ -17,12 +19,12 @@ def Learn(argu):
     NUM_VAL_IMGS = 1000
     BATCH_SIZE = 64
 
-    HORIZONTAL_FLIP = False
-    VERTICAL_FLIP = False
+    HORIZONTAL_FLIP = augmentation[0]
+    VERTICAL_FLIP = augmentation[1]
     BRIGHTNESS_RANGE = None
-    ROTATION_RANGE = 0
+    ROTATION_RANGE = augmentation[2]
 
-    EPOCHS = 10
+    EPOCHS = input_epochs
     train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
     val_steps_per_epoch = NUM_VAL_IMGS // BATCH_SIZE
 
@@ -117,3 +119,4 @@ def Learn(argu):
     plt.legend(loc=0)
 
     plt.show()
+

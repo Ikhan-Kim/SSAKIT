@@ -8,13 +8,14 @@ from keras_preprocessing.image import ImageDataGenerator
 # from livelossplot import PlotLossesKeras
 
 
-def Learn():
+def Learn(augmentation, input_epochs, train_path, val_path):
     #path
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
+    train_dir = BASE_DIR + '\\' + train_path
+    val_dir = BASE_DIR + '\\' + val_path
+    print(train_dir)
     # Define hyperparameter
-    INPUT_SIZE = 224
+    INPUT_SIZE = 200
     CHANNELS = 3
     INPUT_SHAPE = (INPUT_SIZE, INPUT_SIZE, CHANNELS)
     NUM_CLASSES = 10
@@ -22,12 +23,12 @@ def Learn():
     NUM_VAL_IMGS = 1000
     BATCH_SIZE = 64
 
-    HORIZONTAL_FLIP = False
-    VERTICAL_FLIP = False
+    HORIZONTAL_FLIP = augmentation[0]
+    VERTICAL_FLIP = augmentation[1]
     BRIGHTNESS_RANGE = None
-    ROTATION_RANGE = 0
+    ROTATION_RANGE = augmentation[2]
 
-    EPOCHS = 10
+    EPOCHS = input_epochs
     train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
     val_steps_per_epoch = NUM_VAL_IMGS // BATCH_SIZE
 
@@ -123,3 +124,5 @@ def Learn():
     plt.legend(loc=0)
 
     plt.show()
+
+# Learn([False, False, 0], 30, 'final1/train/', 'final1/val/')
