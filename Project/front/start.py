@@ -117,6 +117,7 @@ class ProjectNameClass(QDialog):
 
     def projectNameFn(self):
         WindowClass.projectName = self.lineName.text()
+        self.hide()
 
 class WindowClass(QMainWindow, form_class):
     mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
