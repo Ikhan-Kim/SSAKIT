@@ -10,7 +10,7 @@ from PyQt5.QtGui import QStandardItemModel
 import sqlite3
 
 # 연결할 ui 파일의 경로 설정
-UI_Path = './ClassEdit.ui'
+UI_Path = './ui/ClassEdit.ui'
 form_class = uic.loadUiType(UI_Path)[0]
 
 class ClassEditWidget(QMainWindow, form_class) :

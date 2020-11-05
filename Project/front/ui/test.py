@@ -1,10 +1,11 @@
 import sys
 from PyQt5 import uic
+
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5 import QtGui, QtCore
 from ClassEditWidget import ClassEditWidget
-from PyQt5.QtGui import QStandardItemModel
+# from PyQt5.QtGui import QStandardItemModel
 
 # DB 연동
 import sqlite3

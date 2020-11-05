@@ -2,12 +2,13 @@ import sys
 import os
 from PyQt5.QtCore import QDir
 from PyQt5.QtWidgets import *
-from PyQt5 import uic, QtCore, QtGui
+from PyQt5 import uic, QtCore, QtGui, QtWidgets
 from PIL import Image
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from back import create_dir, set_directory
 from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1
 import time
+from ClassEditWidget import ClassEditWidget
 
 import numpy as np
 import tensorflow as tf
@@ -18,6 +19,9 @@ from keras_preprocessing.image import ImageDataGenerator
 
 from IPython.display import clear_output
 import matplotlib.pyplot as plt
+
+# DB 연동
+import sqlite3
 
 # 연결할 ui 파일의 경로 설정
 UI_Path = './ui/NetworkSetting.ui'
@@ -126,6 +130,15 @@ class WindowClass(QMainWindow, form_class):
     projectName = ''
     # learn_train_path = ''
     # learn_val_path = ''
+
+    # DB에 넣을 데이터 불러오기 => 불러온 이미지의 label 기반
+    data = [
+    {"color": "#FF5733", "label": "12R0", "train":50, "val":30, "test": 30},
+    {"color": "#3372FF", "label": "4300", "train":50, "val":30, "test": 30},
+    {"color": "#61FF33", "label": "4301", "train":50, "val":30, "test": 30},
+    {"color": "#EA33FF", "label": "7501", "train":50, "val":30, "test": 30},
+    ]
+
     def __init__(self) :
         super().__init__()
         self.setupUi(self)
@@ -143,6 +156,18 @@ class WindowClass(QMainWindow, form_class):
         self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
         self.setWindowTitle('SSAKIT')
 
+        # sql 연동
+        # self.sqlConnect()
+
+        # ClassEditWidget 불러오기
+        self.openClassEditWidget = ClassEditWidget(WindowClass.data)
+        # class Edit btn 클릭 => 위젯 열기
+        self.classEditBtn.clicked.connect(self.ClassEditBtnFunc)
+
+    def ClassEditBtnFunc(self):
+        # ClassEditWidget띄우기
+        self.openClassEditWidget.show()
+    
     def createProjectFn(self):
         if self.projectNameDisplay.isVisible():
             self.projectNameDisplay.hide()
@@ -329,6 +354,7 @@ class WindowClass(QMainWindow, form_class):
         # file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
         #     str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
         # plt.savefig('result_logs\\'+file_name)
+
 
 
 if __name__ == "__main__":
