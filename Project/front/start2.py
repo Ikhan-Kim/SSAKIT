@@ -213,7 +213,8 @@ class WindowClass(QMainWindow, form_class):
                 self.textBox_terminal.append(
                     "Epoch {}/5 : loss = {}, accuracy = {}, val_loss = {}, val_accuracy = {}".format(self.i, round(self.losses[-1], 4), round(self.acc[-1], 4), round(self.val_losses[-1], 4), round(self.val_acc[-1], 4)))
 
-                plt.plot(self.losses)
+                plt.plot(self.losses, label="loss")
+                plt.legend()
 
                 plt.draw()
                 plt.pause(0.01)
