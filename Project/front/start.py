@@ -196,38 +196,34 @@ class WindowClass(QMainWindow, form_class):
                 self.acc.append(logs.get('accuracy'))
                 self.val_acc.append(logs.get('val_accuracy'))
                 self.i += 1
-                f, (ax1, ax2) = plt.subplots(1, 2, sharex=True)
+                # f, (ax1, ax2) = plt.subplots(1, 2, sharex=True)
 
-                clear_output(wait=True)
+                # clear_output(wait=True)
 
-                ax1.set_yscale('log')
-                ax1.plot(self.x, self.losses, label="loss")
-                ax1.plot(self.x, self.val_losses, label="val_loss")
-                ax1.legend()
+                # ax1.set_yscale('log')
+                # ax1.plot(self.x, self.losses, label="loss")
+                # ax1.plot(self.x, self.val_losses, label="val_loss")
+                # ax1.legend()
 
-                ax2.plot(self.x, self.acc, label="accuracy")
-                ax2.plot(self.x, self.val_acc, label="validation accuracy")
-                ax2.legend()
+                # ax2.plot(self.x, self.acc, label="accuracy")
+                # ax2.plot(self.x, self.val_acc, label="validation accuracy")
+                # ax2.legend()
 
-                # plt.draw()
-                # plt.pause(0.01)
-                # plt.clf()
-
-                # hbox = QHBoxLayout()
-                # self.win.p = pg.PlotWidget(title="loss")
-                # hbox.addWidget(self.win.p)
-                # self.setLayout(hbox)
-                # self.pl = self.win.p.plot(pen='g')
-                # self.pl.setData(x=self.x, y=self.losses)
-                # self.win.show()
-                my_plot = pg.PlotWidget()
-                self.win.testLayout.addWidget(my_plot)
-                my_plot.plot(self.x, self.losses)
-
-                # self.textBox_terminal.append(str(self.losses[-1]))
+                # 터미널 출력
                 self.textBox_terminal.append(
                     "Epoch {} : lose = {}".format(self.i, self.losses[-1]))
-                # plt.show()
+
+                plt.plot(self.losses)
+
+                plt.draw()
+                plt.pause(0.01)
+
+                if self.i == 5:
+                    now = time.gmtime(time.time())
+                    file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
+                        str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
+                    plt.savefig('result_logs\\'+file_name)
+                plt.clf()
 
         plot_losses = PlotLosses(self.textBox_terminal)
 
@@ -235,29 +231,7 @@ class WindowClass(QMainWindow, form_class):
         history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=5, steps_per_epoch=train_steps_per_epoch, validation_data=(
             X_test, Y_test), validation_steps=val_steps_per_epoch, verbose=1,  callbacks=plot_losses)
 
-        # 터미널에 히스토리 출력
-        # loss_history = history.history["loss"]  # type is list
-        # for i in range(len(loss_history)):
-        #     self.textBox_terminal.append(
-        #         "Epoch {} : lose = {}".format(i, loss_history[i]))
-
-        # 정확도 그래프 (임시)
-        acc = history.history['accuracy']
-        val_acc = history.history['val_accuracy']
-        loss = history.history['loss']
-        val_loss = history.history['val_loss']
-
-        epochs = range(len(acc))
-
-        plt.plot(epochs, acc, 'r', label='Training accuracy')
-        plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
-        plt.title('Training and validation accuracy')
-        plt.legend(loc=0)
-
-        now = time.gmtime(time.time())
-        file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
-            str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
-        plt.savefig('result_logs\\'+file_name)
+        plt.close()
 
 
 if __name__ == "__main__":
