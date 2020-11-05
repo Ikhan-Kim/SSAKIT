@@ -135,7 +135,7 @@
      <rect>
       <x>240</x>
       <y>90</y>
-      <width>891</width>
+      <width>441</width>
       <height>421</height>
      </rect>
     </property>
@@ -157,6 +157,17 @@
 생성</string>
     </property>
    </widget>
+   <widget class="QWidget" name="gridLayoutWidget">
+    <property name="geometry">
+     <rect>
+      <x>710</x>
+      <y>110</y>
+      <width>461</width>
+      <height>381</height>
+     </rect>
+    </property>
+    <layout class="QGridLayout" name="testLayout"/>
+   </widget>
    <zorder>imgLabel</zorder>
    <zorder>btnDataLoad</zorder>
    <zorder>line</zorder>
@@ -168,6 +179,7 @@
    <zorder>btnTraining</zorder>
    <zorder>dirTreeView</zorder>
    <zorder>btnCreateProject</zorder>
+   <zorder>gridLayoutWidget</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
