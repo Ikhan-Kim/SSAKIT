@@ -211,7 +211,7 @@ class WindowClass(QMainWindow, form_class):
 
                 # 터미널 출력
                 self.textBox_terminal.append(
-                    "Epoch {} : lose = {}".format(self.i, self.losses[-1]))
+                    "Epoch {}/5 : loss = {}, accuracy = {}, val_loss = {}, val_accuracy = {}".format(self.i, round(self.losses[-1], 4), round(self.acc[-1], 4), round(self.val_losses[-1], 4), round(self.val_acc[-1], 4)))
 
                 plt.plot(self.losses)
 
