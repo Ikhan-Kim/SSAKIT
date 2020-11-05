@@ -143,19 +143,6 @@
      <string>이미지 출력 위치</string>
     </property>
    </widget>
-<<<<<<< HEAD
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>620</x>
-      <y>110</y>
-      <width>421</width>
-      <height>341</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="testLayout"/>
-   </widget>
-=======
    <widget class="QPushButton" name="btnCreateProject">
     <property name="geometry">
      <rect>
@@ -181,7 +168,6 @@
    <zorder>btnTraining</zorder>
    <zorder>dirTreeView</zorder>
    <zorder>btnCreateProject</zorder>
->>>>>>> 8d291913105308ee30d908efe85e3ed3a1de4a50
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

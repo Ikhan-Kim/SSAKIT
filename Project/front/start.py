@@ -1,3 +1,12 @@
+import sys
+import os
+from PyQt5.QtCore import QDir
+from PyQt5.QtWidgets import *
+from PyQt5 import uic, QtCore, QtGui
+from PIL import Image
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+from back import create_dir, set_directory
+from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1
 import pyqtgraph as pg
 import matplotlib.pyplot as plt
 from IPython.display import clear_output
@@ -8,15 +17,6 @@ from tensorflow import keras
 import tensorflow as tf
 import numpy as np
 import time
-from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1
-from back import create_dir, set_directory
-import sys
-import os
-from PyQt5.QtCore import QDir
-from PyQt5.QtWidgets import *
-from PyQt5 import uic, QtCore, QtGui
-from PIL import Image
-sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
 
 # 연결할 ui 파일의 경로 설정
