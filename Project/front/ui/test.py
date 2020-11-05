@@ -49,7 +49,7 @@ class WindowClass(QMainWindow, form_class) :
         # Navigator
         self.loadNavi()
 
-    # DB)-1. SQL 연결 및 테이블 생성
+    # DB) SQL 연결 및 테이블 생성
     def sqlConnect(self):
         try: 
             self.conn = sqlite3.connect("test2.db", isolation_level=None)

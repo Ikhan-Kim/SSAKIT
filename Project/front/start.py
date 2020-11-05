@@ -157,16 +157,17 @@ class WindowClass(QMainWindow, form_class):
         self.setWindowTitle('SSAKIT')
 
         # sql 연동
-        # self.sqlConnect()
+        self.sqlConnect()
 
         # ClassEditWidget 불러오기
         self.openClassEditWidget = ClassEditWidget(WindowClass.data)
         # class Edit btn 클릭 => 위젯 열기
         self.classEditBtn.clicked.connect(self.ClassEditBtnFunc)
+        # edit 금지 모드
+        self.classType.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
-    def ClassEditBtnFunc(self):
-        # ClassEditWidget띄우기
-        self.openClassEditWidget.show()
+        # Navigator
+        self.loadNavi()
     
     def createProjectFn(self):
         if self.projectNameDisplay.isVisible():
@@ -355,7 +356,107 @@ class WindowClass(QMainWindow, form_class):
         #     str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
         # plt.savefig('result_logs\\'+file_name)
 
+    # ClassEditWidget띄우기
+    def ClassEditBtnFunc(self):
+        self.openClassEditWidget.show()
 
+    # DB) SQL 연결 및 테이블 생성
+    def sqlConnect(self):
+        try: 
+            self.conn = sqlite3.connect("test2.db", isolation_level=None)
+        except:
+            print("문제가 있네요!")
+            exit(1)
+        print("연결성공!")
+        self.cur = self.conn.cursor()
+
+
+        # 테이블 생성
+        self.createSql = "CREATE TABLE IF NOT EXISTS classLabel (idx INTEGER PRIMARY KEY, color TEXT, label TEXT, train INTEGER, val INTEGER, test INTEGER)"
+        self.cmd = self.createSql
+        self.run()
+
+        # 초기 데이터 삽입
+        for d in self.data:
+            # print("d", d)
+            self.color = d["color"]
+            self.label = d["label"]
+            self.train = d["train"]
+            self.val = d["val"]
+            self.test = d["test"]
+
+            self.cmd = "insert into classLabel(`color`, `label`, `train`, `val`, `test`) values('{}', '{}', {}, {}, {})"\
+                .format(self.color, self.label, self.train, self.val, self.test)
+            self.cur.execute(self.cmd)
+            self.conn.commit()
+
+        self.selectData()
+
+    def selectData(self):
+        self.selectSql = "SELECT * FROM classLabel"
+        self.cmd = self.selectSql
+        self.run()
+
+        item_list = [list(item[1:]) for item in self.cur.fetchall()]
+        self.setTables(item_list)
+    
+    def setTables(self, rows):
+        # Table column 수, header 설정+너비
+        self.classType.setColumnCount(5)
+        self.classType.setHorizontalHeaderLabels(['color', 'class', 'train', 'val', 'test'])
+        
+        # Table 너비 조절
+        self.classType.setColumnWidth(0,60)
+        self.classType.setColumnWidth(1,50)
+        self.classType.setColumnWidth(2,10)
+        self.classType.setColumnWidth(3,10)
+        self.classType.setColumnWidth(4,10)
+        self.classType.setColumnWidth(5,10)
+        
+        cnt = len(rows)
+        self.classType.setRowCount(cnt)
+
+        for x in range(cnt):
+            # 리스트 내부의 column쌍은 튜플로 반환하므로 튜플의 각 값을 변수에 저장
+            # print(rows)
+            color, label, train, val, test = rows[x]
+            
+            # print("rows[x]", rows[x][0], rows[x][1], rows[x][2])
+            # 테이블의 각 셀에 값 입력
+            self.classType.setItem(x, 0, QTableWidgetItem(""))
+            self.classType.item(x, 0).setBackground(QtGui.QColor(color))
+            self.classType.setItem(x, 1, QTableWidgetItem(label))
+            self.classType.setItem(x, 2, QTableWidgetItem(str(train)))
+            self.classType.setItem(x, 3, QTableWidgetItem(str(val)))
+            self.classType.setItem(x, 4, QTableWidgetItem(str(test)))
+
+    # DB) sql문 실행 함수
+    def run(self):
+        self.cur.execute(self.cmd)
+        self.conn.commit()
+
+    # DB) 종료 함수
+    def closeEvent(self, QCloseEvent):
+        print("DB close!")
+        self.conn.close()
+
+    def ClassEditBtnFunc(self):
+        # ClassEditWidget띄우기
+        self.openClassEditWidget.show()
+
+    # Navigator
+    def loadNavi(self):
+        # dummydata
+        self.wValue.setText("너비")
+        self.hValue.setText("높이")
+        self.xValue.setText("0")
+        self.yValue.setText("0")
+
+        self.fileName.setText("파일명")
+        self.fileSize.setText("파일사이즈")
+        self.extension.setText("확장자")
+        self.channel.setText("채널")
+        self.bit.setText("비트")
 
 if __name__ == "__main__":
     # QApplication : 프로그램을 실행시켜주는 클래스
