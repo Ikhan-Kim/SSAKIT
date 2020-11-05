@@ -370,12 +370,11 @@ class WindowClass(QMainWindow, form_class):
         print("연결성공!")
         self.cur = self.conn.cursor()
 
-
         # 테이블 생성
         self.createSql = "CREATE TABLE IF NOT EXISTS classLabel (idx INTEGER PRIMARY KEY, color TEXT, label TEXT, train INTEGER, val INTEGER, test INTEGER)"
         self.cmd = self.createSql
         self.run()
-
+ 
         # 초기 데이터 삽입
         for d in self.data:
             # print("d", d)
@@ -392,6 +391,7 @@ class WindowClass(QMainWindow, form_class):
 
         self.selectData()
 
+    # DB 데이터 불러오기
     def selectData(self):
         self.selectSql = "SELECT * FROM classLabel"
         self.cmd = self.selectSql
@@ -400,6 +400,7 @@ class WindowClass(QMainWindow, form_class):
         item_list = [list(item[1:]) for item in self.cur.fetchall()]
         self.setTables(item_list)
     
+    # 불러온 데이터 table widget 에서 보여주기
     def setTables(self, rows):
         # Table column 수, header 설정+너비
         self.classType.setColumnCount(5)
