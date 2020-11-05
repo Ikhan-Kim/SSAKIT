@@ -1,21 +1,23 @@
+import pyqtgraph as pg
+import matplotlib.pyplot as plt
+from IPython.display import clear_output
+from keras_preprocessing.image import ImageDataGenerator
+from keras_preprocessing import image
+import keras_preprocessing
+from tensorflow import keras
+import tensorflow as tf
+import numpy as np
+import time
+from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1
+from back import create_dir, set_directory
 import sys
 import os
 from PyQt5.QtCore import QDir
 from PyQt5.QtWidgets import *
 from PyQt5 import uic, QtCore, QtGui
 from PIL import Image
-import time
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 
-import numpy as np
-import tensorflow as tf
-from tensorflow import keras
-import keras_preprocessing
-from keras_preprocessing import image
-from keras_preprocessing.image import ImageDataGenerator
-
-from IPython.display import clear_output
-import matplotlib.pyplot as plt
-import pyqtgraph as pg
 
 # 연결할 ui 파일의 경로 설정
 UI_Path = './ui/NetworkSetting.ui'
@@ -36,202 +38,304 @@ class AnotherFormLayout(QDialog):
         buttonBox.rejected.connect(self.reject)
 
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.formDataPreprocessing)
+        mainLayout.addWidget(self.formAugmentation)
+        # mainLayout.addWidget(self.formDataPreprocessing)
         mainLayout.addWidget(self.formNueralNetwork)
         mainLayout.addWidget(self.formLearn)
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
 
-        self.setWindowTitle("Nueral Network Settings")
+        self.setWindowTitle("Train Settings")
 
     def createFormGroupBox(self):
-        # data preprocessing
-        self.formDataPreprocessing = QGroupBox("Data Preprocessing")
+        # Augmentation
+        self.formAugmentation = QGroupBox("Augmentation")
         layout = QFormLayout()
-        self.lineTarget = QLineEdit()
-        layout.addRow(QLabel("target size:"), self.lineTarget)
-        layout.addRow(QLabel("class mode:"), QComboBox())
-        self.lineBatch = QLineEdit()
-        layout.addRow(QLabel("batch size:"), self.lineBatch)
-        self.lineRgb = QLineEdit()
-        layout.addRow(QLabel("rgb:"), self.lineRgb)
-        self.formDataPreprocessing.setLayout(layout)
+        self.checkBoxHorizantal = QCheckBox("Horizantal Flip", self)
+        layout.addRow(self.checkBoxHorizantal)
+        self.checkBoxVertical = QCheckBox("Vertical Flip", self)
+        layout.addRow(self.checkBoxVertical)
+        self.checkBoxRotation90 = QCheckBox("Rotation 90", self)
+        layout.addRow(self.checkBoxRotation90)
+        self.checkBoxRotation180 = QCheckBox("Rotation 180", self)
+        layout.addRow(self.checkBoxRotation180)
+        self.formAugmentation.setLayout(layout)
+        # data preprocessing
+        # self.formDataPreprocessing = QGroupBox("Data Preprocessing")
+        # layout = QFormLayout()
+        # self.lineTarget = QLineEdit()
+        # layout.addRow(QLabel("target size:"), self.lineTarget)
+        # layout.addRow(QLabel("class mode:"), QComboBox())
+        # self.lineBatch = QLineEdit()
+        # layout.addRow(QLabel("batch size:"), self.lineBatch)
+        # self.lineRgb = QLineEdit()
+        # layout.addRow(QLabel("rgb:"), self.lineRgb)
+        # self.formDataPreprocessing.setLayout(layout)
         # nn setting
         self.formNueralNetwork = QGroupBox("Nueral Network")
         layoutNN = QFormLayout()
-        layoutNN.addRow(QLabel("select NN:"), QComboBox())
+        self.comboBoxNN = QComboBox()
+        self.comboBoxNN.addItems(["VGG", "InceptionV3", "ResNet152"])
+        layoutNN.addRow(QLabel("select NN:"), self.comboBoxNN)
         self.formNueralNetwork.setLayout(layoutNN)
         # Learn Settings
         self.formLearn = QGroupBox("Learn Settings")
+        layoutLS = QFormLayout()
+        self.lineEpochs = QLineEdit()
+        # onlyInt = QIntValidator()
+        # self.lineEpochs.setValidator(onlyInt)
+        layoutLS.addRow(QLabel("Epochs"), self.lineEpochs)
+        self.formLearn.setLayout(layoutLS)
 
     def accept(self):
-        print('hi')
-        print(self.lineTarget.text(), self.lineBatch.text(), self.lineRgb.text())
+        settings_data = []
+        settings_data.append(self.comboBoxNN.currentText())
+        aug = [False, False, 0]
+        if self.checkBoxHorizantal.isChecked() == True:
+            aug[0] = True
+        if self.checkBoxVertical.isChecked() == True:
+            aug[1] = True
+        if self.checkBoxRotation90.isChecked() == True:
+            aug[2] = 90
+        # if self.checkBoxRotation180.isChecked() == True:
+        #     WindowClass.settingsData.append("Rotation 180")
+        settings_data.append(aug)
+        settings_data.append(int(self.lineEpochs.text()))
+        WindowClass.settingsData = settings_data
+        print(WindowClass.settingsData)
+        self.hide()
+
+
+class ProjectNameClass(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.lineName = QLineEdit()
+        self.btnOk = QPushButton('OK')
+        self.btnOk.clicked.connect(self.projectNameFn)
+        mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.lineName)
+        mainLayout.addWidget(self.btnOk)
+        self.setLayout(mainLayout)
+
+    def projectNameFn(self):
+        WindowClass.projectName = self.lineName.text()
+        self.hide()
 
 
 class WindowClass(QMainWindow, form_class):
     mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
+    settingsData = []
+    projectName = ''
+    # learn_train_path = ''
+    # learn_val_path = ''
 
     def __init__(self):
         super().__init__()
         self.setupUi(self)
         # 기본 설정?>
         self.learnSettingDisplay = AnotherFormLayout()
+        self.projectNameDisplay = ProjectNameClass()
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
         # 버튼별 함수 실행
+        self.btnCreateProject.clicked.connect(self.createProjectFn)
         self.btnDataLoad.clicked.connect(self.dataLoadFn)
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         self.btnTraining.clicked.connect(self.training)
         self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
+        self.setWindowTitle('SSAKIT')
+
+    def createProjectFn(self):
+        if self.projectNameDisplay.isVisible():
+            self.projectNameDisplay.hide()
+        else:
+            self.projectNameDisplay.show()
 
     def dataLoadFn(self):
-        self.dirName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
-                                                        QFileDialog.ShowDirsOnly)
+        self.pathName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
+                                                         QFileDialog.ShowDirsOnly)
+        self.dirName = self.pathName.split('/')[-1]
+        self.testPath = '../back/' + self.projectName
         treeModel = QFileSystemModel()
         self.dirTreeView.setModel(treeModel)
         treeModel.setRootPath(QDir.rootPath())
-        self.dirTreeView.setRootIndex(treeModel.index(self.dirName))
+        self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
+        create_dir.create_dir_flow(self.projectName)
+        set_directory.set_directory(
+            self.projectName, self.dirName, self.pathName)
+        # self.setWindowTitle(self.projectName)
 
     def learnSettingsFn(self, checked):
         if self.learnSettingDisplay.isVisible():
             self.learnSettingDisplay.hide()
         else:
             self.learnSettingDisplay.show()
+        self.learn_train_path = self.projectName + "/train"
+        self.learn_val_path = self.projectName + "/validation"
 
     def fileViewFn(self, index):
         self.mainImg = self.dirTreeView.model().filePath(index)
-        print(self.mainImg)
+        self.dirTreeView.hideColumn(1)
+        self.dirTreeView.hideColumn(2)
+        self.dirTreeView.hideColumn(3)
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
 
     def training(self):
-        # path
-        TRAIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        print('train')
+        if self.settingsData[0] == 'VGG':
+            print('VGG')
+            print(self.learn_train_path, self.learn_val_path)
+            Vgg16_test1.Learn(
+                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path)
+        elif self.settingsData[0] == 'InceptionV3':
+            print('Inception')
+            InceptionV3_test1.Learn(
+                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path)
+        elif self.settingsData[0] == 'ResNet152':
+            print('ResNet')
+            ResNet152_test1.Learn(
+                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path)
+        # # path
+        # TRAIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-        # Define hyperparameter
-        INPUT_SIZE = 32
-        CHANNELS = 3
-        NUM_CLASSES = 10
-        NUM_TRAIN_IMGS = 50000
-        NUM_TEST_IMGS = 10000
+        # # Define hyperparameter
+        # INPUT_SIZE = 32
+        # CHANNELS = 3
+        # NUM_CLASSES = 10
+        # NUM_TRAIN_IMGS = 50000
+        # NUM_TEST_IMGS = 10000
 
-        BATCH_SIZE = 128
-        train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
-        val_steps_per_epoch = NUM_TEST_IMGS // BATCH_SIZE
+        # BATCH_SIZE = 128
+        # train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
+        # val_steps_per_epoch = NUM_TEST_IMGS // BATCH_SIZE
 
-        # Data Preprocessing
-        (X_train, Y_train), (X_test, Y_test) = tf.keras.datasets.cifar10.load_data()
-        X_train = X_train/255.0
-        X_test = X_test/255.0
+        # # Data Preprocessing
+        # (X_train, Y_train), (X_test, Y_test) = tf.keras.datasets.cifar10.load_data()
+        # X_train = X_train/255.0
+        # X_test = X_test/255.0
 
-        # Load pre-trained model
-        base_model = tf.keras.applications.VGG16(include_top=False,
-                                                 weights='imagenet',
-                                                 input_shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS),)
+        # # Load pre-trained model
+        # base_model = tf.keras.applications.VGG16(include_top=False,
+        #                                          weights='imagenet',
+        #                                          input_shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS),)
 
-        # Freeze the pre-trained layers
-        base_model.trainable = False
+        # # Freeze the pre-trained layers
+        # base_model.trainable = False
 
-        # Add a fully connected layer
-        model_input = tf.keras.Input(shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS))
-        model_output = tf.keras.layers.Flatten()(model_input)
-        model_output = tf.keras.layers.Dense(
-            512, activation='relu')(model_output)
-        model_output = tf.keras.layers.Dropout(0.2)(model_output)
-        model_output = tf.keras.layers.Dense(
-            256, activation='relu')(model_output)
-        model_output = tf.keras.layers.Dropout(0.2)(model_output)
-        model_output = tf.keras.layers.Dense(
-            NUM_CLASSES, activation='softmax')(model_output)
-        model = tf.keras.Model(model_input, model_output)
+        # # Add a fully connected layer
+        # model_input = tf.keras.Input(shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS))
+        # model_output = tf.keras.layers.Flatten()(model_input)
+        # model_output = tf.keras.layers.Dense(
+        #     512, activation='relu')(model_output)
+        # model_output = tf.keras.layers.Dropout(0.2)(model_output)
+        # model_output = tf.keras.layers.Dense(
+        #     256, activation='relu')(model_output)
+        # model_output = tf.keras.layers.Dropout(0.2)(model_output)
+        # model_output = tf.keras.layers.Dense(
+        #     NUM_CLASSES, activation='softmax')(model_output)
+        # model = tf.keras.Model(model_input, model_output)
 
-        model.summary()
+        # model.summary()
 
-        # Compile
-        model.compile(optimizer='adam',
-                      loss='sparse_categorical_crossentropy',
-                      metrics=['accuracy'])
+        # # Compile
+        # model.compile(optimizer='adam',
+        #               loss='sparse_categorical_crossentropy',
+        #               metrics=['accuracy'])
 
-        # Callbacks
-        checkpoint_filepath = os.path.join(
-            TRAIN_DIR, 'learning_test/checkpoint/VGG16_cifar10.h5')
-        callbacks = [
-            tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_accuracy',
-                                             #  restore_best_weights=True
-                                             ),
-            tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
-                                               monitor='val_accuracy',
-                                               mode='max',
-                                               save_best_only=True,
-                                               # save_weights_only=True,
-                                               ),
-            # PlotLossesKeras(),
-        ]
+        # # Callbacks
+        # checkpoint_filepath = os.path.join(
+        #     TRAIN_DIR, 'learning_test/checkpoint/VGG16_cifar10.h5')
+        # callbacks = [
+        #     tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_accuracy',
+        #                                      #  restore_best_weights=True
+        #                                      ),
+        #     tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
+        #                                        monitor='val_accuracy',
+        #                                        mode='max',
+        #                                        save_best_only=True,
+        #                                        # save_weights_only=True,
+        #                                        ),
+        #     # PlotLossesKeras(),
+        # ]
 
-        class PlotLosses(keras.callbacks.Callback):
-            def __init__(self, tbt):
-                self.textBox_terminal = tbt
-                self.win = WindowClass()
-                print("textBox copied")
-                # plt.ion()
+        # class PlotLosses(keras.callbacks.Callback):
+        #     def __init__(self, tbt):
+        #         self.textBox_terminal = tbt
+        #         print("textBox copied")
+        #         # plt.ion()
 
-            def on_train_begin(self, logs={}):
-                self.i = 0
-                self.x = []
-                self.losses = []
-                self.val_losses = []
-                self.acc = []
-                self.val_acc = []
-                self.fig = plt.figure()
+        #     def on_train_begin(self, logs={}):
+        #         self.i = 0
+        #         self.x = []
+        #         self.losses = []
+        #         self.val_losses = []
+        #         self.acc = []
+        #         self.val_acc = []
+        #         self.fig = plt.figure()
 
-                self.logs = []
+        #         self.logs = []
 
-            def on_epoch_end(self, epoch, logs={}):
-                self.logs.append(logs)
-                self.x.append(self.i)
-                self.losses.append(logs.get('loss'))
-                self.val_losses.append(logs.get('val_loss'))
-                self.acc.append(logs.get('accuracy'))
-                self.val_acc.append(logs.get('val_accuracy'))
-                self.i += 1
-                # f, (ax1, ax2) = plt.subplots(1, 2, sharex=True)
+        #     def on_epoch_end(self, epoch, logs={}):
+        #         self.logs.append(logs)
+        #         self.x.append(self.i)
+        #         self.losses.append(logs.get('loss'))
+        #         self.val_losses.append(logs.get('val_loss'))
+        #         self.acc.append(logs.get('accuracy'))
+        #         self.val_acc.append(logs.get('val_accuracy'))
+        #         self.i += 1
+        #         f, (ax1, ax2) = plt.subplots(1, 2, sharex=True)
 
-                # clear_output(wait=True)
+        #         clear_output(wait=True)
 
-                # ax1.set_yscale('log')
-                # ax1.plot(self.x, self.losses, label="loss")
-                # ax1.plot(self.x, self.val_losses, label="val_loss")
-                # ax1.legend()
+        #         ax1.set_yscale('log')
+        #         ax1.plot(self.x, self.losses, label="loss")
+        #         ax1.plot(self.x, self.val_losses, label="val_loss")
+        #         ax1.legend()
 
-                # ax2.plot(self.x, self.acc, label="accuracy")
-                # ax2.plot(self.x, self.val_acc, label="validation accuracy")
-                # ax2.legend()
+        #         ax2.plot(self.x, self.acc, label="accuracy")
+        #         ax2.plot(self.x, self.val_acc, label="validation accuracy")
+        #         ax2.legend()
 
-                # 터미널 출력
-                self.textBox_terminal.append(
-                    "Epoch {} : lose = {}".format(self.i, self.losses[-1]))
+        #         plt.draw()
+        #         plt.pause(0.01)
+        #         plt.clf()
 
-                plt.plot(self.losses)
+        #         # self.textBox_terminal.append(str(self.losses[-1]))
+        #         self.textBox_terminal.append(
+        #             "Epoch {} : lose = {}".format(self.i, self.losses[-1]))
+        #         # plt.show()
 
-                plt.draw()
-                plt.pause(0.01)
+        # plot_losses = PlotLosses(self.textBox_terminal)
 
-                if self.i == 5:
-                    now = time.gmtime(time.time())
-                    file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
-                        str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
-                    plt.savefig('result_logs\\'+file_name)
-                plt.clf()
+        # # training model
+        # history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=5, steps_per_epoch=train_steps_per_epoch, validation_data=(
+        #     X_test, Y_test), validation_steps=val_steps_per_epoch, verbose=1,  callbacks=plot_losses)
 
-        plot_losses = PlotLosses(self.textBox_terminal)
+        # # 터미널에 히스토리 출력
+        # # loss_history = history.history["loss"]  # type is list
+        # # for i in range(len(loss_history)):
+        # #     self.textBox_terminal.append(
+        # #         "Epoch {} : lose = {}".format(i, loss_history[i]))
 
-        # training model
-        history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=5, steps_per_epoch=train_steps_per_epoch, validation_data=(
-            X_test, Y_test), validation_steps=val_steps_per_epoch, verbose=1,  callbacks=plot_losses)
+        # # 정확도 그래프 (임시)
+        # acc = history.history['accuracy']
+        # val_acc = history.history['val_accuracy']
+        # loss = history.history['loss']
+        # val_loss = history.history['val_loss']
 
-        plt.close()
+        # epochs = range(len(acc))
+
+        # plt.plot(epochs, acc, 'r', label='Training accuracy')
+        # plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
+        # plt.title('Training and validation accuracy')
+        # plt.legend(loc=0)
+
+        # now = time.gmtime(time.time())
+        # file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
+        #     str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
+        # plt.savefig('result_logs\\'+file_name)
 
 
 if __name__ == "__main__":

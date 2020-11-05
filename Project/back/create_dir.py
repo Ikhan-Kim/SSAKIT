@@ -1,12 +1,13 @@
 import os
 
 
-def create_dir_flow(dataset):
-    os.makedirs("./"+ dataset + "/train")
-    os.makedirs("./"+ dataset + "/validation")
-    os.makedirs("./"+ dataset + "/test")
+def create_dir_flow(dataset_name):
+    os.makedirs("../back/"+ dataset_name + "/train", exist_ok=True)
+    os.makedirs("../back/"+ dataset_name + "/validation", exist_ok=True)
+    os.makedirs("../back/"+ dataset_name + "/test", exist_ok=True)
 
-
+def name():
+    print('create_dir')
 
 
 
@@ -16,4 +17,4 @@ def create_dir_flow(dataset):
 # 에러발생 없이 넘어가고, 없을 경우에만 디렉토리를 생성합니다.
 # 반대로 exist_ok를 True로 설정하지 않았을 때 이미 해당 디렉토리가 
 # 존재하는 경우에는 exception 에러가 뜨게 된다.
-# os.makedirs("./dataset/train, exist_ok=True")
+# os.makedirs("./dataset_name/train, exist_ok=True")
