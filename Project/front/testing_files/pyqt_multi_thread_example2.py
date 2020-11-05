@@ -8,6 +8,7 @@ import tensorflow as tf
 from tensorflow import keras
 import matplotlib.pyplot as plt
 
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 class WorkerSignals(QObject):
     '''
@@ -48,11 +49,13 @@ class Worker(QRunnable):
 
     '''
 
-    def __init__(self, fn, *args, **kwargs):
+    def __init__(self, fn, fig, canvas, *args, **kwargs):
         super(Worker, self).__init__()
 
         # Store constructor arguments (re-used for processing)
         self.fn = fn
+        self.fig = fig
+        self.canvas = canvas
         self.args = args
         self.kwargs = kwargs
         self.signals = WorkerSignals()    
@@ -125,6 +128,10 @@ class Worker(QRunnable):
         ]
 
         class PlotLosses(keras.callbacks.Callback):
+            def __init__(self, figure, canvas):
+                self.fig = figure
+                self.canvas = canvas
+
             def on_train_begin(self, logs={}):
                 self.i = 0
                 self.x = []
@@ -145,20 +152,25 @@ class Worker(QRunnable):
                 self.val_acc.append(logs.get('val_accuracy'))
                 self.i += 1
 
-                plt.plot(self.losses, label="loss")
-                plt.legend()
+                # plt.plot(self.losses, label="loss")
+                # plt.legend()
 
-                plt.draw()
-                plt.pause(0.01)
+                # plt.draw()
+                # plt.pause(0.01)
+                self.fig.clear()
+                ax = self.fig.add_subplot(111)
+                ax.plot(self.x, self.losses, label="losses")
+                ax.set_title("loss plot")
+                self.canvas.draw()
 
                 if self.i == 5:
                     now = time.gmtime(time.time())
                     file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
                         str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
                     plt.savefig('result_logs\\'+file_name)
-                plt.clf()
+                # plt.clf()
 
-        plot_losses = PlotLosses()
+        plot_losses = PlotLosses(self.fig, self.canvas)
 
         # training model
         history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=5, steps_per_epoch=train_steps_per_epoch, validation_data=(
@@ -183,11 +195,16 @@ class MainWindow(QMainWindow):
         layout.addWidget(self.l)
         layout.addWidget(b)
     
+        #
+        self.fig = plt.Figure()
+        self.canvas = FigureCanvas(self.fig)
+        layout.addWidget(self.canvas)
+        #
+
         w = QWidget()
         w.setLayout(layout)
     
         self.setCentralWidget(w)
-    
         self.show()
 
         self.threadpool = QThreadPool()
@@ -216,7 +233,7 @@ class MainWindow(QMainWindow):
  
     def oh_no(self):
         # Pass the function to execute
-        worker = Worker(self.execute_this_fn) # Any other args, kwargs are passed to the run function
+        worker = Worker(self.execute_this_fn, self.fig, self.canvas) # Any other args, kwargs are passed to the run function
         worker.signals.result.connect(self.print_output)
         worker.signals.finished.connect(self.thread_complete)
         worker.signals.progress.connect(self.progress_fn)
