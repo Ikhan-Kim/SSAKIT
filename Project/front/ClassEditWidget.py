@@ -17,12 +17,15 @@ class ClassEditWidget(QMainWindow, form_class) :
     def __init__(self, data) :
         super().__init__()
         self.setupUi(self)
-        # print(data)
+
+        self.setWindowTitle("Class Edit Widget")
 
         # sql 연동
         self.sqlConnect()
 
-        self.setWindowTitle("Class Edit Widget")
+        #버튼 클릭시 데이터 입력을 위해 연결할 클래스 외부 함수
+        self.pushButton.clicked.connect(self.insertData)
+
         # Save 버튼 클릭
         ## => 바뀐 부분 save 되고 창 닫기
         # self.saveBtn.clicked.connect(self.saveBtnFunc)
@@ -37,8 +40,8 @@ class ClassEditWidget(QMainWindow, form_class) :
         # self.buttonBox.rejected.connect(self.reject)
 
         # self.retranslateUi(Dialog)
-        self.buttonBox.accepted.connect(accept)
-        self.buttonBox.rejected.connect(reject)
+        # self.buttonBox.accepted.connect(accept)
+        # self.buttonBox.rejected.connect(reject)
         # QtCore.QMetaObject.connectSlotsByName(Dialog)
         
         # self.cancelBtn.clicked.connect(QCoreApplication.instance().quit)
@@ -64,10 +67,9 @@ class ClassEditWidget(QMainWindow, form_class) :
     #     self.reject()
 
     # 수정하기
+##########################################################
 
-        
-    # def reject(self):
-    #     print('사라자렷')
+########################################################
 
     # DB) SQL 연결 및 테이블 생성
     def sqlConnect(self):
@@ -94,11 +96,12 @@ class ClassEditWidget(QMainWindow, form_class) :
     def setTables(self, rows):
         # Table column 수, header 설정+너비
         self.classTypeWidget.setColumnCount(2)
-        self.classTypeWidget.setHorizontalHeaderLabels(['color', 'class'])
+        self.classTypeWidget.setHorizontalHeaderLabels(['color', 'label'])
+        self.classTypeWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         
-        # Table 너비 조절
-        self.classTypeWidget.setColumnWidth(0,100)
-        self.classTypeWidget.setColumnWidth(1,200)
+        # # Table 너비 조절
+        # self.classTypeWidget.setColumnWidth(0,100)
+        # self.classTypeWidget.setColumnWidth(1,200)
         
         cnt = len(rows)
         self.classTypeWidget.setRowCount(cnt)
@@ -114,6 +117,16 @@ class ClassEditWidget(QMainWindow, form_class) :
             self.classTypeWidget.item(x, 0).setBackground(QtGui.QColor(color))
             self.classTypeWidget.setItem(x, 1, QTableWidgetItem(label))
 
+    # 데이터 삽입하기 (Insert)
+    # def InsertData(self):
+    #     self.insertSql = "INSERT INTO classLabel (color, label) VALUES (?, ?)"
+
+    #     cur.execute(sql, (color, label))
+    #     conn.commit()
+    #     conn.close()
+
+    #     self.selectData()
+
     # DB) sql문 실행 함수
     def run(self):
         self.cur.execute(self.cmd)
@@ -128,8 +141,23 @@ class ClassEditWidget(QMainWindow, form_class) :
     def saveBtnFunc(self):
         self.closeEvent()
 
+    # insert
+    def insertData(self):
+        #두개의 lineEdit에서 각각 색과 className를 받아온다.  
+        color = self.lineEdit.text()
+        label = self.lineEdit_2.text()
+        
+        conn = sqlite3.connect("test2.db")
+        cur = conn.cursor()
+        
+        insertSql = "INSERT INTO classLabel (color, label) VALUES (?,?)"
+        cur.execute(insertSql, (color, label))
+        conn.commit()
+
+        #데이터 입력 후 DB의 내용 불러와서 TableWidget에 넣기 위한 함수 호출
+        self.selectData()
 if __name__ == "__main__" :
     app = QApplication(sys.argv) 
-    myWindow = ClassEditWidget() 
+    myWindow = ClassEditWidget(form_class) 
     myWindow.show()
     app.exec_()

@@ -75,8 +75,6 @@ class WindowClass(QMainWindow, form_class) :
         # ClassEditWidget띄우기
         self.openClassEditWidget.show()
 
-    
-
         ########### init UI 테스트 ########
 
     # def initUI(self):

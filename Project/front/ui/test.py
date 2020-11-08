@@ -281,32 +281,7 @@ class WindowClass(QMainWindow, form_class) :
     
 #     conn.close()
 
-# def InsertData():
-#     # dummy data
-#     data = [
-#     {"color": "#FF5733", "label": "12R0", "train":50, "val":30, "test": 30},
-#     {"color": "#3372FF", "label": "4300", "train":50, "val":30, "test": 30},
-#     {"color": "#61FF33", "label": "4301", "train":50, "val":30, "test": 30},
-#     {"color": "#EA33FF", "label": "7501", "train":50, "val":30, "test": 30},
-#     ]
 
-#     color = "#FF5733"
-#     label = "12R0"
-#     train = 50
-#     test = 30
-#     val = 20
-
-#     conn = sq.connect(Daatabasename)
-#     cur.conn.cursor()
-
-#     sql = "INSERT INTO classLabel (color, label, train, test, val) VALUES (?, ?, ?, ?, ?)"
-
-#     cur.execute(sql, (color, label, train, test, val))
-#     conn.commit()
-
-#     conn.close()
-
-#     SelectData()
 
 
 # def SelectData():
