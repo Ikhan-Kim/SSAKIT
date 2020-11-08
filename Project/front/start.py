@@ -397,22 +397,23 @@ class WindowClass(QMainWindow, form_class):
         self.cmd = self.selectSql
         self.run()
 
-        item_list = [list(item[1:]) for item in self.cur.fetchall()]
+        item_list = [list(item[:]) for item in self.cur.fetchall()]
         self.setTables(item_list)
     
     # 불러온 데이터 table widget 에서 보여주기
     def setTables(self, rows):
         # Table column 수, header 설정+너비
         self.classType.setColumnCount(5)
-        self.classType.setHorizontalHeaderLabels(['color', 'class', 'train', 'val', 'test'])
+        self.classType.setHorizontalHeaderLabels(['idx','color', 'class', 'train', 'val', 'test'])
         
         # Table 너비 조절
-        self.classType.setColumnWidth(0,60)
+        self.classType.setColumnWidth(0,10)
         self.classType.setColumnWidth(1,50)
         self.classType.setColumnWidth(2,10)
         self.classType.setColumnWidth(3,10)
         self.classType.setColumnWidth(4,10)
         self.classType.setColumnWidth(5,10)
+        self.classType.setColumnWidth(6,10)
         
         cnt = len(rows)
         self.classType.setRowCount(cnt)
@@ -420,16 +421,24 @@ class WindowClass(QMainWindow, form_class):
         for x in range(cnt):
             # 리스트 내부의 column쌍은 튜플로 반환하므로 튜플의 각 값을 변수에 저장
             # print(rows)
-            color, label, train, val, test = rows[x]
+            idx, color, label, train, val, test = rows[x]
             
             # print("rows[x]", rows[x][0], rows[x][1], rows[x][2])
             # 테이블의 각 셀에 값 입력
-            self.classType.setItem(x, 0, QTableWidgetItem(""))
-            self.classType.item(x, 0).setBackground(QtGui.QColor(color))
-            self.classType.setItem(x, 1, QTableWidgetItem(label))
-            self.classType.setItem(x, 2, QTableWidgetItem(str(train)))
-            self.classType.setItem(x, 3, QTableWidgetItem(str(val)))
-            self.classType.setItem(x, 4, QTableWidgetItem(str(test)))
+            # self.classType.setItem(x, 0, QTableWidgetItem(""))
+            # self.classType.item(x, 0).setBackground(QtGui.QColor(color))
+            # self.classType.setItem(x, 1, QTableWidgetItem(label))
+            # self.classType.setItem(x, 2, QTableWidgetItem(str(train)))
+            # self.classType.setItem(x, 3, QTableWidgetItem(str(val)))
+            # self.classType.setItem(x, 4, QTableWidgetItem(str(test)))
+
+            self.classType.setItem(x, 0, QTableWidgetItem(str(idx)))
+            self.classType.setItem(x, 1, QTableWidgetItem(""))
+            self.classType.item(x, 1).setBackground(QtGui.QColor(color))
+            self.classType.setItem(x, 2, QTableWidgetItem(label))
+            self.classType.setItem(x, 3, QTableWidgetItem(str(train)))
+            self.classType.setItem(x, 4, QTableWidgetItem(str(val)))
+            self.classType.setItem(x, 5, QTableWidgetItem(str(test)))
 
     # DB) sql문 실행 함수
     def run(self):
