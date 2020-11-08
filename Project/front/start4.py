@@ -121,18 +121,6 @@ class Worker(QRunnable):
         # Callbacks
         checkpoint_filepath = os.path.join(
             TRAIN_DIR, 'learning_test/checkpoint/VGG16_cifar10.h5')
-        callbacks = [
-            tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_accuracy',
-                                             #  restore_best_weights=True
-                                             ),
-            tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
-                                               monitor='val_accuracy',
-                                               mode='max',
-                                               save_best_only=True,
-                                               # save_weights_only=True,
-                                               ),
-            # PlotLossesKeras(),
-        ]
 
         class PlotLosses(keras.callbacks.Callback):
             def __init__(self, tbt, figure, canvas):
@@ -168,20 +156,35 @@ class Worker(QRunnable):
                 ax = self.fig.add_subplot(111)
                 ax.plot(self.x, self.losses, label="losses")
                 ax.set_title("loss plot")
-                self.canvas.draw()
 
                 if self.i == 5:
                     now = time.gmtime(time.time())
                     file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
                         str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
-                    plt.savefig('result_logs\\'+file_name)
+                    self.fig.savefig('result_logs\\'+file_name)
+
+                self.canvas.draw()
                 # plt.clf()
 
-        plot_losses = PlotLosses(self.textBox_terminal, self.fig, self.canvas)
+        # plot_losses = PlotLosses(self.textBox_terminal, self.fig, self.canvas)
+
+        callbacks = [
+            tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_accuracy',
+                                             #  restore_best_weights=True
+                                             ),
+            tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
+                                               monitor='val_accuracy',
+                                               mode='max',
+                                               save_best_only=True,
+                                               # save_weights_only=True,
+                                               ),
+            PlotLosses(self.textBox_terminal, self.fig, self.canvas),
+        ]
+
 
         # training model
         history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=5, steps_per_epoch=train_steps_per_epoch, validation_data=(
-            X_test, Y_test), validation_steps=val_steps_per_epoch, verbose=1,  callbacks=plot_losses)
+            X_test, Y_test), validation_steps=val_steps_per_epoch, verbose=1,  callbacks=callbacks)
 
         plt.close()
 
