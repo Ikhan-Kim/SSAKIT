@@ -87,7 +87,7 @@ class Worker(QRunnable):
         elif self.settingsData[0] == 'InceptionV3':
             print('Inception')
             InceptionV3_test1.Learn(
-                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path)
+                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, self.textBox_terminal, self.fig, self.canvas)
         elif self.settingsData[0] == 'ResNet152':
             print('ResNet')
             ResNet152_test1.Learn(

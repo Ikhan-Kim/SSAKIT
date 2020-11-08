@@ -150,7 +150,7 @@ def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
 
     # training model
     history = model.fit(train_generator, epochs=EPOCHS, steps_per_epoch=train_steps_per_epoch, validation_data = validation_generator, validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
-    plt.close
+    plt.close()
 
 
     # 정확도 그래프 (임시) 
