@@ -536,6 +536,19 @@
      </property>
     </widget>
    </widget>
+   <widget class="QPushButton" name="f5Btn">
+    <property name="geometry">
+     <rect>
+      <x>1430</x>
+      <y>100</y>
+      <width>31</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>♻</string>
+    </property>
+   </widget>
    <zorder>imgLabel</zorder>
    <zorder>line</zorder>
    <zorder>line_3</zorder>
@@ -546,6 +559,20 @@
    <zorder>line_5</zorder>
    <zorder>widget</zorder>
    <zorder>widget_2</zorder>
+   <zorder>extension</zorder>
+   <zorder>wValue</zorder>
+   <zorder>xLabel</zorder>
+   <zorder>yLabel</zorder>
+   <zorder>extensionLabel</zorder>
+   <zorder>line_2</zorder>
+   <zorder>image</zorder>
+   <zorder>classEditBtn</zorder>
+   <zorder>fileSize</zorder>
+   <zorder>classType</zorder>
+   <zorder>wLabel</zorder>
+   <zorder>hLabel</zorder>
+   <zorder>bitLabel</zorder>
+   <zorder>f5Btn</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

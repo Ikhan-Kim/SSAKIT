@@ -251,6 +251,8 @@ class WindowClass(QMainWindow, form_class):
         self.classEditBtn.clicked.connect(self.ClassEditBtnFunc)
         # edit 금지 모드
         self.classType.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # 새로고침 버튼 ()
+        self.f5Btn.clicked.connect(self.f5BtnFunc)
 
         # Navigator
         self.loadNavi()
@@ -320,6 +322,10 @@ class WindowClass(QMainWindow, form_class):
     # ClassEditWidget띄우기
     def ClassEditBtnFunc(self):
         self.openClassEditWidget.show()
+
+    def f5BtnFunc(self):
+        print("새로고침")
+        self.selectData()
 
     # DB) SQL 연결 및 테이블 생성
     def sqlConnect(self):
