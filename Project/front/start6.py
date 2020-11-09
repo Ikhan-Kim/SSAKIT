@@ -288,6 +288,7 @@ class WindowClass(QMainWindow, form_class):
     
     def 대충_테스트_함수(self, test_path):
         # 실제론 임포트 할거임
+        test_images, test_labels = test_path # 를 가공
         test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
         predictions = model.predict(test_images)
         return test_loss, test_acc, predictions
