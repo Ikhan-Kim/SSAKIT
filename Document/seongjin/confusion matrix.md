@@ -97,6 +97,12 @@ precision-recall 그래프는 어떤 알고리즘의 성능을 전반적으로 �
 
 ![image-20201108205355293](confusion matrix.assets/image-20201108205355293.png)
 
+**3-2 mAP(mean Average Precision)**
+
+class마다 계산된 AP들을 전부 평균한 것이 mAP다.
+
+
+
 ### 4. F-measure
 
 알고리즘의 precision-recall 성능을 하나의 숫자로 표현한 또 다른 방법이다. 
