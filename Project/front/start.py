@@ -182,20 +182,22 @@ class AnotherFormLayout(QDialog):
 
 
 class ProjectNameClass(QDialog):
+    nameSignal = pyqtSignal()
     def __init__(self):
         super().__init__()
-        self.lineName = QLineEdit()
         self.btnOk = QPushButton('OK')
         self.btnOk.clicked.connect(self.projectNameFn)
+        self.lineName = QLineEdit()
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.lineName)
         mainLayout.addWidget(self.btnOk)
         self.setLayout(mainLayout)
+        wc = WindowClass
 
     def projectNameFn(self):
         WindowClass.projectName = self.lineName.text()
+        self.nameSignal.emit()
         self.hide()
-
 
 # MainWindow
 class WindowClass(QMainWindow, form_class):
@@ -227,6 +229,7 @@ class WindowClass(QMainWindow, form_class):
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         self.btnTraining.clicked.connect(self.training)
+        self.projectNameDisplay.nameSignal.connect(self.createNameFn)
         # 터미널
         self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
         # live loss plot
@@ -251,7 +254,16 @@ class WindowClass(QMainWindow, form_class):
 
         # Navigator
         self.loadNavi()
-    
+
+    def createNameFn(self):
+        self.setWindowTitle('SSAKIT -' + self.projectName)
+        self.testPath = '../back/' + self.projectName
+        create_dir.create_dir_flow(self.projectName)
+        treeModel = QFileSystemModel()
+        self.dirTreeView.setModel(treeModel)
+        treeModel.setRootPath(QDir.rootPath())
+        self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
+        
     def createProjectFn(self):
         if self.projectNameDisplay.isVisible():
             self.projectNameDisplay.hide()
@@ -261,16 +273,11 @@ class WindowClass(QMainWindow, form_class):
     def dataLoadFn(self):
         self.pathName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
                                                          QFileDialog.ShowDirsOnly)
-        self.dirName = self.pathName.split('/')[-1]
-        self.testPath = '../back/' + self.projectName
-        treeModel = QFileSystemModel()
-        self.dirTreeView.setModel(treeModel)
-        treeModel.setRootPath(QDir.rootPath())
-        self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
-        create_dir.create_dir_flow(self.projectName)
-        set_directory.set_directory(
-            self.projectName, self.dirName, self.pathName)
-        # self.setWindowTitle(self.projectName)
+        if self.pathName:
+            self.dirName = self.pathName.split('/')[-1]
+            set_directory.set_directory(
+                self.projectName, self.dirName, self.pathName)
+            # self.setWindowTitle(self.projectName)
 
     def learnSettingsFn(self, checked):
         if self.learnSettingDisplay.isVisible():
