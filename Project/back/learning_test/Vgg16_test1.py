@@ -122,8 +122,11 @@ def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
 
             self.fig.clear()
             ax = self.fig.add_subplot(111)
-            ax.plot(self.x, self.losses, label="losses")
-            ax.set_title("loss plot")
+            # ax.plot(self.x, self.losses, label="losses")
+            # ax.set_title("loss plot")
+            ax.plot(self.x, self.acc, label="train_accuracy")
+            ax.plot(self.x, self.val_acc, label="val_accuracy")
+            ax.legend()
 
             if self.i == epoch:
                 now = time.gmtime(time.time())
