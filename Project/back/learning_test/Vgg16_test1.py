@@ -168,9 +168,9 @@ def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
 
     # plt.show()
 
-    now = time.gmtime(time.time())
-    file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
-    str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
-    plt.savefig('result_logs\\'+file_name)
+    # now = time.gmtime(time.time())
+    # file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
+    # str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
+    # plt.savefig('result_logs\\'+file_name)
 
 # Learn([False, False, 0], 30, 'final1/train', 'final1/validation')
