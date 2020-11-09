@@ -161,7 +161,7 @@ class ClassEditWidget(QMainWindow, form_class) :
                 # color는 DB에서 값 불러와서 DB 값 수정 => bg color 재설정
                 # self.classTypeWidget.setItem(x, 1, QTableWidgetItem(""))
                 # self.classTypeWidget.item(x, 1).setBackground(QtGui.QColor(color))
-                color_ = "#1BE6EA"
+                color_ = "#1BE6EA" # 컬러는 임시 데이터 ㅜㅜ
                 label_ = self.classTypeWidget.item(row, 2).text()
                 # print("idx - ",idx, "label : ", label_)
 
