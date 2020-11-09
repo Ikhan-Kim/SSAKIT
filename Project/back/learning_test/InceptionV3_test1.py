@@ -13,13 +13,14 @@ def Learn(augmentation, input_epochs, train_dir, val_dir, tbt, fig, canvas):
     train_dir = os.path.join(BASE_DIR, train_dir)
     val_dir = os.path.join(BASE_DIR, val_dir)
     # Define hyperparameter
-    INPUT_SIZE = 299
+    # INPUT_SIZE = 299
+    INPUT_SIZE = 200
     CHANNELS = 3
     INPUT_SHAPE = (INPUT_SIZE, INPUT_SIZE, CHANNELS)
     NUM_CLASSES = 10
     NUM_TRAIN_IMGS = 3000
     NUM_VAL_IMGS = 1000
-    BATCH_SIZE = 64
+    BATCH_SIZE = 32
 
 
     HORIZONTAL_FLIP = augmentation[0]
@@ -70,12 +71,11 @@ def Learn(augmentation, input_epochs, train_dir, val_dir, tbt, fig, canvas):
     # Add a fully connected layer
     model = tf.keras.Sequential()
     model.add(base_model)
-    model.add(tf.keras.layers.GlobalAveragePooling2D())
     model.add(tf.keras.layers.Flatten())
     model.add(tf.keras.layers.Dense(512, activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.2))
+    model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(256, activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.2))
+    model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(NUM_CLASSES, activation='softmax'))
 
     model.summary()
