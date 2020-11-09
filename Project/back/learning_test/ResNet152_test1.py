@@ -122,7 +122,7 @@ def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
             ax.plot(self.x, self.losses, label="losses")
             ax.set_title("loss plot")
 
-            if self.i == 5:
+            if self.i == epoch:
                 now = time.gmtime(time.time())
                 file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
                     str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
