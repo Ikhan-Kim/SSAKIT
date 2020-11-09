@@ -273,10 +273,11 @@ class WindowClass(QMainWindow, form_class):
     def dataLoadFn(self):
         self.pathName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
                                                          QFileDialog.ShowDirsOnly)
-        self.dirName = self.pathName.split('/')[-1]
-        set_directory.set_directory(
-            self.projectName, self.dirName, self.pathName)
-        # self.setWindowTitle(self.projectName)
+        if self.pathName:
+            self.dirName = self.pathName.split('/')[-1]
+            set_directory.set_directory(
+                self.projectName, self.dirName, self.pathName)
+            # self.setWindowTitle(self.projectName)
 
     def learnSettingsFn(self, checked):
         if self.learnSettingDisplay.isVisible():
