@@ -20,9 +20,15 @@ from ClassEditWidget import ClassEditWidget
 # DB 연동
 import sqlite3
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+ 
+
 # 연결할 ui 파일의 경로 설정
-UI_Path = './ui/NetworkSetting.ui'
-form_class = uic.loadUiType(UI_Path)[0]
+form = resource_path('NetworkSetting.ui')
+form_class = uic.loadUiType(form)[0]
 
 # multiThread
 class WorkerSignals(QObject):
