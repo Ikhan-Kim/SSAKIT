@@ -1,28 +1,18 @@
-import sys
-import os
-from PyQt5.QtCore import QDir
+import sys, os, traceback
+from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from PyQt5 import uic, QtCore, QtGui, QtWidgets
-from PIL import Image
+from PyQt5 import uic, QtGui, QtCore
+import time
+
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from back import create_dir, set_directory
 from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1
-import pyqtgraph as pg
-import matplotlib.pyplot as plt
-import time
-from ClassEditWidget import ClassEditWidget
 
-import numpy as np
-import tensorflow as tf
-from tensorflow import keras
-import keras_preprocessing
-from keras_preprocessing.image import ImageDataGenerator
-from keras_preprocessing import image
-import keras_preprocessing
-from tensorflow import keras
 import tensorflow as tf
 import numpy as np
-import time
+
+import matplotlib.pyplot as plt
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 
 # DB 연동
@@ -32,7 +22,81 @@ import sqlite3
 UI_Path = './ui/NetworkSetting.ui'
 form_class = uic.loadUiType(UI_Path)[0]
 
+# multiThread
+class WorkerSignals(QObject):
+    '''
+    Defines the signals available from a running worker thread.
 
+    Supported signals are:
+
+    finished
+        No data
+    
+    error
+        `tuple` (exctype, value, traceback.format_exc() )
+    
+    result
+        `object` data returned from processing, anything
+
+    progress
+        `int` indicating % progress 
+
+    '''
+    finished = pyqtSignal()
+    error = pyqtSignal(tuple)
+    result = pyqtSignal(object)
+    progress = pyqtSignal(int)
+
+
+class Worker(QRunnable):
+    '''
+    Worker thread
+
+    Inherits from QRunnable to handler worker thread setup, signals and wrap-up.
+
+    :param callback: The function callback to run on this worker thread. Supplied args and 
+                     kwargs will be passed through to the runner.
+    :type callback: function
+    :param args: Arguments to pass to the callback function
+    :param kwargs: Keywords to pass to the callback function
+
+    '''
+
+    def __init__(self, tbt, fig, canvas, settingsData, learn_train_path, learn_val_path, *args, **kwargs):
+        super(Worker, self).__init__()
+
+        # Store constructor arguments (re-used for processing)
+        self.textBox_terminal = tbt
+        self.fig = fig
+        self.canvas = canvas
+        self.settingsData = settingsData
+        self.learn_train_path = learn_train_path
+        self.learn_val_path = learn_val_path
+        self.args = args
+        self.kwargs = kwargs
+        self.signals = WorkerSignals()    
+
+        # Add the callback to our kwargs
+        self.kwargs['progress_callback'] = self.signals.progress        
+
+    @pyqtSlot()
+    def run(self):
+        if self.settingsData[0] == 'VGG':
+            print('VGG')
+            print(self.learn_train_path, self.learn_val_path)
+            Vgg16_test1.Learn(
+                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, self.textBox_terminal, self.fig, self.canvas)
+        elif self.settingsData[0] == 'InceptionV3':
+            print('Inception')
+            InceptionV3_test1.Learn(
+                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, self.textBox_terminal, self.fig, self.canvas)
+        elif self.settingsData[0] == 'ResNet152':
+            print('ResNet')
+            ResNet152_test1.Learn(
+                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, self.textBox_terminal, self.fig, self.canvas)
+
+
+# preprocess setting popup
 class AnotherFormLayout(QDialog):
     NumGridRows = 3
     NumButtons = 4
@@ -131,6 +195,7 @@ class ProjectNameClass(QDialog):
         self.hide()
 
 
+# MainWindow
 class WindowClass(QMainWindow, form_class):
     mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
     settingsData = []
@@ -160,7 +225,16 @@ class WindowClass(QMainWindow, form_class):
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         self.btnTraining.clicked.connect(self.training)
+        # 터미널
         self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
+        # live loss plot
+        self.threadpool = QThreadPool()
+        print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
+
+        self.fig = plt.Figure()
+        self.canvas = FigureCanvas(self.fig)
+        self.testLayout.addWidget(self.canvas)
+
         self.setWindowTitle('SSAKIT')
 
         # sql 연동
@@ -212,160 +286,27 @@ class WindowClass(QMainWindow, form_class):
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
 
+    # ▼▼ codes for multiTrhead ▼▼
+    def progress_fn(self, n):
+        print("%d%% done" % n)
+ 
+    def print_output(self, s):
+        print(s)
+        
+    def thread_complete(self):
+        print("THREAD COMPLETE!")
+    # ▲▲ codes for multiTrhead ▲▲
+
     def training(self):
         print('train')
-        if self.settingsData[0] == 'VGG':
-            print('VGG')
-            print(self.learn_train_path, self.learn_val_path)
-            Vgg16_test1.Learn(
-                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path)
-        elif self.settingsData[0] == 'InceptionV3':
-            print('Inception')
-            InceptionV3_test1.Learn(
-                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path)
-        elif self.settingsData[0] == 'ResNet152':
-            print('ResNet')
-            ResNet152_test1.Learn(
-                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path)
-        # # path
-        # TRAIN_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        # Pass the function to execute
+        worker = Worker(self.textBox_terminal, self.fig, self.canvas, self.settingsData, self.learn_train_path, self.learn_val_path) # Any other args, kwargs are passed to the run function
+        worker.signals.result.connect(self.print_output)
+        worker.signals.finished.connect(self.thread_complete)
+        worker.signals.progress.connect(self.progress_fn)
 
-        # # Define hyperparameter
-        # INPUT_SIZE = 32
-        # CHANNELS = 3
-        # NUM_CLASSES = 10
-        # NUM_TRAIN_IMGS = 50000
-        # NUM_TEST_IMGS = 10000
-
-        # BATCH_SIZE = 128
-        # train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
-        # val_steps_per_epoch = NUM_TEST_IMGS // BATCH_SIZE
-
-        # # Data Preprocessing
-        # (X_train, Y_train), (X_test, Y_test) = tf.keras.datasets.cifar10.load_data()
-        # X_train = X_train/255.0
-        # X_test = X_test/255.0
-
-        # # Load pre-trained model
-        # base_model = tf.keras.applications.VGG16(include_top=False,
-        #                                          weights='imagenet',
-        #                                          input_shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS),)
-
-        # # Freeze the pre-trained layers
-        # base_model.trainable = False
-
-        # # Add a fully connected layer
-        # model_input = tf.keras.Input(shape=(INPUT_SIZE, INPUT_SIZE, CHANNELS))
-        # model_output = tf.keras.layers.Flatten()(model_input)
-        # model_output = tf.keras.layers.Dense(
-        #     512, activation='relu')(model_output)
-        # model_output = tf.keras.layers.Dropout(0.2)(model_output)
-        # model_output = tf.keras.layers.Dense(
-        #     256, activation='relu')(model_output)
-        # model_output = tf.keras.layers.Dropout(0.2)(model_output)
-        # model_output = tf.keras.layers.Dense(
-        #     NUM_CLASSES, activation='softmax')(model_output)
-        # model = tf.keras.Model(model_input, model_output)
-
-        # model.summary()
-
-        # # Compile
-        # model.compile(optimizer='adam',
-        #               loss='sparse_categorical_crossentropy',
-        #               metrics=['accuracy'])
-
-        # # Callbacks
-        # checkpoint_filepath = os.path.join(
-        #     TRAIN_DIR, 'learning_test/checkpoint/VGG16_cifar10.h5')
-        # callbacks = [
-        #     tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_accuracy',
-        #                                      #  restore_best_weights=True
-        #                                      ),
-        #     tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
-        #                                        monitor='val_accuracy',
-        #                                        mode='max',
-        #                                        save_best_only=True,
-        #                                        # save_weights_only=True,
-        #                                        ),
-        #     # PlotLossesKeras(),
-        # ]
-
-        # class PlotLosses(keras.callbacks.Callback):
-        #     def __init__(self, tbt):
-        #         self.textBox_terminal = tbt
-        #         print("textBox copied")
-        #         # plt.ion()
-
-        #     def on_train_begin(self, logs={}):
-        #         self.i = 0
-        #         self.x = []
-        #         self.losses = []
-        #         self.val_losses = []
-        #         self.acc = []
-        #         self.val_acc = []
-        #         self.fig = plt.figure()
-
-        #         self.logs = []
-
-        #     def on_epoch_end(self, epoch, logs={}):
-        #         self.logs.append(logs)
-        #         self.x.append(self.i)
-        #         self.losses.append(logs.get('loss'))
-        #         self.val_losses.append(logs.get('val_loss'))
-        #         self.acc.append(logs.get('accuracy'))
-        #         self.val_acc.append(logs.get('val_accuracy'))
-        #         self.i += 1
-        #         f, (ax1, ax2) = plt.subplots(1, 2, sharex=True)
-
-        #         clear_output(wait=True)
-
-        #         ax1.set_yscale('log')
-        #         ax1.plot(self.x, self.losses, label="loss")
-        #         ax1.plot(self.x, self.val_losses, label="val_loss")
-        #         ax1.legend()
-
-        #         ax2.plot(self.x, self.acc, label="accuracy")
-        #         ax2.plot(self.x, self.val_acc, label="validation accuracy")
-        #         ax2.legend()
-
-        #         plt.draw()
-        #         plt.pause(0.01)
-        #         plt.clf()
-
-        #         # self.textBox_terminal.append(str(self.losses[-1]))
-        #         self.textBox_terminal.append(
-        #             "Epoch {} : lose = {}".format(self.i, self.losses[-1]))
-        #         # plt.show()
-
-        # plot_losses = PlotLosses(self.textBox_terminal)
-
-        # # training model
-        # history = model.fit(X_train, Y_train, batch_size=BATCH_SIZE, epochs=5, steps_per_epoch=train_steps_per_epoch, validation_data=(
-        #     X_test, Y_test), validation_steps=val_steps_per_epoch, verbose=1,  callbacks=plot_losses)
-
-        # # 터미널에 히스토리 출력
-        # # loss_history = history.history["loss"]  # type is list
-        # # for i in range(len(loss_history)):
-        # #     self.textBox_terminal.append(
-        # #         "Epoch {} : lose = {}".format(i, loss_history[i]))
-
-        # # 정확도 그래프 (임시)
-        # acc = history.history['accuracy']
-        # val_acc = history.history['val_accuracy']
-        # loss = history.history['loss']
-        # val_loss = history.history['val_loss']
-
-        # epochs = range(len(acc))
-
-        # plt.plot(epochs, acc, 'r', label='Training accuracy')
-        # plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
-        # plt.title('Training and validation accuracy')
-        # plt.legend(loc=0)
-
-        # now = time.gmtime(time.time())
-        # file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
-        #     str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
-        # plt.savefig('result_logs\\'+file_name)
+        # Execute
+        self.threadpool.start(worker) 
 
     # ClassEditWidget띄우기
     def ClassEditBtnFunc(self):
