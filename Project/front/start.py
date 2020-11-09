@@ -438,6 +438,11 @@ class WindowClass(QMainWindow, form_class):
         self.bit.setText("비트")
 
 if __name__ == "__main__":
+    try:
+        os.chdir(sys._MEIPASS)
+        print(sys._MEIPASS)
+    except:
+        os.chdir(os.getcwd())
     # QApplication : 프로그램을 실행시켜주는 클래스
     app = QApplication(sys.argv)
 
