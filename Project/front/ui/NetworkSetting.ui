@@ -529,6 +529,19 @@
      <string>Bit</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="f5Btn">
+    <property name="geometry">
+     <rect>
+      <x>1430</x>
+      <y>100</y>
+      <width>31</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>♻</string>
+    </property>
+   </widget>
    <zorder>imgLabel</zorder>
    <zorder>btnDataLoad</zorder>
    <zorder>line</zorder>
@@ -568,6 +581,7 @@
    <zorder>wLabel</zorder>
    <zorder>hLabel</zorder>
    <zorder>bitLabel</zorder>
+   <zorder>f5Btn</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

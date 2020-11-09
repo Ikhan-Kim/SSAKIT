@@ -30,16 +30,20 @@ class ClassEditWidget(QMainWindow, form_class) :
         self.sqlConnect()
 
         # edit 금지 모드
-        self.classTypeWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # self.classTypeWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
         # 버튼 클릭시 데이터 입력
         self.pushButton.clicked.connect(self.insertData)
 
+        self.classTypeWidget.cellClicked.connect(self.cellClick)
+
         # Table의 내부 셀을 클릭할 때 연결할 함수
         # 셀을 클릭하여 연결한 함수에는 기본적으로 셀의 Row, Column 두개의 인자를 넘겨준다.
-        self.classTypeWidget.cellClicked.connect(self.deleteData)
+        # self.classTypeWidget.cellClicked.connect(self.deleteData)
         
         self.okBtn.clicked.connect(self.hideFunc)
+
+        # self.classTypeWidget.clicked.connect(self.checkCurrentIndex)
 
     ########################################################
 
@@ -70,13 +74,14 @@ class ClassEditWidget(QMainWindow, form_class) :
     # 불러온 데이터 table widget 에서 보여주기
     def setTables(self, rows):
         # Table column 수, header 설정+너비
-        self.classTypeWidget.setColumnCount(4)
-        self.classTypeWidget.setHorizontalHeaderLabels(['idx', 'color', 'label', '삭제'])
+        self.classTypeWidget.setColumnCount(5)
+        self.classTypeWidget.setHorizontalHeaderLabels(['idx', 'color', 'label', '수정', '삭제'])
         # self.classTypeWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         
         # # Table 너비 조절
         self.classTypeWidget.setColumnWidth(0,40)
         self.classTypeWidget.setColumnWidth(3,50)
+        self.classTypeWidget.setColumnWidth(4,50)
         self.classTypeWidget.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
         self.classTypeWidget.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
         
@@ -95,7 +100,8 @@ class ClassEditWidget(QMainWindow, form_class) :
             self.classTypeWidget.setItem(x, 1, QTableWidgetItem(""))
             self.classTypeWidget.item(x, 1).setBackground(QtGui.QColor(color))
             self.classTypeWidget.setItem(x, 2, QTableWidgetItem(label))
-            self.classTypeWidget.setItem(x, 3, QTableWidgetItem("❌"))
+            self.classTypeWidget.setItem(x, 3, QTableWidgetItem("수정"))
+            self.classTypeWidget.setItem(x, 4, QTableWidgetItem("❌"))
 
     # DB) sql문 실행 함수
     def run(self):
@@ -139,11 +145,49 @@ class ClassEditWidget(QMainWindow, form_class) :
         #데이터 입력 후 DB의 내용 불러와서 TableWidget에 넣기 위한 함수 호출
         self.selectData()
 
-    # delete
-    def deleteData(self, row, column):
-        # 테이블 내부의 셀 클릭과 연결된 이벤트는 기본적으로 셀의 Row, Column을 인자로써 전달받는다.
-        # 삭제 셀이 눌렸을 때, 삭제 셀은 4번째 셀이므로 column 값이 3일 경우만 작동한다.
-        if column == 3: 
+    # update & delete
+    def cellClick(self, row, column):
+        # update
+        if column == 3:
+            # print("수정버튼 클릭됨")
+            conn = sqlite3.connect("test2.db")
+            cur = conn.cursor()
+            a = QMessageBox.question(self, "수정 확인", "정말로 수정 하시겠습니까?",
+                                 QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
+            if a == QMessageBox.Yes:
+
+                idx = self.classTypeWidget.item(row, 0).text()
+                # color_ = self.classTypeWidget.item(row, 1).
+                # color는 DB에서 값 불러와서 DB 값 수정 => bg color 재설정
+                # self.classTypeWidget.setItem(x, 1, QTableWidgetItem(""))
+                # self.classTypeWidget.item(x, 1).setBackground(QtGui.QColor(color))
+                color_ = "#1BE6EA"
+                label_ = self.classTypeWidget.item(row, 2).text()
+                # print("idx - ",idx, "label : ", label_)
+
+                #DB의 데이터 idx는 선택한 Row의 첫번째 셀(0번 Column)의 값에 해당한다.
+                updateSql = "UPDATE classLabel SET `color` = '{}', `label` = '{}' WHERE idx=?".format(color_, label_)
+                cur.execute(updateSql, (idx,))
+                conn.commit()        
+                conn.close()
+
+                # self.cmd = "insert into classLabel(`color`, `label`, `train`, `val`, `test`) values('{}', '{}', {}, {}, {})"\
+                # .format(self.color, self.label, self.train, self.val, self.test)
+
+                # self.cmd = "update test2 set `name` = '{}', `addr` = '{}' where `no` = {}"  \
+                #     .format(self.txt이름.text(), self.txt주소.text(), self.txt번호.text())
+                
+            #데이터 삭제 후 DB의 내용 불러와서 TableWidget에 넣기 위한 함수 호출
+            self.selectData()
+
+
+            
+        
+        # delete
+        ## 테이블 내부의 셀 클릭과 연결된 이벤트는 기본적으로 셀의 Row, Column을 인자로써 전달받는다.
+        ## 삭제 셀이 눌렸을 때, 삭제 셀은 5번째 셀이므로 column 값이 4일 경우만 작동한다.
+        elif column == 4:
+            print(row, column, "셀클릭-로우4")
             conn = sqlite3.connect("test2.db")
             cur = conn.cursor()
             a = QMessageBox.question(self, "삭제 확인", "정말로 삭제 하시겠습니까?",
@@ -158,6 +202,71 @@ class ClassEditWidget(QMainWindow, form_class) :
             
             #데이터 삭제 후 DB의 내용 불러와서 TableWidget에 넣기 위한 함수 호출
             self.selectData()
+
+    def updateData(self, row, column):
+        if column == 3:
+            print("수정버튼 클릭됨")
+            idx = self.classTypeWidget.item(row, 0).text()
+            color_ = self.classTypeWidget.item(row, 1).text()
+            lable_ = self.classTypeWidget.item(row, 2).text()
+            print(idx, color_, label_)
+            
+
+            # conn = sqlite3.connect("test2.db")
+            # cur = conn.cursor()
+            # a = QMessageBox.question(self, "수정 확인", "정말로 수정 하시겠습니까?",
+            #                      QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
+            # if a == QMessageBox.Yes:
+            #     #DB의 데이터 idx는 선택한 Row의 첫번째 셀(0번 Column)의 값에 해당한다.
+            #     idx = self.classTypeWidget.item(row, 0).text()
+            #     sql = "DELETE FROM classLabel WHERE idx =?"
+            #     updateSql = "UPDATE classLabel SET _____ WHERE idx=?".format()
+            #     cur.execute(updateSql, (idx,))
+            #     conn.commit()        
+            #     conn.close()
+            
+            # #데이터 삭제 후 DB의 내용 불러와서 TableWidget에 넣기 위한 함수 호출
+            # self.selectData()
+            
+    
+    def edit(self):
+        if (self.txt이름.text() != "") and (self.txt주소.text() != ""):
+            try:
+                self.cmd = "update test2 set `name` = '{}', `addr` = '{}' where `no` = {}"  \
+                    .format(self.txt이름.text(), self.txt주소.text(), self.txt번호.text())
+                print(self.cmd)
+                self.cur.execute(self.cmd)
+                self.conn.commit()
+            except:
+                QMessageBox.information(self, "삽입 오류", "올바른 형식으로 입력하세요.",
+                                        QMessageBox.Yes, QMessageBox.Yes)
+                return
+        else:
+            QMessageBox.information(self, "입력 오류", "빈칸 없이 입력하세요.",
+                                    QMessageBox.Yes, QMessageBox.Yes)
+            return
+        QMessageBox.information(self, "수정 성공", "수정되었습니다.",
+                                QMessageBox.Yes, QMessageBox.Yes)
+
+    # # delete
+    # def deleteData(self, row, column):
+    #     # 테이블 내부의 셀 클릭과 연결된 이벤트는 기본적으로 셀의 Row, Column을 인자로써 전달받는다.
+    #     # 삭제 셀이 눌렸을 때, 삭제 셀은 4번째 셀이므로 column 값이 3일 경우만 작동한다.
+    #     if column == 4: 
+    #         conn = sqlite3.connect("test2.db")
+    #         cur = conn.cursor()
+    #         a = QMessageBox.question(self, "삭제 확인", "정말로 삭제 하시겠습니까?",
+    #                              QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
+    #         if a == QMessageBox.Yes:
+    #             #DB의 데이터 idx는 선택한 Row의 첫번째 셀(0번 Column)의 값에 해당한다.
+    #             idx = self.classTypeWidget.item(row, 0).text()
+    #             sql = "DELETE FROM classLabel WHERE idx =?"
+    #             cur.execute(sql, (idx,))
+    #             conn.commit()        
+    #             conn.close()
+            
+    #         #데이터 삭제 후 DB의 내용 불러와서 TableWidget에 넣기 위한 함수 호출
+    #         self.selectData()
 
 if __name__ == "__main__" :
     app = QApplication(sys.argv) 
