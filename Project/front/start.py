@@ -6,7 +6,7 @@ import time
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from back import create_dir, set_directory
-from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1
+from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1, test_function2
 
 import tensorflow as tf
 import numpy as np
@@ -232,6 +232,7 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         self.btnTraining.clicked.connect(self.training)
         self.projectNameDisplay.nameSignal.connect(self.createNameFn)
+        self.btnTest.clicked.connect(self.test)
         # 터미널
         self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
         # live loss plot
@@ -320,6 +321,9 @@ class WindowClass(QMainWindow, form_class):
 
         # Execute
         self.threadpool.start(worker) 
+
+    def test(self):
+        test_function2.test()
 
     # ClassEditWidget띄우기
     def ClassEditBtnFunc(self):
