@@ -214,6 +214,7 @@ class WindowClass(QMainWindow, form_class):
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         self.btnTraining.clicked.connect(self.training)
+        self.btnTest.clicked.connect(self.testing)
         # 터미널
         self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
         # live loss plot
@@ -253,6 +254,7 @@ class WindowClass(QMainWindow, form_class):
             self.learnSettingDisplay.show()
         self.learn_train_path = self.projectName + "/train"
         self.learn_val_path = self.projectName + "/validation"
+        self.learn_test_path = self.projectName + "/test"
 
     def fileViewFn(self, index):
         self.mainImg = self.dirTreeView.model().filePath(index)
@@ -283,6 +285,16 @@ class WindowClass(QMainWindow, form_class):
 
         # Execute
         self.threadpool.start(worker) 
+    
+    def 대충_테스트_함수(self, test_path):
+        # 실제론 임포트 할거임
+        test_images, test_labels = test_path # 를 가공
+        test_loss, test_acc = model.evaluate(test_images,  test_labels, verbose=2)
+        predictions = model.predict(test_images)
+        return test_loss, test_acc, predictions
+
+    def testing(self):
+        예측로스, 예측어큐러시, 예측리스트 = self.대충_테스트_함수(self.learn_test_path)
 
 
 if __name__ == "__main__":
