@@ -168,6 +168,20 @@
     </property>
     <layout class="QGridLayout" name="testLayout"/>
    </widget>
+   <widget class="QPushButton" name="btnTest">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>10</y>
+      <width>75</width>
+      <height>61</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>테스트
+하기</string>
+    </property>
+   </widget>
    <zorder>imgLabel</zorder>
    <zorder>btnDataLoad</zorder>
    <zorder>line</zorder>
@@ -180,6 +194,7 @@
    <zorder>dirTreeView</zorder>
    <zorder>btnCreateProject</zorder>
    <zorder>gridLayoutWidget</zorder>
+   <zorder>btnTest</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
