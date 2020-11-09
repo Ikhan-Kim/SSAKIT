@@ -6,16 +6,12 @@ from keras_preprocessing.image import ImageDataGenerator
 from tensorflow import keras
 import time
 
-# from livelossplot import PlotLossesKeras
-
-
 def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
     #path
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    train_dir = os.path.join(BASE_DIR, train_path)
-    val_dir = os.path.join(BASE_DIR, val_path)
-    print(train_dir)
-    print(val_dir)
+    print(BASE_DIR)
+    train_dir = BASE_DIR + '\\' + train_path
+    val_dir = BASE_DIR + '\\' + val_path
     # Define hyperparameter
     INPUT_SIZE = 200
     CHANNELS = 3
@@ -63,9 +59,9 @@ def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
 
 
     # Load pre-trained model
-    base_model = tf.keras.applications.VGG16(include_top=False, 
-                                            weights='imagenet', 
-                                            input_shape=INPUT_SHAPE ,)
+    base_model = tf.keras.applications.EfficientNetB4(include_top=False, 
+                                                weights='imagenet', 
+                                                input_shape=INPUT_SHAPE,)
 
     # Freeze the pre-trained layers
     base_model.trainable = False
@@ -79,7 +75,7 @@ def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
     model.add(tf.keras.layers.Dense(256, activation='relu'))
     model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(NUM_CLASSES, activation='softmax'))
-    
+
     model.summary()
 
     # Compile
@@ -88,7 +84,7 @@ def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
                 metrics = ['accuracy'])
 
     # Callbacks
-    checkpoint_filepath = os.path.join(BASE_DIR, 'learning_test/checkpoint/VGG16_cifar10.h5')
+    checkpoint_filepath = os.path.join(BASE_DIR, 'learning_test/checkpoint/Efficientnet_stl10.h5')
 
     class PlotLosses(keras.callbacks.Callback):
         def __init__(self, tbt, figure, canvas):
@@ -166,10 +162,3 @@ def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
     # plt.legend(loc=0)
 
     # plt.show()
-
-    # now = time.gmtime(time.time())
-    # file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
-    # str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
-    # plt.savefig('result_logs\\'+file_name)
-
-# Learn([False, False, 0], 30, 'final1/train', 'final1/validation')
