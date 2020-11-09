@@ -105,8 +105,8 @@ class AnotherFormLayout(QDialog):
 
     def __init__(self):
         super().__init__()
+        self.setGeometry(800,100,600,600)
         self.createFormGroupBox()
-
         buttonBox = QDialogButtonBox(
             QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
         buttonBox.accepted.connect(self.accept)
@@ -117,6 +117,8 @@ class AnotherFormLayout(QDialog):
         # mainLayout.addWidget(self.formDataPreprocessing)
         mainLayout.addWidget(self.formNueralNetwork)
         mainLayout.addWidget(self.formLearn)
+        self.trainList = QTableWidget()
+        mainLayout.addWidget(self.trainList)
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
 
