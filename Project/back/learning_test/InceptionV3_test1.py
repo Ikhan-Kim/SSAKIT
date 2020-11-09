@@ -116,7 +116,7 @@ def Learn(augmentation, input_epochs, train_dir, val_dir, tbt, fig, canvas):
 
             # 터미널 출력
             self.textBox_terminal.append(
-                "Epoch {}/5 : loss = {}, accuracy = {}, val_loss = {}, val_accuracy = {}".format(self.i, round(self.losses[-1], 4), round(self.acc[-1], 4), round(self.val_losses[-1], 4), round(self.val_acc[-1], 4)))
+                "Epoch {}/{} : loss = {}, accuracy = {}, val_loss = {}, val_accuracy = {}".format(self.i, input_epochs, round(self.losses[-1], 4), round(self.acc[-1], 4), round(self.val_losses[-1], 4), round(self.val_acc[-1], 4)))
 
             self.fig.clear()
             ax = self.fig.add_subplot(111)
