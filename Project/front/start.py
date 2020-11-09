@@ -2,14 +2,20 @@ import sys
 import os
 from PyQt5.QtCore import QDir
 from PyQt5.QtWidgets import *
-from PyQt5 import uic, QtCore, QtGui
+from PyQt5 import uic, QtCore, QtGui, QtWidgets
 from PIL import Image
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from back import create_dir, set_directory
 from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1
 import pyqtgraph as pg
 import matplotlib.pyplot as plt
-from IPython.display import clear_output
+import time
+from ClassEditWidget import ClassEditWidget
+
+import numpy as np
+import tensorflow as tf
+from tensorflow import keras
+import keras_preprocessing
 from keras_preprocessing.image import ImageDataGenerator
 from keras_preprocessing import image
 import keras_preprocessing
@@ -18,6 +24,9 @@ import tensorflow as tf
 import numpy as np
 import time
 
+
+# DB 연동
+import sqlite3
 
 # 연결할 ui 파일의 경로 설정
 UI_Path = './ui/NetworkSetting.ui'
@@ -129,7 +138,15 @@ class WindowClass(QMainWindow, form_class):
     # learn_train_path = ''
     # learn_val_path = ''
 
-    def __init__(self):
+    # DB에 넣을 데이터 불러오기 => 불러온 이미지의 label 기반
+    data = [
+    {"color": "#FF5733", "label": "12R0", "train":50, "val":30, "test": 30},
+    {"color": "#3372FF", "label": "4300", "train":50, "val":30, "test": 30},
+    {"color": "#61FF33", "label": "4301", "train":50, "val":30, "test": 30},
+    {"color": "#EA33FF", "label": "7501", "train":50, "val":30, "test": 30},
+    ]
+
+    def __init__(self) :
         super().__init__()
         self.setupUi(self)
         # 기본 설정?>
@@ -146,6 +163,19 @@ class WindowClass(QMainWindow, form_class):
         self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
         self.setWindowTitle('SSAKIT')
 
+        # sql 연동
+        self.sqlConnect()
+
+        # ClassEditWidget 불러오기
+        self.openClassEditWidget = ClassEditWidget(WindowClass.data)
+        # class Edit btn 클릭 => 위젯 열기
+        self.classEditBtn.clicked.connect(self.ClassEditBtnFunc)
+        # edit 금지 모드
+        self.classType.setEditTriggers(QAbstractItemView.NoEditTriggers)
+
+        # Navigator
+        self.loadNavi()
+    
     def createProjectFn(self):
         if self.projectNameDisplay.isVisible():
             self.projectNameDisplay.hide()
@@ -337,6 +367,117 @@ class WindowClass(QMainWindow, form_class):
         #     str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
         # plt.savefig('result_logs\\'+file_name)
 
+    # ClassEditWidget띄우기
+    def ClassEditBtnFunc(self):
+        self.openClassEditWidget.show()
+
+    # DB) SQL 연결 및 테이블 생성
+    def sqlConnect(self):
+        try: 
+            self.conn = sqlite3.connect("test2.db", isolation_level=None)
+        except:
+            print("문제가 있네요!")
+            exit(1)
+        print("연결성공!")
+        self.cur = self.conn.cursor()
+
+        # 테이블 생성
+        self.createSql = "CREATE TABLE IF NOT EXISTS classLabel (idx INTEGER PRIMARY KEY, color TEXT, label TEXT, train INTEGER, val INTEGER, test INTEGER)"
+        self.cmd = self.createSql
+        self.run()
+ 
+        # 초기 데이터 삽입
+        for d in self.data:
+            # print("d", d)
+            self.color = d["color"]
+            self.label = d["label"]
+            self.train = d["train"]
+            self.val = d["val"]
+            self.test = d["test"]
+
+            self.cmd = "insert into classLabel(`color`, `label`, `train`, `val`, `test`) values('{}', '{}', {}, {}, {})"\
+                .format(self.color, self.label, self.train, self.val, self.test)
+            self.cur.execute(self.cmd)
+            self.conn.commit()
+
+        self.selectData()
+
+    # DB 데이터 불러오기
+    def selectData(self):
+        self.selectSql = "SELECT * FROM classLabel"
+        self.cmd = self.selectSql
+        self.run()
+
+        item_list = [list(item[:]) for item in self.cur.fetchall()]
+        self.setTables(item_list)
+    
+    # 불러온 데이터 table widget 에서 보여주기
+    def setTables(self, rows):
+        # Table column 수, header 설정+너비
+        self.classType.setColumnCount(5)
+        self.classType.setHorizontalHeaderLabels(['idx','color', 'class', 'train', 'val', 'test'])
+        
+        # Table 너비 조절
+        self.classType.setColumnWidth(0,10)
+        self.classType.setColumnWidth(1,50)
+        self.classType.setColumnWidth(2,10)
+        self.classType.setColumnWidth(3,10)
+        self.classType.setColumnWidth(4,10)
+        self.classType.setColumnWidth(5,10)
+        self.classType.setColumnWidth(6,10)
+        
+        cnt = len(rows)
+        self.classType.setRowCount(cnt)
+
+        for x in range(cnt):
+            # 리스트 내부의 column쌍은 튜플로 반환하므로 튜플의 각 값을 변수에 저장
+            # print(rows)
+            idx, color, label, train, val, test = rows[x]
+            
+            # print("rows[x]", rows[x][0], rows[x][1], rows[x][2])
+            # 테이블의 각 셀에 값 입력
+            # self.classType.setItem(x, 0, QTableWidgetItem(""))
+            # self.classType.item(x, 0).setBackground(QtGui.QColor(color))
+            # self.classType.setItem(x, 1, QTableWidgetItem(label))
+            # self.classType.setItem(x, 2, QTableWidgetItem(str(train)))
+            # self.classType.setItem(x, 3, QTableWidgetItem(str(val)))
+            # self.classType.setItem(x, 4, QTableWidgetItem(str(test)))
+
+            self.classType.setItem(x, 0, QTableWidgetItem(str(idx)))
+            self.classType.setItem(x, 1, QTableWidgetItem(""))
+            self.classType.item(x, 1).setBackground(QtGui.QColor(color))
+            self.classType.setItem(x, 2, QTableWidgetItem(label))
+            self.classType.setItem(x, 3, QTableWidgetItem(str(train)))
+            self.classType.setItem(x, 4, QTableWidgetItem(str(val)))
+            self.classType.setItem(x, 5, QTableWidgetItem(str(test)))
+
+    # DB) sql문 실행 함수
+    def run(self):
+        self.cur.execute(self.cmd)
+        self.conn.commit()
+
+    # DB) 종료 함수
+    def closeEvent(self, QCloseEvent):
+        print("DB close!")
+        self.conn.close()
+
+    def ClassEditBtnFunc(self):
+        # ClassEditWidget띄우기
+        self.openClassEditWidget.show()
+
+    # Navigator
+    def loadNavi(self):
+        # dummydata
+        self.wValue.setText("너비")
+        self.hValue.setText("높이")
+        self.xValue.setText("0")
+        self.yValue.setText("0")
+
+        self.fileName.setText("파일명")
+        self.fileSize.setText("파일사이즈")
+        self.extension.setText("확장자")
+        self.channel.setText("채널")
+        self.bit.setText("비트")
 
 if __name__ == "__main__":
     # QApplication : 프로그램을 실행시켜주는 클래스
