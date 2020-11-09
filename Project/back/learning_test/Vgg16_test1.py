@@ -3,6 +3,7 @@ import numpy as np
 import tensorflow as tf
 import matplotlib.pyplot as plt
 from keras_preprocessing.image import ImageDataGenerator
+import time
 # import keras
 
 # from livelossplot import PlotLossesKeras
@@ -22,7 +23,7 @@ def Learn(augmentation, input_epochs, train_path, val_path):
     NUM_CLASSES = 10
     NUM_TRAIN_IMGS = 3000
     NUM_VAL_IMGS = 1000
-    BATCH_SIZE = 64
+    BATCH_SIZE = 32
 
     HORIZONTAL_FLIP = augmentation[0]
     VERTICAL_FLIP = augmentation[1]
@@ -74,9 +75,9 @@ def Learn(augmentation, input_epochs, train_path, val_path):
     model_output = base_model(model_input)
     model_output = tf.keras.layers.Flatten()(model_output)
     model_output = tf.keras.layers.Dense(512, activation='relu')(model_output)
-    model_output = tf.keras.layers.Dropout(0.2)(model_output)
+    model_output = tf.keras.layers.Dropout(0.5)(model_output)
     model_output = tf.keras.layers.Dense(256, activation='relu')(model_output)
-    model_output = tf.keras.layers.Dropout(0.2)(model_output)
+    model_output = tf.keras.layers.Dropout(0.5)(model_output)
     model_output = tf.keras.layers.Dense(NUM_CLASSES, activation='softmax')(model_output)
     model = tf.keras.Model(model_input, model_output)
 
@@ -125,5 +126,10 @@ def Learn(augmentation, input_epochs, train_path, val_path):
     plt.legend(loc=0)
 
     plt.show()
+
+    now = time.gmtime(time.time())
+    file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
+    str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
+    plt.savefig('result_logs\\'+file_name)
 
 # Learn([False, False, 0], 30, 'final1/train', 'final1/validation')
