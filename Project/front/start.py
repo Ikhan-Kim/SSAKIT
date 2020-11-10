@@ -7,6 +7,9 @@ import time
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from back import create_dir, set_directory
 from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1, test_function2
+# # sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
+# from mymodules import create_dir, set_directory
+# from mymodules import InceptionV3_test1, ResNet152_test1, Vgg16_test1, EfficientnetB4_test1
 
 import tensorflow as tf
 import numpy as np
@@ -20,9 +23,15 @@ from ClassEditWidget import ClassEditWidget
 # DB 연동
 import sqlite3
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+ 
+
 # 연결할 ui 파일의 경로 설정
-UI_Path = './ui/NetworkSetting.ui'
-form_class = uic.loadUiType(UI_Path)[0]
+form = resource_path('NetworkSetting.ui')
+form_class = uic.loadUiType(form)[0]
 
 # multiThread
 class WorkerSignals(QObject):
@@ -96,6 +105,10 @@ class Worker(QRunnable):
             print('ResNet')
             ResNet152_test1.Learn(
                 self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, self.textBox_terminal, self.fig, self.canvas)
+        elif self.settingsData[0] == 'EfficientnetB4':
+            print('EfficientnetB4')
+            EfficientnetB4_test1.Learn(
+                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, self.textBox_terminal, self.fig, self.canvas)
 
 
 # preprocess setting popup
@@ -152,7 +165,7 @@ class AnotherFormLayout(QDialog):
         self.formNueralNetwork = QGroupBox("Nueral Network")
         layoutNN = QFormLayout()
         self.comboBoxNN = QComboBox()
-        self.comboBoxNN.addItems(["VGG", "InceptionV3", "ResNet152"])
+        self.comboBoxNN.addItems(["VGG", "InceptionV3", "ResNet152", "EfficientnetB4"])
         layoutNN.addRow(QLabel("select NN:"), self.comboBoxNN)
         self.formNueralNetwork.setLayout(layoutNN)
         # Learn Settings
@@ -442,6 +455,11 @@ class WindowClass(QMainWindow, form_class):
         self.bit.setText("비트")
 
 if __name__ == "__main__":
+    try:
+        os.chdir(sys._MEIPASS)
+        print(sys._MEIPASS)
+    except:
+        os.chdir(os.getcwd())
     # QApplication : 프로그램을 실행시켜주는 클래스
     app = QApplication(sys.argv)
 
