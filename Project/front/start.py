@@ -6,7 +6,7 @@ import time
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from back import create_dir, set_directory
-from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1, test_function2
+from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1, test_function2, EfficientnetB4_test1
 # # sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 # from mymodules import create_dir, set_directory
 # from mymodules import InceptionV3_test1, ResNet152_test1, Vgg16_test1, EfficientnetB4_test1
