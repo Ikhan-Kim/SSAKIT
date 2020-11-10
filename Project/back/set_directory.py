@@ -18,10 +18,10 @@ def set_directory(dataset_name, class_name, copy_path):
     file_list = os.listdir(train_path)
     file_len = int(len(file_list) * 0.2)
     for file_name in random.sample(file_list, file_len):
-        shutil.move(train_path + file_name, validation_path)
+        shutil.move(train_path + file_name, validation_path + file_name)
     file_list = os.listdir(train_path)
     for file_name in random.sample(file_list, file_len):
-        shutil.move(train_path + file_name, test_path)
+        shutil.move(train_path + file_name, test_path + file_name)
 
 
 def name():
