@@ -19,8 +19,8 @@ TEST_dir = os.path.join(BASE_DIR, 'final1/test')
 #path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 model_path = os.path.join(BASE_DIR, 'learning_test/checkpoint/VGG16_stl10.h5')
-test_dir = os.path.join(BASE_DIR, 'test/test')
-
+# test_dir = os.path.join(BASE_DIR, 'test/test')
+test_dir = os.path.join(BASE_DIR, 'final1/test')
 
 # Define hyperparameter
 INPUT_SIZE = 200
