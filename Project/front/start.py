@@ -115,6 +115,7 @@ class Worker(QRunnable):
 class AnotherFormLayout(QDialog):
     NumGridRows = 3
     NumButtons = 4
+    send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
     def __init__(self):
         super().__init__()
@@ -136,6 +137,15 @@ class AnotherFormLayout(QDialog):
         self.setLayout(mainLayout)
 
         self.setWindowTitle("Train Settings")
+
+    def warningMSG(self, title: str, content: str):
+        msg = QMessageBox()
+        msg.setWindowTitle(title)
+        msg.setText(content)
+        msg.setStandardButtons(QMessageBox.Ok)
+        result = msg.exec_()
+        if result == QMessageBox.Ok:
+            self.send_valve_popup_signal.emit(True)
 
     def createFormGroupBox(self):
         # Augmentation
@@ -171,7 +181,8 @@ class AnotherFormLayout(QDialog):
         # Learn Settings
         self.formLearn = QGroupBox("Learn Settings")
         layoutLS = QFormLayout()
-        self.lineEpochs = QLineEdit()
+        self.lineEpochs = QSpinBox()
+        self.lineEpochs.setRange(1, 10000)
         # onlyInt = QIntValidator()
         # self.lineEpochs.setValidator(onlyInt)
         layoutLS.addRow(QLabel("Epochs"), self.lineEpochs)
@@ -219,8 +230,10 @@ class WindowClass(QMainWindow, form_class):
     mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
     settingsData = []
     projectName = ''
-    # learn_train_path = ''
+    learn_train_path = ''
     # learn_val_path = ''
+    isTrained = False
+    send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
     # DB에 넣을 데이터 불러오기 => 불러온 이미지의 label 기반
     data = [
@@ -289,21 +302,27 @@ class WindowClass(QMainWindow, form_class):
             self.projectNameDisplay.show()
 
     def dataLoadFn(self):
-        self.pathName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
-                                                         QFileDialog.ShowDirsOnly)
-        if self.pathName:
-            self.dirName = self.pathName.split('/')[-1]
-            set_directory.set_directory(
-                self.projectName, self.dirName, self.pathName)
-            # self.setWindowTitle(self.projectName)
+        if self.projectName:
+            self.pathName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
+                                                            QFileDialog.ShowDirsOnly)
+            if self.pathName:
+                self.dirName = self.pathName.split('/')[-1]
+                set_directory.set_directory(
+                    self.projectName, self.dirName, self.pathName)
+                # self.setWindowTitle(self.projectName)
+        else:
+            self.warningMSG("주의", "프로젝트를 먼저 생성/선택 해주십시오.")
 
     def learnSettingsFn(self, checked):
-        if self.learnSettingDisplay.isVisible():
-            self.learnSettingDisplay.hide()
+        if self.projectName:
+            if self.learnSettingDisplay.isVisible():
+                self.learnSettingDisplay.hide()
+            else:
+                self.learnSettingDisplay.show()
+            self.learn_train_path = self.projectName + "/train"
+            self.learn_val_path = self.projectName + "/validation"
         else:
-            self.learnSettingDisplay.show()
-        self.learn_train_path = self.projectName + "/train"
-        self.learn_val_path = self.projectName + "/validation"
+            self.warningMSG("주의", "프로젝트를 먼저 생성/선택 해주십시오.")
 
     def fileViewFn(self, index):
         self.mainImg = self.dirTreeView.model().filePath(index)
@@ -324,19 +343,35 @@ class WindowClass(QMainWindow, form_class):
         print("THREAD COMPLETE!")
     # ▲▲ codes for multiTrhead ▲▲
 
+    def warningMSG(self, title: str, content: str):
+        msg = QMessageBox()
+        msg.setWindowTitle(title)
+        msg.setText(content)
+        msg.setStandardButtons(QMessageBox.Ok)
+        result = msg.exec_()
+        if result == QMessageBox.Ok:
+            self.send_valve_popup_signal.emit(True)
+
     def training(self):
         print('train')
-        # Pass the function to execute
-        worker = Worker(self.textBox_terminal, self.fig, self.canvas, self.settingsData, self.learn_train_path, self.learn_val_path) # Any other args, kwargs are passed to the run function
-        worker.signals.result.connect(self.print_output)
-        worker.signals.finished.connect(self.thread_complete)
-        worker.signals.progress.connect(self.progress_fn)
+        if self.learn_train_path:
+            # Pass the function to execute
+            worker = Worker(self.textBox_terminal, self.fig, self.canvas, self.settingsData, self.learn_train_path, self.learn_val_path) # Any other args, kwargs are passed to the run function
+            worker.signals.result.connect(self.print_output)
+            worker.signals.finished.connect(self.thread_complete)
+            worker.signals.progress.connect(self.progress_fn)
 
-        # Execute
-        self.threadpool.start(worker) 
+            # Execute
+            self.threadpool.start(worker)
+            self.isTrained = True
+        else:
+            self.warningMSG("주의", "데이터 로드 및 이미지 전처리를 먼저 실행해 주십시오.")
 
     def test(self):
-        test_function2.test()
+        if self.isTrained:
+            test_function2.test()
+        else:
+            self.warningMSG("주의", "모델 학습을 먼저 실행해 주십시오.")
 
     # ClassEditWidget띄우기
     def ClassEditBtnFunc(self):
