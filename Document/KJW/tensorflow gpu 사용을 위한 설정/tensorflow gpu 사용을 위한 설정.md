@@ -8,13 +8,13 @@
 
   - 참고 링크: https://www.tensorflow.org/install/gpu
 
-  <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112023102070.png" alt="image-20201112023102070" style="zoom: 67%;" />
+  <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112023102070.jpg" alt="image-20201112023102070" style="zoom: 67%;" />
 
 - tensorflow-gpu-2.3.0 버전을 지원하는 CUDA, cuDNN 버전
 
   - 참고링크: https://www.tensorflow.org/install/source_windows
 
-  <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112022926195.png" alt="image-20201112022926195" style="zoom:80%;" />
+  <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112022926195.jpg" alt="image-20201112022926195" style="zoom:80%;" />
   
   - 따라서 해당 버전의 NVIDIA GPU 드라이버, CUDA Tookit, cuDNN 을 설치해줘야함. 
     - NVIDIA GPU 드라이버 `418.x 이상`
@@ -39,9 +39,9 @@
 
 - 그래픽 드라이버를 삭제했다면 그래픽 드라이버 설치하기. (`457.30 버전으로 설치함.`)
 
-  <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112024553108.png" alt="image-20201112024553108" style="zoom: 67%;" />
+  <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112024553108.jpg" alt="image-20201112024553108" style="zoom: 67%;" />
 
-  <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112024455417.png" alt="image-20201112024455417" style="zoom:67%;" />
+  <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112024455417.jpg" alt="image-20201112024455417" style="zoom:67%;" />
 
   - 그래픽 드라이버 설치가 완료됐다면 버전 확인하기
 
@@ -49,7 +49,7 @@
 
     - 아래 사진처럼 나오는데 `CUDA Version`은 `현재 설치되어 있는 버전이 아니라` 설치된 그래픽 드라이버가 지원할 수 있는 최대 버전임.
 
-      <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112025327196.png" alt="image-20201112025327196" style="zoom: 67%;" />
+      <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112025327196.jpg" alt="image-20201112025327196" style="zoom: 67%;" />
 
 - `CUDA Toolkit 10.1 update2 (Aug 2019)` 을 다운 받고 설치함.
 
@@ -78,11 +78,11 @@
 
   - 시스템 변수에  아래와 같이 되어 있는지 확인
 
-    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112030304925.png" alt="image-20201112030304925" style="zoom:67%;" />
+    <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112030304925.jpg" alt="image-20201112030304925" style="zoom:67%;" />
 
 - 잘 실행될 경우의 터미널 창
 
-  <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112031029579.png" alt="image-20201112031029579"  />
+  <img src="C:\Users\multicampus\Documents\s03p31c203\Document\KJW\tensorflow gpu 사용을 위한 설정\tensorflow gpu 사용을 위한 설정.assets\image-20201112031029579.jpg" alt="image-20201112031029579"  />
 
 - 참고 링크
   - https://mellowlee.tistory.com/entry/Windows-Tensorflow-Keras-%EC%82%AC%EC%A0%84-%EC%A4%80%EB%B9%84
