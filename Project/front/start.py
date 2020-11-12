@@ -113,7 +113,6 @@ class Worker(QRunnable):
 class AnotherFormLayout(QDialog):
     NumGridRows = 3
     NumButtons = 4
-    send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
     def __init__(self):
         super().__init__()
@@ -135,15 +134,6 @@ class AnotherFormLayout(QDialog):
         self.setLayout(mainLayout)
 
         self.setWindowTitle("Train Settings")
-
-    def warningMSG(self, title: str, content: str):
-        msg = QMessageBox()
-        msg.setWindowTitle(title)
-        msg.setText(content)
-        msg.setStandardButtons(QMessageBox.Ok)
-        result = msg.exec_()
-        if result == QMessageBox.Ok:
-            self.send_valve_popup_signal.emit(True)
 
     def createFormGroupBox(self):
         # Augmentation
