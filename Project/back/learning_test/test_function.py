@@ -11,6 +11,12 @@ from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics import plot_confusion_matrix
 from sklearn.metrics import confusion_matrix
 
+
+import sklearn.metrics as metrics
+
+
+
+
 # path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TEST_dir = os.path.join(BASE_DIR, 'final1/test')
@@ -220,4 +226,35 @@ plot_confusion_matrix(real, predicted_labels, classes=class_names,
 plot_confusion_matrix(real, predicted_labels, classes=class_names, normalize=True,
                       title='Normalized confusion matrix')
 
+plt.show()
+
+
+
+ 
+modelAClassValueNDArray       = np.array([0   , 0   , 0   , 0   , 0   , 0   , 1   , 0   , 1   , 1   , 0   , 0   , 0   , 1   , 1   ])
+modelAClassProbabilityNDArray = np.array([0.05, 0.05, 0.15, 0.15, 0.25, 0.25, 0.35, 0.35, 0.45, 0.45, 0.55, 0.55, 0.65, 0.85, 0.95])
+
+modelBClassValueNDArray       = np.array([0   , 0   , 0   , 1   , 1   , 0   , 0   , 1   , 0   , 0   , 1   , 0   , 0   , 0   , 1   ])
+modelBClassProbabilityNDArray = np.array([0.05, 0.05, 0.15, 0.15, 0.25, 0.25, 0.25, 0.35, 0.35, 0.45, 0.55, 0.55, 0.65, 0.75, 0.95])
+
+ 
+
+modelAPrecisionNDArray, modelARecallRateNDArray, _ = metrics.precision_recall_curve(modelAClassValueNDArray, modelAClassProbabilityNDArray)
+modelBPrecisionNDArray, modelBRecallRateNDArray, _ = metrics.precision_recall_curve(modelBClassValueNDArray, modelBClassProbabilityNDArray)
+
+ 
+
+modelAAP = metrics.average_precision_score(modelAClassValueNDArray, modelAClassProbabilityNDArray)
+modelBAP = metrics.average_precision_score(modelBClassValueNDArray, modelBClassProbabilityNDArray)
+print(modelAAP)
+print(modelBAP)
+
+plt.title("Precision-Recall Graph")
+plt.xlabel("Recall"   )
+plt.ylabel("Precision")
+
+plt.plot(modelARecallRateNDArray, modelAPrecisionNDArray, "b", label = "Model A (AP = %0.2F)" % modelAAP)
+plt.plot(modelBRecallRateNDArray, modelBPrecisionNDArray, "g", label = "Model B (AP = %0.2F)" % modelBAP)
+
+plt.legend(loc = "upper right")
 plt.show()
