@@ -5,8 +5,9 @@ import matplotlib.pyplot as plt
 from keras_preprocessing.image import ImageDataGenerator
 from tensorflow import keras
 import time
+from .PlotLosses import PlotLosses
 
-def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
+def Learn(augmentation, input_epochs, train_path, val_path, window):
     #path
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     print(BASE_DIR)
@@ -87,56 +88,7 @@ def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
     # Callbacks
     checkpoint_filepath = os.path.join(BASE_DIR, 'learning_test/checkpoint/ResNet152_cifar10.h5')
 
-    class PlotLosses(keras.callbacks.Callback):
-        def __init__(self, tbt, figure, canvas):
-            self.textBox_terminal = tbt
-            self.fig = figure
-            self.canvas = canvas
-
-        def on_train_begin(self, logs={}):
-            self.i = 0
-            self.x = []
-            self.losses = []
-            self.val_losses = []
-            self.acc = []
-            self.val_acc = []
-            # self.fig = plt.figure()
-
-            self.logs = []
-
-        def on_epoch_end(self, epoch, logs={}):
-            self.logs.append(logs)
-            self.x.append(self.i)
-            self.losses.append(logs.get('loss'))
-            self.val_losses.append(logs.get('val_loss'))
-            self.acc.append(logs.get('accuracy'))
-            self.val_acc.append(logs.get('val_accuracy'))
-            self.i += 1
-
-            # 터미널 출력
-            self.textBox_terminal.append(
-                "Epoch {}/{} : loss = {}, accuracy = {}, val_loss = {}, val_accuracy = {}".format(self.i, input_epochs, round(self.losses[-1], 4), round(self.acc[-1], 4), round(self.val_losses[-1], 4), round(self.val_acc[-1], 4)))
-
-            self.fig.clear()
-            ax1 = self.fig.add_subplot(121)
-            ax1.plot(self.x, self.acc, label="train_accuracy")
-            ax1.plot(self.x, self.val_acc, label="val_accuracy")
-            ax1.legend()
-            ax1.set_title("accuracy")
-            ax2 = self.fig.add_subplot(122)
-            ax2.plot(self.x, self.losses, label="train_loss")
-            ax2.plot(self.x, self.val_losses, label="val_loss")
-            ax2.legend()
-            ax2.set_title("loss")
-
-            if self.i == input_epochs:
-                now = time.gmtime(time.time())
-                file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
-                    str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
-                self.fig.savefig('result_logs\\'+file_name)
-                print("figure saved!")
-
-            self.canvas.draw()
+    plotLosses = PlotLosses(input_epochs, window)
 
     callbacks = [
         tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_accuracy',
@@ -148,11 +100,11 @@ def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
                                             save_best_only=True,
                                             # save_weights_only=True,
                                         ),
-        PlotLosses(tbt, fig, canvas),
+        plotLosses,
     ]
 
 
     # training model
     history = model.fit(train_generator, epochs=EPOCHS, steps_per_epoch=train_steps_per_epoch, validation_data = validation_generator, validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
-    tbt.append("Training Done!")
+    window.textBox_terminal.append("Training Done!")
     plt.close()
