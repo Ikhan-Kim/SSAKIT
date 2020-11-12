@@ -109,7 +109,7 @@ class Worker(QRunnable):
             print('EfficientnetB4')
             EfficientnetB4_test1.Learn(
                 self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, self.textBox_terminal, self.fig, self.canvas)
-
+        myWindow.btnEnable()
 
 # preprocess setting popup
 class AnotherFormLayout(QDialog):
@@ -351,10 +351,25 @@ class WindowClass(QMainWindow, form_class):
         result = msg.exec_()
         if result == QMessageBox.Ok:
             self.send_valve_popup_signal.emit(True)
+    
+    def btnDisable(self):
+        print("Buttons are disabled!")
+        self.btnCreateProject.setEnabled(False)
+        self.btnDataLoad.setEnabled(False)
+        self.btnLearnSettings.setEnabled(False)
+        self.btnTraining.setEnabled(False)
+        self.btnTest.setEnabled(False)
+
+    def btnEnable(self):
+        self.btnCreateProject.setEnabled(True)
+        self.btnDataLoad.setEnabled(True)
+        self.btnLearnSettings.setEnabled(True)
+        self.btnTraining.setEnabled(True)
+        self.btnTest.setEnabled(True)
 
     def training(self):
-        print('train')
         if self.learn_train_path:
+            self.btnDisable()
             # Pass the function to execute
             worker = Worker(self.textBox_terminal, self.fig, self.canvas, self.settingsData, self.learn_train_path, self.learn_val_path) # Any other args, kwargs are passed to the run function
             worker.signals.result.connect(self.print_output)
@@ -366,6 +381,7 @@ class WindowClass(QMainWindow, form_class):
             self.isTrained = True
         else:
             self.warningMSG("주의", "데이터 로드 및 이미지 전처리를 먼저 실행해 주십시오.")
+        # self.btnEnable()
 
     def test(self):
         if self.isTrained:
