@@ -74,13 +74,10 @@ class Worker(QRunnable):
 
     '''
 
-    def __init__(self, tbt, fig, canvas, settingsData, learn_train_path, learn_val_path, *args, **kwargs):
+    def __init__(self, settingsData, learn_train_path, learn_val_path, *args, **kwargs):
         super(Worker, self).__init__()
 
         # Store constructor arguments (re-used for processing)
-        self.textBox_terminal = tbt
-        self.fig = fig
-        self.canvas = canvas
         self.settingsData = settingsData
         self.learn_train_path = learn_train_path
         self.learn_val_path = learn_val_path
@@ -374,7 +371,7 @@ class WindowClass(QMainWindow, form_class):
         if self.learn_train_path:
             self.btnDisable()
             # Pass the function to execute
-            worker = Worker(self.textBox_terminal, self.fig, self.canvas, self.settingsData, self.learn_train_path, self.learn_val_path) # Any other args, kwargs are passed to the run function
+            worker = Worker(self.settingsData, self.learn_train_path, self.learn_val_path) # Any other args, kwargs are passed to the run function
             worker.signals.result.connect(self.print_output)
             worker.signals.finished.connect(self.thread_complete)
             worker.signals.progress.connect(self.progress_fn)
