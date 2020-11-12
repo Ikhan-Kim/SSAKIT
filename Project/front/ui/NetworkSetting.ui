@@ -30,7 +30,7 @@
    <widget class="Line" name="line_3">
     <property name="geometry">
      <rect>
-      <x>180</x>
+      <x>230</x>
       <y>90</y>
       <width>20</width>
       <height>421</height>
@@ -70,23 +70,23 @@
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>90</y>
+      <y>130</y>
       <width>231</width>
-      <height>421</height>
+      <height>381</height>
      </rect>
     </property>
    </widget>
    <widget class="QLabel" name="imgLabel">
     <property name="geometry">
      <rect>
-      <x>240</x>
+      <x>260</x>
       <y>100</y>
       <width>441</width>
-      <height>411</height>
+      <height>391</height>
      </rect>
     </property>
     <property name="text">
-     <string>이미지 출력 위치dddddddddddddddddddddddddddddddddddddddddddddddddddddddddd</string>
+     <string/>
     </property>
    </widget>
    <widget class="QWidget" name="gridLayoutWidget">
@@ -549,6 +549,25 @@
      <string>♻</string>
     </property>
    </widget>
+   <widget class="QLabel" name="pjtTitle">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>90</y>
+      <width>231</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>배달의민족 도현</family>
+      <pointsize>12</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>프로젝트를 생성해주세요.</string>
+    </property>
+   </widget>
    <zorder>imgLabel</zorder>
    <zorder>line</zorder>
    <zorder>line_3</zorder>
@@ -560,6 +579,7 @@
    <zorder>widget</zorder>
    <zorder>widget_2</zorder>
    <zorder>f5Btn</zorder>
+   <zorder>pjtTitle</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

@@ -295,6 +295,7 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.setModel(treeModel)
         treeModel.setRootPath(QDir.rootPath())
         self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
+        self.pjtTitle.setText(self.projectName)
         
     def createProjectFn(self):
         if self.projectNameDisplay.isVisible():
