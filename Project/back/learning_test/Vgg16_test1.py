@@ -121,18 +121,24 @@ def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
                 "Epoch {}/{} : loss = {}, accuracy = {}, val_loss = {}, val_accuracy = {}".format(self.i, input_epochs, round(self.losses[-1], 4), round(self.acc[-1], 4), round(self.val_losses[-1], 4), round(self.val_acc[-1], 4)))
 
             self.fig.clear()
-            ax = self.fig.add_subplot(111)
-            # ax.plot(self.x, self.losses, label="losses")
-            # ax.set_title("loss plot")
-            ax.plot(self.x, self.acc, label="train_accuracy")
-            ax.plot(self.x, self.val_acc, label="val_accuracy")
-            ax.legend()
+            ax1 = self.fig.add_subplot(121)
+            ax1.plot(self.x, self.acc, label="train_accuracy")
+            ax1.plot(self.x, self.val_acc, label="val_accuracy")
+            ax1.legend()
+            ax1.set_title("accuracy")
+            ax2 = self.fig.add_subplot(122)
+            ax2.plot(self.x, self.losses, label="train_loss")
+            ax2.plot(self.x, self.val_losses, label="val_loss")
+            ax2.legend()
+            ax2.set_title("loss")
 
-            if self.i == epoch:
+            if self.i == input_epochs:
                 now = time.gmtime(time.time())
                 file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
                     str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
                 self.fig.savefig('result_logs\\'+file_name)
+                print("figure saved!")
+                self.textBox_terminal.append("Training Done!")
 
             self.canvas.draw()
 
@@ -153,26 +159,3 @@ def Learn(augmentation, input_epochs, train_path, val_path, tbt, fig, canvas):
     # training model
     history = model.fit(train_generator, epochs=EPOCHS, steps_per_epoch=train_steps_per_epoch, validation_data = validation_generator, validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
     plt.close()
-
-
-    # 정확도 그래프 (임시) 
-    # acc = history.history['accuracy']
-    # val_acc = history.history['val_accuracy']
-    # loss = history.history['loss']
-    # val_loss = history.history['val_loss']
-
-    # epochs = range(len(acc))
-
-    # plt.plot(epochs, acc, 'r', label='Training accuracy')
-    # plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
-    # plt.title('Training and validation accuracy')
-    # plt.legend(loc=0)
-
-    # plt.show()
-
-    # now = time.gmtime(time.time())
-    # file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
-    # str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
-    # plt.savefig('result_logs\\'+file_name)
-
-# Learn([False, False, 0], 30, 'final1/train', 'final1/validation')
