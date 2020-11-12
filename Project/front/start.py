@@ -2,6 +2,7 @@ import sys, os, traceback
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5 import uic, QtGui, QtCore
+from PyQt5.QtGui import *
 import time
 
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -30,7 +31,7 @@ def resource_path(relative_path):
  
 
 # 연결할 ui 파일의 경로 설정
-form = resource_path('NetworkSetting.ui')
+form = resource_path('./ui/NetworkSetting.ui')
 form_class = uic.loadUiType(form)[0]
 
 # multiThread
@@ -330,7 +331,8 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.hideColumn(2)
         self.dirTreeView.hideColumn(3)
         pixmap = QtGui.QPixmap(self.mainImg)
-        self.imgLabel.setPixmap(pixmap)
+        pixmap2 = pixmap.scaledToWidth(430)
+        self.imgLabel.setPixmap(pixmap2)
 
     # ▼▼ codes for multiTrhead ▼▼
     def progress_fn(self, n):
