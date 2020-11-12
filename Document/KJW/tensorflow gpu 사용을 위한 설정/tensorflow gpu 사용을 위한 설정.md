@@ -135,9 +135,20 @@
   - `python --version`: 파이썬 버전확인 (또는 python -V)
 
 - 사용 버전
-  - tensorflow-gpu=2.3.0
-  - scipy=1.4.1
-  - scikit-learn=0.23.2 
-  - numpy=1.18.1
-  - matplotlib=3.1.3 
+
+  - `tensorflow-gpu=2.3.0`
+  - `scipy=1.4.1`
+  - `scikit-learn=0.23.2 `
+  - `numpy=1.18.1`
+  - `matplotlib=3.1.3`
+  - `pyqt5=5.15.1`
+
+- 아나콘다 가상환경 export
+
+  - `$ conda env export -n 가상환경이름 > 파일명.yml`
+
+- export된 가상환경 설치
+
+  - 가상환경 정보가 저장된 디렉토리로 이동하고 아래 명령어 입력.
+  - `$ conda env create -f 파일명.yml`
 
