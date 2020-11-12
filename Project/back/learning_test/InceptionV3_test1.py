@@ -136,7 +136,6 @@ def Learn(augmentation, input_epochs, train_dir, val_dir, tbt, fig, canvas):
                     str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
                 self.fig.savefig('result_logs\\'+file_name)
                 print("figure saved!")
-                self.textBox_terminal.append("Training Done!")
 
             self.canvas.draw()
 
@@ -157,20 +156,5 @@ def Learn(augmentation, input_epochs, train_dir, val_dir, tbt, fig, canvas):
 
     # training model
     history = model.fit(train_generator, epochs=EPOCHS, steps_per_epoch=train_steps_per_epoch, validation_data = validation_generator, validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
+    tbt.append("Training Done!")
     plt.close()
-
-
-    # 정확도 그래프 (임시) 
-    # acc = history.history['accuracy']
-    # val_acc = history.history['val_accuracy']
-    # loss = history.history['loss']
-    # val_loss = history.history['val_loss']
-
-    # epochs = range(len(acc))
-
-    # plt.plot(epochs, acc, 'r', label='Training accuracy')
-    # plt.plot(epochs, val_acc, 'b', label='Validation accuracy')
-    # plt.title('Training and validation accuracy')
-    # plt.legend(loc=0)
-
-    # plt.show()
