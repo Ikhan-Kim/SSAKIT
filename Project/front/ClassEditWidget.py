@@ -10,9 +10,14 @@ from PyQt5.QtCore import pyqtSignal
 # DB 연동
 import sqlite3
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    base_path = getattr(sys, '_MEIPASS', os.path.dirname(os.path.abspath(__file__)))
+    return os.path.join(base_path, relative_path)
+
 # 연결할 ui 파일의 경로 설정
-UI_Path = './ui/ClassEdit.ui'
-form_class = uic.loadUiType(UI_Path)[0]
+form = 'ClassEdit.ui'
+form_class = uic.loadUiType(form)[0]
 
 class ClassEditWidget(QMainWindow, form_class) :
     # Signal 선언부
@@ -269,6 +274,10 @@ class ClassEditWidget(QMainWindow, form_class) :
     #         self.selectData()
 
 if __name__ == "__main__" :
+    try:
+        os.chdir(sys._MEIPASS)
+    except:
+        os.chdir(os.getcwd())
     app = QApplication(sys.argv) 
     myWindow = ClassEditWidget(form_class) 
     myWindow.show()
