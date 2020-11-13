@@ -258,10 +258,11 @@ class WindowClass(QMainWindow, form_class):
 
     def __init__(self) :     
         super().__init__()
-
         # design
         # changing the background color to yellow 
-        # self.setStyleSheet("background-color: #767171;")
+        self.setStyleSheet("background-color: #847f7f;")
+
+        print(self.tabWidget.currentIndex)
 
         self.setupUi(self)
         # 기본 설정?>
@@ -271,6 +272,7 @@ class WindowClass(QMainWindow, form_class):
         self.imgLabel.setPixmap(pixmap)
         # 버튼별 함수 실행
         self.btnCreateProject.clicked.connect(self.createProjectFn)
+        # self.btnDataLoad.setStyleSheet("background-image: url(front\assets\img\imageUpload.png);")
         self.btnDataLoad.clicked.connect(self.dataLoadFn)
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
@@ -278,7 +280,7 @@ class WindowClass(QMainWindow, form_class):
         self.projectNameDisplay.nameSignal.connect(self.createNameFn)
         self.btnTest.clicked.connect(self.test)
         # 터미널
-        self.textBox_terminal.setGeometry(QtCore.QRect(0, 0, 1200, 190))
+        # self.textBox_terminal.setGeometry(QtCore.QRect(0, 0, 1200, 190))
         # live loss plot
         self.threadpool = QThreadPool()
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
@@ -313,6 +315,7 @@ class WindowClass(QMainWindow, form_class):
         treeModel.setRootPath(QDir.rootPath())
         self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
         self.pjtTitle.setText(self.projectName)
+        self.mainWidget.hide()
         
     def createProjectFn(self):
         if self.projectNameDisplay.isVisible():
