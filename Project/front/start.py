@@ -98,7 +98,7 @@ class Worker(QRunnable):
                 self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, self.textBox_terminal, self.fig, self.canvas)
 
 
-# preprocess setting popup
+# preprocess setting popup #train wizard
 class AnotherFormLayout(QDialog):
     NumGridRows = 3
     NumButtons = 4
@@ -184,6 +184,7 @@ class AnotherFormLayout(QDialog):
         print(WindowClass.settingsData)
         self.hide()
 
+    # DB 연결, 테이블 생성
     def trainListSqlConnect(self):
         try: 
             self.conn = sqlite3.connect("test2.db", isolation_level=None)
@@ -194,15 +195,15 @@ class AnotherFormLayout(QDialog):
         self.cur = self.conn.cursor()
 
         # 테이블 생성
-        self.createSql = "CREATE TABLE IF NOT EXISTS trainList (idx INTEGER PRIMARY KEY, Date TEXT, Epochs INTEGER, Augmentation TEXT, Model selection TEXT)"
+        self.createSql = "CREATE TABLE IF NOT EXISTS trainList (idx INTEGER PRIMARY KEY, Augmentation TEXT, Model selection TEXT, Epochs INTEGER, Loss INTEGER, Accuracy INTEGER, Date TEXT)"
         self.cmd = self.createSql
         self.cur.execute(self.cmd)
         self.conn.commit()
     
     def setTLTables(self):
         # Table column 수, header 설정+너비
-        self.trainList.setColumnCount(4)
-        self.trainList.setHorizontalHeaderLabels(['Date', 'Epochs', 'Augmentation', 'Model selection', '', ''])
+        self.trainList.setColumnCount(6)
+        self.trainList.setHorizontalHeaderLabels(['Augmentation', 'Model selection', 'Epochs' , 'Loss' , 'Accuracy' , 'Date'])
         # accuracy, 
         # self.classTypeWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         # # Table 너비 조절
@@ -242,8 +243,13 @@ class WindowClass(QMainWindow, form_class):
     {"color": "#EA33FF", "label": "7501", "train":50, "val":30, "test": 30},
     ]
 
-    def __init__(self) :
+    def __init__(self) :     
         super().__init__()
+
+        # design
+        # changing the background color to yellow 
+        # self.setStyleSheet("background-color: #767171;")
+
         self.setupUi(self)
         # 기본 설정?>
         self.learnSettingDisplay = AnotherFormLayout()
