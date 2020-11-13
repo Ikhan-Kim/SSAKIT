@@ -43,8 +43,8 @@
    <widget class="Line" name="line_8">
     <property name="geometry">
      <rect>
-      <x>0</x>
-      <y>470</y>
+      <x>10</x>
+      <y>430</y>
       <width>1271</width>
       <height>81</height>
      </rect>
@@ -55,50 +55,6 @@
     <property name="orientation">
      <enum>Qt::Horizontal</enum>
     </property>
-   </widget>
-   <widget class="QTextBrowser" name="textBox_terminal">
-    <property name="geometry">
-     <rect>
-      <x>110</x>
-      <y>520</y>
-      <width>111</width>
-      <height>111</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QTreeView" name="dirTreeView">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>130</y>
-      <width>231</width>
-      <height>381</height>
-     </rect>
-    </property>
-   </widget>
-   <widget class="QLabel" name="imgLabel">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>100</y>
-      <width>441</width>
-      <height>391</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-   </widget>
-   <widget class="QWidget" name="gridLayoutWidget">
-    <property name="geometry">
-     <rect>
-      <x>260</x>
-      <y>110</y>
-      <width>911</width>
-      <height>381</height>
-     </rect>
-    </property>
-    <layout class="QGridLayout" name="testLayout"/>
    </widget>
    <widget class="Line" name="line_5">
     <property name="geometry">
@@ -113,7 +69,7 @@
      <enum>Qt::Vertical</enum>
     </property>
    </widget>
-   <widget class="QWidget" name="widget" native="true">
+   <widget class="QWidget" name="button_widget" native="true">
     <property name="geometry">
      <rect>
       <x>0</x>
@@ -205,7 +161,7 @@
      </property>
     </widget>
    </widget>
-   <widget class="QWidget" name="widget_2" native="true">
+   <widget class="QWidget" name="detail_widget" native="true">
     <property name="geometry">
      <rect>
       <x>1290</x>
@@ -549,37 +505,111 @@
      <string>♻</string>
     </property>
    </widget>
-   <widget class="QLabel" name="pjtTitle">
+   <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>10</x>
+      <x>240</x>
       <y>90</y>
-      <width>231</width>
-      <height>41</height>
+      <width>1051</width>
+      <height>421</height>
      </rect>
     </property>
-    <property name="font">
-     <font>
-      <family>배달의민족 도현</family>
-      <pointsize>12</pointsize>
-     </font>
+    <property name="currentIndex">
+     <number>0</number>
     </property>
-    <property name="text">
-     <string>프로젝트를 생성해주세요.</string>
-    </property>
+    <widget class="QWidget" name="Image">
+     <attribute name="title">
+      <string>Image</string>
+     </attribute>
+     <widget class="QLabel" name="imgLabel">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>0</y>
+        <width>441</width>
+        <height>391</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="Plot">
+     <attribute name="title">
+      <string>Plot</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="result">
+     <attribute name="title">
+      <string>result</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="test_result">
+     <attribute name="title">
+      <string>test result</string>
+     </attribute>
+    </widget>
    </widget>
-   <zorder>imgLabel</zorder>
-   <zorder>line</zorder>
-   <zorder>line_3</zorder>
-   <zorder>line_8</zorder>
-   <zorder>textBox_terminal</zorder>
-   <zorder>dirTreeView</zorder>
-   <zorder>gridLayoutWidget</zorder>
-   <zorder>line_5</zorder>
-   <zorder>widget</zorder>
-   <zorder>widget_2</zorder>
-   <zorder>f5Btn</zorder>
-   <zorder>pjtTitle</zorder>
+   <widget class="QWidget" name="directory_widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>80</y>
+      <width>241</width>
+      <height>421</height>
+     </rect>
+    </property>
+    <widget class="QLabel" name="pjtTitle">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>0</y>
+       <width>231</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="font">
+      <font>
+       <family>배달의민족 도현</family>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
+     <property name="text">
+      <string>프로젝트를 생성해주세요.</string>
+     </property>
+    </widget>
+    <widget class="QTreeView" name="dirTreeView">
+     <property name="geometry">
+      <rect>
+       <x>0</x>
+       <y>40</y>
+       <width>231</width>
+       <height>381</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
+   <widget class="QWidget" name="widget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>500</y>
+      <width>1281</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <widget class="QTextBrowser" name="textBox_terminal">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>1261</width>
+       <height>171</height>
+      </rect>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

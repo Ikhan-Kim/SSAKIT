@@ -247,14 +247,14 @@ class WindowClass(QMainWindow, form_class):
         self.projectNameDisplay.nameSignal.connect(self.createNameFn)
         self.btnTest.clicked.connect(self.test)
         # 터미널
-        self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
+        self.textBox_terminal.setGeometry(QtCore.QRect(0, 0, 1200, 190))
         # live loss plot
         self.threadpool = QThreadPool()
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
         self.fig = plt.Figure()
-        self.canvas = FigureCanvas(self.fig)
-        self.testLayout.addWidget(self.canvas)
+        self.Plot = FigureCanvas(self.fig)
+        # self.Plot.addWidget(self.canvas)
 
         self.setWindowTitle('SSAKIT')
 
