@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1616</width>
-    <height>710</height>
+    <width>1617</width>
+    <height>831</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -104,24 +104,6 @@
      <property name="text">
       <string>이미지
 전처리</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btnCreateProject">
-     <property name="geometry">
-      <rect>
-       <x>30</x>
-       <y>10</y>
-       <width>75</width>
-       <height>61</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(255, 0, 0);
-font: 9pt &quot;a디딤돌&quot;;</string>
-     </property>
-     <property name="text">
-      <string>프로젝트
-생성</string>
      </property>
     </widget>
     <widget class="QPushButton" name="btnTraining">
@@ -614,17 +596,65 @@ font: 9pt &quot;a디딤돌&quot;;</string>
      </property>
     </widget>
    </widget>
-   <zorder>imgLabel</zorder>
+   <widget class="QWidget" name="mainWidget" native="true">
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>0</y>
+      <width>1621</width>
+      <height>791</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(64, 64, 64);</string>
+    </property>
+    <widget class="QPushButton" name="btnCreateProject">
+     <property name="geometry">
+      <rect>
+       <x>530</x>
+       <y>460</y>
+       <width>481</width>
+       <height>61</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(241, 127, 66);
+font: 20pt &quot;a로케트&quot;;</string>
+     </property>
+     <property name="text">
+      <string>Open Project</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label">
+     <property name="geometry">
+      <rect>
+       <x>540</x>
+       <y>270</y>
+       <width>471</width>
+       <height>131</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 60pt &quot;a로케트&quot;;
+font: 70pt &quot;a로케트&quot;;
+color: rgb(255, 238, 228);</string>
+     </property>
+     <property name="text">
+      <string>SSAKIT</string>
+     </property>
+    </widget>
+   </widget>
+   <zorder>button_widget</zorder>
+   <zorder>detail_widget</zorder>
+   <zorder>tabWidget</zorder>
+   <zorder>directory_widget</zorder>
    <zorder>line</zorder>
    <zorder>line_3</zorder>
    <zorder>line_8</zorder>
-   <zorder>textBox_terminal</zorder>
-   <zorder>dirTreeView</zorder>
-   <zorder>gridLayoutWidget</zorder>
    <zorder>line_5</zorder>
    <zorder>widget</zorder>
-   <zorder>widget_2</zorder>
    <zorder>f5Btn</zorder>
+   <zorder>mainWidget</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
