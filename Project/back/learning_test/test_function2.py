@@ -75,7 +75,7 @@ def test():
     # print(real)
 
 
-    class_names = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
+    # class_names = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
     
     def plot_confusion_matrix(y_true, y_pred, classes,
                             normalize=False,
