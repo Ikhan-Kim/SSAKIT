@@ -76,6 +76,8 @@ class Worker(QRunnable):
 
     def __init__(self, settingsData, learn_train_path, learn_val_path, *args, **kwargs):
         super(Worker, self).__init__()
+        # self._mutex = QMutex()
+        self._running = True
 
         # Store constructor arguments (re-used for processing)
         self.settingsData = settingsData
@@ -107,7 +109,14 @@ class Worker(QRunnable):
             print('EfficientnetB4')
             EfficientnetB4_test1.Learn(
                 self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
-        myWindow.btnEnable()
+        myWindow.allBtnEnable()
+    
+    @pyqtSlot()
+    def stop(self):
+        print("Thread stoped")
+        # self._mutex.lock()
+        self._running = False
+        # self._mutex.unlock()
 
 # preprocess setting popup
 class AnotherFormLayout(QDialog):
@@ -245,11 +254,13 @@ class WindowClass(QMainWindow, form_class):
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         self.btnTraining.clicked.connect(self.training)
+        self.btnTrainingStop.clicked.connect(self.trainingStop)
         self.projectNameDisplay.nameSignal.connect(self.createNameFn)
         self.btnTest.clicked.connect(self.test)
         # 터미널
         self.textBox_terminal.setGeometry(QtCore.QRect(0, 510, 1200, 190))
         # live loss plot
+        self.worker = None
         self.threadpool = QThreadPool()
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
@@ -342,7 +353,7 @@ class WindowClass(QMainWindow, form_class):
         if result == QMessageBox.Ok:
             self.send_valve_popup_signal.emit(True)
     
-    def btnDisable(self):
+    def allBtnDisable(self):
         print("Buttons are disabled!")
         self.btnCreateProject.setEnabled(False)
         self.btnDataLoad.setEnabled(False)
@@ -350,7 +361,7 @@ class WindowClass(QMainWindow, form_class):
         self.btnTraining.setEnabled(False)
         self.btnTest.setEnabled(False)
 
-    def btnEnable(self):
+    def allBtnEnable(self):
         self.btnCreateProject.setEnabled(True)
         self.btnDataLoad.setEnabled(True)
         self.btnLearnSettings.setEnabled(True)
@@ -359,19 +370,28 @@ class WindowClass(QMainWindow, form_class):
 
     def training(self):
         if self.learn_train_path:
-            self.btnDisable()
+            # 모델 학습하기 -> 학습 중단하기
+            self.allBtnDisable()
+            # self.btnTraining.setText("학습중지")
+            # self.btnTraining.clicked.connect(self.trainingStop)
+            # self.btnTraining.setEnabled(True)
+            
             # Pass the function to execute
-            worker = Worker(self.settingsData, self.learn_train_path, self.learn_val_path) # Any other args, kwargs are passed to the run function
-            worker.signals.result.connect(self.print_output)
-            worker.signals.finished.connect(self.thread_complete)
-            worker.signals.progress.connect(self.progress_fn)
+            self.worker = Worker(self.settingsData, self.learn_train_path, self.learn_val_path) # Any other args, kwargs are passed to the run function
+            self.worker.signals.result.connect(self.print_output)
+            self.worker.signals.finished.connect(self.trainingStop)
+            self.worker.signals.progress.connect(self.progress_fn)
 
             # Execute
-            self.threadpool.start(worker)
+            self.threadpool.start(self.worker)
             self.isTrained = True
         else:
             self.warningMSG("주의", "데이터 로드 및 이미지 전처리를 먼저 실행해 주십시오.")
         # self.btnEnable()
+    
+    def trainingStop(self):
+        print("trainig Stop!")
+        self.threadpool.clear()
 
     def test(self):
         if self.isTrained:
