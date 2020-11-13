@@ -108,7 +108,7 @@ class Worker(QRunnable):
                 self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
         myWindow.btnEnable()
 
-# preprocess setting popup
+# preprocess setting popup #train wizard
 class AnotherFormLayout(QDialog):
     NumGridRows = 3
     NumButtons = 4
@@ -133,6 +133,8 @@ class AnotherFormLayout(QDialog):
         self.setLayout(mainLayout)
 
         self.setWindowTitle("Train Settings")
+
+        self.setTLTables()
 
     def createFormGroupBox(self):
         # Augmentation
@@ -193,6 +195,30 @@ class AnotherFormLayout(QDialog):
         print(WindowClass.settingsData)
         self.hide()
 
+    # DB 연결, 테이블 생성
+    def trainListSqlConnect(self):
+        try: 
+            self.conn = sqlite3.connect("test2.db", isolation_level=None)
+        except:
+            print("문제가 있네요!")
+            exit(1)
+        print("연결성공!")
+        self.cur = self.conn.cursor()
+
+        # 테이블 생성
+        self.createSql = "CREATE TABLE IF NOT EXISTS trainList (idx INTEGER PRIMARY KEY, Augmentation TEXT, Model selection TEXT, Epochs INTEGER, Loss INTEGER, Accuracy INTEGER, Date TEXT)"
+        self.cmd = self.createSql
+        self.cur.execute(self.cmd)
+        self.conn.commit()
+    
+    def setTLTables(self):
+        # Table column 수, header 설정+너비
+        self.trainList.setColumnCount(6)
+        self.trainList.setHorizontalHeaderLabels(['Augmentation', 'Model selection', 'Epochs' , 'Loss' , 'Accuracy' , 'Date'])
+        # accuracy, 
+        # self.classTypeWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # # Table 너비 조절
+        self.trainList.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
 class ProjectNameClass(QDialog):
     nameSignal = pyqtSignal()
@@ -230,8 +256,13 @@ class WindowClass(QMainWindow, form_class):
     {"color": "#EA33FF", "label": "7501", "train":50, "val":30, "test": 30},
     ]
 
-    def __init__(self) :
+    def __init__(self) :     
         super().__init__()
+
+        # design
+        # changing the background color to yellow 
+        # self.setStyleSheet("background-color: #767171;")
+
         self.setupUi(self)
         # 기본 설정?>
         self.learnSettingDisplay = AnotherFormLayout()
@@ -403,18 +434,25 @@ class WindowClass(QMainWindow, form_class):
         self.run()
  
         # 초기 데이터 삽입
-        for d in self.data:
-            # print("d", d)
-            self.color = d["color"]
-            self.label = d["label"]
-            self.train = d["train"]
-            self.val = d["val"]
-            self.test = d["test"]
+        self.selectSql = "SELECT * FROM classLabel"
+        self.cmd = self.selectSql
+        self.run()
 
-            self.cmd = "insert into classLabel(`color`, `label`, `train`, `val`, `test`) values('{}', '{}', {}, {}, {})"\
-                .format(self.color, self.label, self.train, self.val, self.test)
-            self.cur.execute(self.cmd)
-            self.conn.commit()
+        item_list = [list(item[:]) for item in self.cur.fetchall()]
+        print(item_list, len(item_list))
+        if len(item_list) == 0:
+            for d in self.data:
+                # print("d", d)
+                self.color = d["color"]
+                self.label = d["label"]
+                self.train = d["train"]
+                self.val = d["val"]
+                self.test = d["test"]
+
+                self.cmd = "insert into classLabel(`color`, `label`, `train`, `val`, `test`) values('{}', '{}', {}, {}, {})"\
+                    .format(self.color, self.label, self.train, self.val, self.test)
+                self.cur.execute(self.cmd)
+                self.conn.commit()
 
         self.selectData()
 
@@ -430,17 +468,18 @@ class WindowClass(QMainWindow, form_class):
     # 불러온 데이터 table widget 에서 보여주기
     def setTables(self, rows):
         # Table column 수, header 설정+너비
-        self.classType.setColumnCount(5)
-        self.classType.setHorizontalHeaderLabels(['idx','color', 'class', 'train', 'val', 'test'])
+        self.classType.setColumnCount(4)
+        self.classType.setHorizontalHeaderLabels(['color', 'class', 'train', 'val', 'test'])
         
         # Table 너비 조절
-        self.classType.setColumnWidth(0,10)
-        self.classType.setColumnWidth(1,50)
-        self.classType.setColumnWidth(2,10)
-        self.classType.setColumnWidth(3,10)
-        self.classType.setColumnWidth(4,10)
-        self.classType.setColumnWidth(5,10)
-        self.classType.setColumnWidth(6,10)
+        # self.classType.setColumnWidth(0,10)
+        # self.classType.setColumnWidth(0,50)
+        # self.classType.setColumnWidth(1,10)
+        # self.classType.setColumnWidth(3,10)
+        # self.classType.setColumnWidth(4,10)
+        # self.classType.setColumnWidth(5,10)
+        # self.classType.setColumnWidth(6,10)
+        self.classType.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         
         cnt = len(rows)
         self.classType.setRowCount(cnt)
@@ -448,7 +487,7 @@ class WindowClass(QMainWindow, form_class):
         for x in range(cnt):
             # 리스트 내부의 column쌍은 튜플로 반환하므로 튜플의 각 값을 변수에 저장
             # print(rows)
-            idx, color, label, train, val, test = rows[x]
+            color, label, train, val, test = rows[x][1:]
             
             # print("rows[x]", rows[x][0], rows[x][1], rows[x][2])
             # 테이블의 각 셀에 값 입력
@@ -459,13 +498,13 @@ class WindowClass(QMainWindow, form_class):
             # self.classType.setItem(x, 3, QTableWidgetItem(str(val)))
             # self.classType.setItem(x, 4, QTableWidgetItem(str(test)))
 
-            self.classType.setItem(x, 0, QTableWidgetItem(str(idx)))
-            self.classType.setItem(x, 1, QTableWidgetItem(""))
-            self.classType.item(x, 1).setBackground(QtGui.QColor(color))
-            self.classType.setItem(x, 2, QTableWidgetItem(label))
-            self.classType.setItem(x, 3, QTableWidgetItem(str(train)))
-            self.classType.setItem(x, 4, QTableWidgetItem(str(val)))
-            self.classType.setItem(x, 5, QTableWidgetItem(str(test)))
+            # self.classType.setItem(x, 0, QTableWidgetItem(str(idx)))
+            self.classType.setItem(x, 0, QTableWidgetItem(""))
+            self.classType.item(x, 0).setBackground(QtGui.QColor(color))
+            self.classType.setItem(x, 1, QTableWidgetItem(label))
+            self.classType.setItem(x, 2, QTableWidgetItem(str(train)))
+            self.classType.setItem(x, 3, QTableWidgetItem(str(val)))
+            self.classType.setItem(x, 4, QTableWidgetItem(str(test)))
 
     # DB) sql문 실행 함수
     def run(self):

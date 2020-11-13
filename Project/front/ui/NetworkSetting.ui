@@ -115,6 +115,10 @@
        <height>61</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(255, 0, 0);
+font: 9pt &quot;a디딤돌&quot;;</string>
+     </property>
      <property name="text">
       <string>프로젝트
 생성</string>
@@ -610,6 +614,17 @@
      </property>
     </widget>
    </widget>
+   <zorder>imgLabel</zorder>
+   <zorder>line</zorder>
+   <zorder>line_3</zorder>
+   <zorder>line_8</zorder>
+   <zorder>textBox_terminal</zorder>
+   <zorder>dirTreeView</zorder>
+   <zorder>gridLayoutWidget</zorder>
+   <zorder>line_5</zorder>
+   <zorder>widget</zorder>
+   <zorder>widget_2</zorder>
+   <zorder>f5Btn</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

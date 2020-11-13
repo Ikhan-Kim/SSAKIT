@@ -79,16 +79,16 @@ class ClassEditWidget(QMainWindow, form_class) :
     # 불러온 데이터 table widget 에서 보여주기
     def setTables(self, rows):
         # Table column 수, header 설정+너비
-        self.classTypeWidget.setColumnCount(5)
-        self.classTypeWidget.setHorizontalHeaderLabels(['idx', 'color', 'label', '수정', '삭제'])
+        self.classTypeWidget.setColumnCount(4)
+        self.classTypeWidget.setHorizontalHeaderLabels(['color', 'label', '수정', '삭제'])
         # self.classTypeWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         
         # # Table 너비 조절
-        self.classTypeWidget.setColumnWidth(0,40)
+        # self.classTypeWidget.setColumnWidth(0,40)
+        self.classTypeWidget.setColumnWidth(2,50)
         self.classTypeWidget.setColumnWidth(3,50)
-        self.classTypeWidget.setColumnWidth(4,50)
+        self.classTypeWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
         self.classTypeWidget.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
-        self.classTypeWidget.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
         
         cnt = len(rows)
         self.classTypeWidget.setRowCount(cnt)
@@ -96,17 +96,17 @@ class ClassEditWidget(QMainWindow, form_class) :
         for x in range(cnt):
             # 리스트 내부의 column쌍은 튜플로 반환하므로 튜플의 각 값을 변수에 저장
             # print(rows)
-            idx, color, label = rows[x][0], rows[x][1], rows[x][2]
+            color, label = rows[x][1], rows[x][2]
             # print("idx, color, label : ", idx, color, label)
             
             # print("rows[x]", rows[x][0], rows[x][1], rows[x][2])
             # 테이블의 각 셀에 값 입력
-            self.classTypeWidget.setItem(x, 0, QTableWidgetItem(str(idx)))
-            self.classTypeWidget.setItem(x, 1, QTableWidgetItem(""))
-            self.classTypeWidget.item(x, 1).setBackground(QtGui.QColor(color))
-            self.classTypeWidget.setItem(x, 2, QTableWidgetItem(label))
-            self.classTypeWidget.setItem(x, 3, QTableWidgetItem("수정"))
-            self.classTypeWidget.setItem(x, 4, QTableWidgetItem("❌"))
+            # self.classTypeWidget.setItem(x, 0, QTableWidgetItem(str(idx)))
+            self.classTypeWidget.setItem(x, 0, QTableWidgetItem(""))
+            self.classTypeWidget.item(x, 0).setBackground(QtGui.QColor(color))
+            self.classTypeWidget.setItem(x, 1, QTableWidgetItem(label))
+            self.classTypeWidget.setItem(x, 2, QTableWidgetItem("수정"))
+            self.classTypeWidget.setItem(x, 3, QTableWidgetItem("❌"))
 
     # DB) sql문 실행 함수
     def run(self):
