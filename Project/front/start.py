@@ -16,7 +16,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
-from ClassEditWidget import ClassEditWidget
+# from ClassEditWidget import ClassEditWidget
 
 
 # DB 연동
@@ -274,9 +274,9 @@ class WindowClass(QMainWindow, form_class):
         self.sqlConnect()
 
         # ClassEditWidget 불러오기
-        self.openClassEditWidget = ClassEditWidget(WindowClass.data)
+        # self.openClassEditWidget = ClassEditWidget(WindowClass.data)
         # class Edit btn 클릭 => 위젯 열기
-        self.classEditBtn.clicked.connect(self.ClassEditBtnFunc)
+        # self.classEditBtn.clicked.connect(self.ClassEditBtnFunc)
         # edit 금지 모드
         self.classType.setEditTriggers(QAbstractItemView.NoEditTriggers)
         # 새로고침 버튼 ()
@@ -287,7 +287,7 @@ class WindowClass(QMainWindow, form_class):
 
     def createNameFn(self):
         self.setWindowTitle('SSAKIT -' + self.projectName)
-        self.testPath = '../back/' + self.projectName
+        self.testPath = './learnData/' + self.projectName
         create_dir.create_dir_flow(self.projectName)
         treeModel = QFileSystemModel()
         self.dirTreeView.setModel(treeModel)
@@ -304,6 +304,7 @@ class WindowClass(QMainWindow, form_class):
         if self.projectName:
             self.pathName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
                                                             QFileDialog.ShowDirsOnly)
+            print(self.pathName)
             if self.pathName:
                 self.dirName = self.pathName.split('/')[-1]
                 set_directory.set_directory(
@@ -318,8 +319,8 @@ class WindowClass(QMainWindow, form_class):
                 self.learnSettingDisplay.hide()
             else:
                 self.learnSettingDisplay.show()
-            self.learn_train_path = self.projectName + "/train"
-            self.learn_val_path = self.projectName + "/validation"
+            self.learn_train_path = 'learnData/' + self.projectName + "/train"
+            self.learn_val_path = 'learnData/' + self.projectName + "/validation"
         else:
             self.warningMSG("주의", "프로젝트를 먼저 생성/선택 해주십시오.")
 
@@ -329,7 +330,8 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.hideColumn(2)
         self.dirTreeView.hideColumn(3)
         pixmap = QtGui.QPixmap(self.mainImg)
-        self.imgLabel.setPixmap(pixmap)
+        pixmap2 = pixmap.scaledToWidth(200)
+        self.imgLabel.setPixmap(pixmap2)
 
     # ▼▼ codes for multiTrhead ▼▼
     def progress_fn(self, n):
@@ -373,8 +375,8 @@ class WindowClass(QMainWindow, form_class):
             self.warningMSG("주의", "모델 학습을 먼저 실행해 주십시오.")
 
     # ClassEditWidget띄우기
-    def ClassEditBtnFunc(self):
-        self.openClassEditWidget.show()
+    # def ClassEditBtnFunc(self):
+    #     self.openClassEditWidget.show()
 
     def f5BtnFunc(self):
         print("새로고침")
@@ -470,9 +472,9 @@ class WindowClass(QMainWindow, form_class):
         print("DB close!")
         self.conn.close()
 
-    def ClassEditBtnFunc(self):
-        # ClassEditWidget띄우기
-        self.openClassEditWidget.show()
+    # def ClassEditBtnFunc(self):
+    #     # ClassEditWidget띄우기
+    #     self.openClassEditWidget.show()
 
     # Navigator
     def loadNavi(self):
