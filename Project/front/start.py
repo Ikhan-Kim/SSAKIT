@@ -114,6 +114,7 @@ class Worker(QRunnable):
 class AnotherFormLayout(QDialog):
     NumGridRows = 3
     NumButtons = 4
+    sw_new_continue = 'new'
     colorSignal = pyqtSignal()
 
     def __init__(self):
@@ -221,7 +222,10 @@ class AnotherFormLayout(QDialog):
 
     def accept(self):
         settings_data = []
-        settings_data.append(self.comboBoxNN.currentText())
+        if self.sw_new_continue == 'new':
+            settings_data.append(self.comboBoxNN.currentText())
+        else:
+            settings_data.append(self.comboBoxContinue.currentText())
         aug = [False, False, None, 0]
         if self.checkBoxHorizantal.isChecked() == True:
             aug[0] = True
@@ -238,18 +242,21 @@ class AnotherFormLayout(QDialog):
         settings_data.append(aug)
         settings_data.append(int(self.lineEpochs.text()))
         settings_data.append(self.setModelName.text())
+        settings_data.append(self.sw_new_continue)
         WindowClass.settingsData = settings_data
         self.colorSignal.emit()
         print(WindowClass.settingsData)
         self.hide()
 
     def newFn(self):
+        self.sw_new_continue = 'new'
         self.formNeuralNetwork.show()
         self.formContinueNetwork.hide()
         self.new_learn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
         self.continue_learn.setStyleSheet("background-color: rgb(175, 171, 171); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
 
     def continueFn(self):
+        self.sw_new_continue = 'continue'
         self.formNeuralNetwork.hide()
         self.formContinueNetwork.show()
         self.new_learn.setStyleSheet("background-color: rgb(175, 171, 171); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
