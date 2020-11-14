@@ -211,6 +211,8 @@ def plot_confusion_matrix(y_true, y_pred, classes,
         recall.append(tmp)
     print(precision)
     print(recall)
+    macro_precision = sum(precision) / len(precision)
+    print(macro_precision)
 
 
     fig, ax = plt.subplots()

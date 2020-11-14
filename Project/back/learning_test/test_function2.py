@@ -131,6 +131,9 @@ def test():
             recall.append(tmp)
         print(precision)
         print(recall)
+        macro_precision = sum(precision) / len(precision)
+        print(macro_precision)
+
 
         fig, ax = plt.subplots()
         im = ax.imshow(cm, interpolation='nearest', cmap=cmap)

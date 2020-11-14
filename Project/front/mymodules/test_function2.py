@@ -127,6 +127,9 @@ def test(model_name, window):
             recall.append(tmp)
         print(precision)
         print(recall)
+        macro_precision = sum(precision) / len(precision)
+        print(macro_precision)
+
 
         # classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
 
