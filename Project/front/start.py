@@ -456,6 +456,7 @@ class WindowClass(QMainWindow, form_class):
         self.projectNameDisplay.nameSignal.connect(self.createNameFn)
         self.learnSettingDisplay.colorSignal.connect(self.changeColorFn)
         self.btnTest.clicked.connect(self.test)
+        self.btnOpenDir.clicked.connect(self.openDirFn)
         # 터미널
         # self.textBox_terminal.setGeometry(QtCore.QRect(0, 0, 1200, 190))
         # live loss plot
@@ -748,6 +749,9 @@ class WindowClass(QMainWindow, form_class):
             cnt_val += len([name for name in os.listdir(self.learnDataPath + '/validation/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/validation/' + folder, name))])
         self.learn_num_data.append(cnt_train)
         self.learn_num_data.append(cnt_val)
+
+    def openDirFn(self):
+        os.startfile(resource_path(self.learnDataPath))
 
 if __name__ == "__main__":
     try:
