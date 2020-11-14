@@ -100,7 +100,7 @@ def test(model_name, window):
             print("Normalized confusion matrix")
         else:
             print('Confusion matrix, without normalization')
-
+        print(classes)
         print(cm)
         #대각선값
         diagonal = 0
@@ -128,7 +128,7 @@ def test(model_name, window):
         print(precision)
         print(recall)
 
-        classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
+        # classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
 
         window.confusionMatrixTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         window.confusionMatrixTable.setColumnCount(len(cm))
