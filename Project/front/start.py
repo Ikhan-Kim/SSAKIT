@@ -311,7 +311,7 @@ class TestModelSelect(QDialog):
 
     def itemActivated_event(self, item):
         self.hide()
-        test_function2.test(item.text())
+        test_function2.test(item.text(), myWindow.class_names)
 
 # MainWindow
 class WindowClass(QMainWindow, form_class):

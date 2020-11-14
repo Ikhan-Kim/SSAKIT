@@ -97,7 +97,7 @@ def test():
         # Only use the labels that appear in the data
         # classes = classes[unique_labels(y_true, y_pred)]
         # classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
-        classes = class_names
+        classes = classes
         # print('dsfgfdgfdgfdgfdsfasdfsfdsgredtygdrafsdfdsayhetrsdfdsf',classes)
         if normalize:
             cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
@@ -106,6 +106,31 @@ def test():
             print('Confusion matrix, without normalization')
 
         print(cm)
+        #대각선값
+        diagonal = 0
+        #전체값
+        ssum = 0
+        for i in range(len(cm)):
+            diagonal += cm[i][i]
+            for j in cm[i]:
+                ssum += j
+        acc = round(diagonal / ssum, 2) * 100
+        print(acc)
+
+        precision = []
+        recall = []
+        for i in range(len(cm)):
+            temp = 0
+            tmp = 0
+            for j in range(len(cm)):
+                temp += cm[j][i]
+                tmp += cm[i][j]
+            temp = int(round(cm[i][i] / temp, 2) * 100)
+            tmp = int(round(cm[i][i] / tmp, 2) * 100)
+            precision.append(temp)
+            recall.append(tmp)
+        print(precision)
+        print(recall)
 
         fig, ax = plt.subplots()
         im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
@@ -143,7 +168,7 @@ def test():
                         title='Confusion matrix, without normalization')
 
     # Plot normalized confusion matrix
-    plot_confusion_matrix(real, predicted_labels, classes=class_names, normalize=True,
-                        title='Normalized confusion matrix')
+    # plot_confusion_matrix(real, predicted_labels, classes=class_names, normalize=True,
+    #                     title='Normalized confusion matrix')
 
     plt.show()

@@ -12,7 +12,7 @@ from sklearn.metrics import plot_confusion_matrix
 from sklearn.metrics import confusion_matrix
 
 
-def test(model_name):
+def test(model_name, class_names):
     #path
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     model_path = os.path.join(BASE_DIR, 'checkpoint/'+model_name)
@@ -70,7 +70,7 @@ def test(model_name):
     # print(real)
 
 
-    class_names = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
+    # class_names = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
     
     def plot_confusion_matrix(y_true, y_pred, classes,
                             normalize=False,
@@ -91,7 +91,7 @@ def test(model_name):
         cm = confusion_matrix(y_true, y_pred)
         # Only use the labels that appear in the data
         # classes = classes[unique_labels(y_true, y_pred)]
-        classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
+        # classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
         # print('dsfgfdgfdgfdgfdsfasdfsfdsgredtygdrafsdfdsayhetrsdfdsf',classes)
         if normalize:
             cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
@@ -100,6 +100,31 @@ def test(model_name):
             print('Confusion matrix, without normalization')
 
         print(cm)
+        #대각선값
+        diagonal = 0
+        #전체값
+        ssum = 0
+        for i in range(len(cm)):
+            diagonal += cm[i][i]
+            for j in cm[i]:
+                ssum += j
+        acc = round(diagonal / ssum, 2) * 100
+        print(acc)
+
+        precision = []
+        recall = []
+        for i in range(len(cm)):
+            temp = 0
+            tmp = 0
+            for j in range(len(cm)):
+                temp += cm[j][i]
+                tmp += cm[i][j]
+            temp = int(round(cm[i][i] / temp, 2) * 100)
+            tmp = int(round(cm[i][i] / tmp, 2) * 100)
+            precision.append(temp)
+            recall.append(tmp)
+        print(precision)
+        print(recall)
 
         fig, ax = plt.subplots()
         im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
@@ -133,8 +158,8 @@ def test(model_name):
 
 
     # Plot non-normalized confusion matrix
-    plot_confusion_matrix(real, predicted_labels, classes=class_names,
-                        title='Confusion matrix, without normalization')
+    # plot_confusion_matrix(real, predicted_labels, classes=class_names,
+    #                     title='Confusion matrix, without normalization')
 
     # Plot normalized confusion matrix
     plot_confusion_matrix(real, predicted_labels, classes=class_names, normalize=True,
