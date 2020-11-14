@@ -197,7 +197,20 @@ def plot_confusion_matrix(y_true, y_pred, classes,
     acc = round(diagonal / ssum, 2) * 100
     print(acc)
 
-    
+    precision = []
+    recall = []
+    for i in range(len(cm)):
+        temp = 0
+        tmp = 0
+        for j in range(len(cm)):
+            temp += cm[j][i]
+            tmp += cm[i][j]
+        temp = int(round(cm[i][i] / temp, 2) * 100)
+        tmp = int(round(cm[i][i] / tmp, 2) * 100)
+        precision.append(temp)
+        recall.append(tmp)
+    print(precision)
+    print(recall)
 
 
     fig, ax = plt.subplots()
