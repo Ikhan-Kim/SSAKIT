@@ -116,20 +116,23 @@ class AnotherFormLayout(QDialog):
 
     def __init__(self):
         super().__init__()
-        self.setGeometry(650,100,750,600)
+        self.setGeometry(560,200,800,600) #옆, 위,  width, height
         self.createFormGroupBox()
+
+        self.setStyleSheet("background-color: #847f7f;")
         buttonBox = QDialogButtonBox(
-            QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
+            QDialogButtonBox.Save | QDialogButtonBox.Cancel)
         buttonBox.accepted.connect(self.accept)
         buttonBox.rejected.connect(self.reject)
+        buttonBox.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
 
         mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.formModelName)
         mainLayout.addWidget(self.formAugmentation)
         # mainLayout.addWidget(self.formDataPreprocessing)
-        mainLayout.addWidget(self.formNueralNetwork)
+        mainLayout.addWidget(self.formNeuralNetwork)
         mainLayout.addWidget(self.formLearn)
-        self.trainList = QTableWidget()
-        mainLayout.addWidget(self.trainList)
+        mainLayout.addWidget(self.formTrainList)
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
 
@@ -138,8 +141,19 @@ class AnotherFormLayout(QDialog):
         self.setTLTables()
 
     def createFormGroupBox(self):
+        # model name
+        self.formModelName = QGroupBox("Set Model Name")
+        self.formModelName.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
+        layoutMN = QFormLayout()
+        self.setModelName = QLineEdit()
+        self.setModelName.setPlaceholderText("모델 이름 설정")
+        self.setModelName.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
+        layoutMN.addRow(QLabel("Model Name : "), self.setModelName)
+        self.formModelName.setLayout(layoutMN)
+
         # Augmentation
         self.formAugmentation = QGroupBox("Augmentation")
+        self.formAugmentation.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
         layout = QFormLayout()
         self.checkBoxHorizantal = QCheckBox("[H] Horizantal Flip", self)
         layout.addRow(self.checkBoxHorizantal)
@@ -164,21 +178,34 @@ class AnotherFormLayout(QDialog):
         # layout.addRow(QLabel("rgb:"), self.lineRgb)
         # self.formDataPreprocessing.setLayout(layout)
         # nn setting
-        self.formNueralNetwork = QGroupBox("Nueral Network")
+        self.formNeuralNetwork = QGroupBox("Neural Network")
+        self.formNeuralNetwork.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
         layoutNN = QFormLayout()
         self.comboBoxNN = QComboBox()
+        self.comboBoxNN.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
         self.comboBoxNN.addItems(["VGG", "InceptionV3", "ResNet152", "EfficientnetB4"])
         layoutNN.addRow(QLabel("select NN:"), self.comboBoxNN)
-        self.formNueralNetwork.setLayout(layoutNN)
+        self.formNeuralNetwork.setLayout(layoutNN)
         # Learn Settings
         self.formLearn = QGroupBox("Learn Settings")
+        self.formLearn.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
         layoutLS = QFormLayout()
         self.lineEpochs = QSpinBox()
+        self.lineEpochs.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
         self.lineEpochs.setRange(1, 10000)
         # onlyInt = QIntValidator()
         # self.lineEpochs.setValidator(onlyInt)
         layoutLS.addRow(QLabel("Epochs"), self.lineEpochs)
         self.formLearn.setLayout(layoutLS)
+
+        # Train List
+        self.formTrainList = QGroupBox("Train List")
+        self.formTrainList.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
+        self.trainList = QTableWidget()
+        self.trainList.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
+        tableLayout = QFormLayout()
+        tableLayout.addRow(self.trainList)
+        self.formTrainList.setLayout(tableLayout)
 
     def accept(self):
         settings_data = []
