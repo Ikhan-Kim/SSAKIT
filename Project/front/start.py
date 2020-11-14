@@ -116,7 +116,7 @@ class AnotherFormLayout(QDialog):
 
     def __init__(self):
         super().__init__()
-        self.setGeometry(650,100,750,600)
+        self.setGeometry(560,200,800,600) #옆, 위,  width, height
         self.createFormGroupBox()
 
         self.setStyleSheet("background-color: #847f7f;")
