@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import itertools
 from sklearn.utils.multiclass import unique_labels
 from PyQt5.QtWidgets import *
+from PyQt5.QtGui import *
 
 
 from sklearn.metrics import plot_confusion_matrix
@@ -127,10 +128,17 @@ def test(model_name, window):
         print(precision)
         print(recall)
 
+        classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
+
+        window.confusionMatrixTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         window.confusionMatrixTable.setColumnCount(len(cm))
         window.confusionMatrixTable.setHorizontalHeaderLabels(classes)
         window.confusionMatrixTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         window.confusionMatrixTable.setRowCount(len(cm))
+        window.confusionMatrixTable.setVerticalHeaderLabels(classes)
+        for i in range(len(cm)):
+            for j in range(len(cm)):
+                window.confusionMatrixTable.setItem(i, j, QTableWidgetItem(str(cm[i][j])))
 
         # fig, ax = plt.subplots()
         # im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
