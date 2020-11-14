@@ -309,7 +309,7 @@ font: 9pt &quot;a스마일L&quot;;</string>
 font: 12pt &quot;a디딤돌&quot;;</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -336,17 +336,6 @@ font: 12pt &quot;a디딤돌&quot;;</string>
      <attribute name="title">
       <string>Plot</string>
      </attribute>
-     <widget class="QWidget" name="formLayoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>1001</width>
-        <height>331</height>
-       </rect>
-      </property>
-      <layout class="QFormLayout" name="plotLayout"/>
-     </widget>
     </widget>
     <widget class="QWidget" name="result">
      <attribute name="title">
@@ -454,7 +443,7 @@ font: 15pt &quot;a로케트&quot;;</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>10</y>
+      <y>-40</y>
       <width>1631</width>
       <height>821</height>
      </rect>
@@ -861,7 +850,6 @@ background-color: rgb(132, 127, 127);</string>
     <zorder>hLabel</zorder>
     <zorder>hValue</zorder>
     <zorder>xValue</zorder>
-    <zorder>yLabel</zorder>
     <zorder>fileSize</zorder>
     <zorder>channel</zorder>
     <zorder>extension</zorder>
@@ -874,6 +862,7 @@ background-color: rgb(132, 127, 127);</string>
     <zorder>channelLabel</zorder>
     <zorder>yValue</zorder>
     <zorder>xLabel</zorder>
+    <zorder>yLabel</zorder>
    </widget>
    <widget class="Line" name="line_5">
     <property name="geometry">

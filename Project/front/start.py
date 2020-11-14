@@ -222,27 +222,56 @@ class AnotherFormLayout(QDialog):
         # # Table 너비 조절
         self.trainList.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
 
+# open project
 class ProjectNameClass(QDialog):
+    # Signal 선언부
+    send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
+
     nameSignal = pyqtSignal()
     class_names = []
     project_list = []
     def __init__(self):
         super().__init__()
+
+        self.clickedRow = ""
+
+        # 기본 구조
+        self.setStyleSheet("background-color: #847f7f;")
         self.project_list = os.listdir('./learnData/')
         self.setWindowTitle('Open Project')
-        self.formLoadProject = QGroupBox("프로젝트 불러오기")
-        self.formNewProject = QGroupBox("프로젝트 생성하기")
+        self.formLoadProject = QGroupBox("기존 프로젝트 불러오기")
+        self.formLoadProject.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255);")
+        self.formNewProject = QGroupBox("새 프로젝트 생성하기")
+        self.formNewProject.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255);")
         loadlayout = QFormLayout()
-        newlayout = QFormLayout()
+        newlayout = QFormLayout() 
+        
+        # 기존 프로젝트 불러오기
         self.loadTable = QTableWidget()
+        self.loadTable.setStyleSheet("color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);")
         self.createTable()
         self.loadTable.cellClicked.connect(self.cellClick)
+        # self.btnDelete = QPushButton('삭제하기')
+        # self.btnDelete.setStyleSheet("font: 12pt 'a디딤돌'; background-color: rgb(175, 171, 171); color: rgb(225, 225, 225);")
+        # self.btnSelect = QPushButton(' 불러오기')
+        # self.btnSelect.setStyleSheet("font: 12pt 'a디딤돌'; background-color: rgb(241, 127, 66); color: rgb(225, 225, 225);")
+        buttonBox = QDialogButtonBox()
+        buttonBox.addButton('삭제하기', QDialogButtonBox.AcceptRole)
+        buttonBox.addButton('불러오기', QDialogButtonBox.RejectRole)
+        buttonBox.setStyleSheet("background-color: rgb(241, 127, 66);")
+        buttonBox.accepted.connect(self.pjtDelete)
+        buttonBox.rejected.connect(self.pjtSelect)
+
+        # 새 프로젝트 생성
         self.lineName = QLineEdit()
-        self.btnOk = QPushButton('OK')
+        self.lineName.setPlaceholderText("프로젝트 이름 입력")
+        self.lineName.setStyleSheet("font: 10pt 'a스마일L'; background-color: rgb(255, 255, 255); color: black;")
+        self.btnOk = QPushButton('생성하기')
+        self.btnOk.setStyleSheet("font: 12pt 'a디딤돌'; background-color: rgb(241, 127, 66);")
         self.btnOk.clicked.connect(self.projectNameFn)
         loadlayout.addRow(self.loadTable)
-        newlayout.addRow(self.lineName)
-        newlayout.addRow(self.btnOk)
+        loadlayout.addRow(buttonBox)
+        newlayout.addRow(self.lineName, self.btnOk)
         mainLayout = QVBoxLayout()
         self.formLoadProject.setLayout(loadlayout)
         self.formNewProject.setLayout(newlayout)
@@ -251,39 +280,58 @@ class ProjectNameClass(QDialog):
         self.setLayout(mainLayout)
 
     def createTable(self):
-        self.loadTable.setColumnCount(3)
-        self.loadTable.setHorizontalHeaderLabels(['Name', '선택', '삭제'])
-        self.loadTable.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
-        self.loadTable.setColumnWidth(1,50)
-        self.loadTable.setColumnWidth(2,50)
+        self.loadTable.setColumnCount(1)
+        self.loadTable.setHorizontalHeaderLabels(['프로젝트 이름'])
+        self.loadTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+
         self.loadTable.setRowCount(len(self.project_list))
         for x in range(len(self.project_list)):
             self.loadTable.setItem(x, 0, QTableWidgetItem(self.project_list[x]))
-            self.loadTable.setItem(x, 1, QTableWidgetItem("선택"))
-            self.loadTable.setItem(x, 2, QTableWidgetItem("❌"))
+            # self.loadTable.setItem(x, 1, QTableWidgetItem("선택"))
+            # self.loadTable.setItem(x, 2, QTableWidgetItem("❌"))
 
     def cellClick(self, row, column):
-        if column == 1:
-            # 선택
+        self.clickedRow = row
+        print(self.clickedRow)
+    
+    def pjtSelect(self):
+        if self.clickedRow =="":
+            self.warningMSG("알림", "프로젝트를 선택해 주세요")
+        else:
             print('선택클릭')
-            WindowClass.projectName = self.project_list[row]
+            WindowClass.projectName = self.project_list[self.clickedRow]
             self.nameSignal.emit()
-            self.hide()
-
-        elif column == 2:
-            # 삭제
+            self.hide()            
+    
+    def pjtDelete(self):
+        if self.clickedRow =="":
+            self.warningMSG("알림", "프로젝트를 선택해 주세요")
+        else:
             a = QMessageBox.question(self, "삭제 확인", "정말로 삭제 하시겠습니까?",
                                  QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
             if a == QMessageBox.Yes:
-                del_path = './learnData/' + self.project_list[row]
+                del_path = './learnData/' + self.project_list[self.clickedRow]
                 shutil.rmtree(del_path)
                 self.project_list = os.listdir('./learnData/')
                 self.hide()
 
+
+    def warningMSG(self, title: str, content: str):
+        msg = QMessageBox()
+        msg.setWindowTitle(title)
+        msg.setText(content)
+        msg.setStandardButtons(QMessageBox.Ok)
+        result = msg.exec_()
+        if result == QMessageBox.Ok:
+            self.send_valve_popup_signal.emit(True)
+
     def projectNameFn(self):
-        WindowClass.projectName = self.lineName.text()
-        self.nameSignal.emit()
-        self.hide()
+        if self.lineName.text() == "":
+            self.warningMSG("알림", "프로젝트 이름을 입력해주세요")
+        else:
+            WindowClass.projectName = self.lineName.text()
+            self.nameSignal.emit()
+            self.hide()
 
 class TestModelSelect(QDialog):
     def __init__(self):
