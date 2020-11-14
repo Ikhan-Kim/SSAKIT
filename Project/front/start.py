@@ -116,7 +116,7 @@ class AnotherFormLayout(QDialog):
 
     def __init__(self):
         super().__init__()
-        self.setGeometry(800,100,600,600)
+        self.setGeometry(650,100,750,600)
         self.createFormGroupBox()
         buttonBox = QDialogButtonBox(
             QDialogButtonBox.Ok | QDialogButtonBox.Cancel)
@@ -429,6 +429,7 @@ class WindowClass(QMainWindow, form_class):
         btn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a로케트'; color: rgb(255, 255, 255);")
         for b in btns:
             b.setStyleSheet("background-color: #ffeee4; font: 12pt 'a로케트'; color: rgb(0, 0, 0);")
+        self.widgetInfo.hide()
 
     def createNameFn(self):
         self.setWindowTitle('SSAKIT -' + self.projectName)
