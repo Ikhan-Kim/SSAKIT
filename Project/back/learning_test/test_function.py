@@ -5,7 +5,7 @@ import keras_preprocessing
 from keras_preprocessing import image
 import matplotlib.pyplot as plt
 import itertools
-from sklearn.utils.multiclass import unique_labels
+# from sklearn.utils.multiclass import unique_labels
 
 
 from sklearn.metrics import plot_confusion_matrix
@@ -79,7 +79,7 @@ for i in range(len(true_labels[0])):
 #     if i[0] == i[1]:
 #         cnt += 1
 # print(cnt)
-
+print(result_labels)
 real = []
 for i in true_labels[0]:
     real.append(i)
@@ -186,6 +186,19 @@ def plot_confusion_matrix(y_true, y_pred, classes,
         print('Confusion matrix, without normalization')
 
     print(cm)
+    #대각선값
+    diagonal = 0
+    #전체값
+    ssum = 0
+    for i in range(len(cm)):
+        diagonal += cm[i][i]
+        for j in cm[i]:
+            ssum += j
+    acc = round(diagonal / ssum, 2) * 100
+    print(acc)
+
+    
+
 
     fig, ax = plt.subplots()
     im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
@@ -213,18 +226,35 @@ def plot_confusion_matrix(y_true, y_pred, classes,
                     color="white" if cm[i, j] > thresh else "black")
     #자동 레이아웃 설정
     fig.tight_layout()
+
+    # cm, _ = metrics.precision_recall_curve(cm)
+    # cm_ap = metrics.average_precision_score(y_true, y_pred)
+    # plt.title("Precision-Recall Graph")
+    # plt.xlabel("Recall")
+    # plt.ylabel("Precision")
+    # plt.plot(cm, "b", label = "Model A (AP = %0.2F)" % cm_ap)
+    # print('ddddddddddddddddddddddddddddddddddddddddddddd',cm_ap)
     return ax
 
+def pre_recall_curve(y_true, y_pred):
+    cm = confusion_matrix(y_true, y_pred)
+    cm_ap = metrics.average_precision_score(y_true, y_pred)
+    print(cm_ap)
+    plt.title("Precision_Recall Graph")
+    plt.xlabel("Recall")
+    plt.ylabel("Precision")
+    # plt.plot(cm, "b", label = "newmodel AP: {0:0.2f}".format(cm_ap))
+    return plt.show()
 
+# pre_recall_curve(real, predicted_labels)
 
-
-# Plot non-normalized confusion matrix
+#Plot non-normalized confusion matrix
 plot_confusion_matrix(real, predicted_labels, classes=class_names,
                       title='Confusion matrix, without normalization')
 
 # Plot normalized confusion matrix
-plot_confusion_matrix(real, predicted_labels, classes=class_names, normalize=True,
-                      title='Normalized confusion matrix')
+# plot_confusion_matrix(real, predicted_labels, classes=class_names, normalize=True,
+#                       title='Normalized confusion matrix')
 
 plt.show()
 
@@ -278,3 +308,19 @@ plt.plot([0,1],[0,1],'r--')
 
 plt.legend(loc='lower right')
 plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
