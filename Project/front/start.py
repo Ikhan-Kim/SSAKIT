@@ -1,4 +1,4 @@
-import sys, os, traceback
+import sys, os, traceback, shutil
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 from PyQt5 import uic, QtGui, QtCore
@@ -17,7 +17,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
-# from ClassEditWidget import ClassEditWidget
+from ClassEditWidget import ClassEditWidget
 
 
 # DB 연동
@@ -222,16 +222,61 @@ class AnotherFormLayout(QDialog):
 
 class ProjectNameClass(QDialog):
     nameSignal = pyqtSignal()
+    class_names = []
+    project_list = []
     def __init__(self):
         super().__init__()
+        self.project_list = os.listdir('./learnData/')
+        self.setWindowTitle('Open Project')
+        self.formLoadProject = QGroupBox("프로젝트 불러오기")
+        self.formNewProject = QGroupBox("프로젝트 생성하기")
+        loadlayout = QFormLayout()
+        newlayout = QFormLayout()
+        self.loadTable = QTableWidget()
+        self.createTable()
+        self.loadTable.cellClicked.connect(self.cellClick)
+        self.lineName = QLineEdit()
         self.btnOk = QPushButton('OK')
         self.btnOk.clicked.connect(self.projectNameFn)
-        self.lineName = QLineEdit()
+        loadlayout.addRow(self.loadTable)
+        newlayout.addRow(self.lineName)
+        newlayout.addRow(self.btnOk)
         mainLayout = QVBoxLayout()
-        mainLayout.addWidget(self.lineName)
-        mainLayout.addWidget(self.btnOk)
+        self.formLoadProject.setLayout(loadlayout)
+        self.formNewProject.setLayout(newlayout)
+        mainLayout.addWidget(self.formLoadProject)
+        mainLayout.addWidget(self.formNewProject)
         self.setLayout(mainLayout)
-        wc = WindowClass
+
+    def createTable(self):
+        self.loadTable.setColumnCount(3)
+        self.loadTable.setHorizontalHeaderLabels(['Name', '선택', '삭제'])
+        self.loadTable.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.loadTable.setColumnWidth(1,50)
+        self.loadTable.setColumnWidth(2,50)
+        self.loadTable.setRowCount(len(self.project_list))
+        for x in range(len(self.project_list)):
+            self.loadTable.setItem(x, 0, QTableWidgetItem(self.project_list[x]))
+            self.loadTable.setItem(x, 1, QTableWidgetItem("선택"))
+            self.loadTable.setItem(x, 2, QTableWidgetItem("❌"))
+
+    def cellClick(self, row, column):
+        if column == 1:
+            # 선택
+            print('선택클릭')
+            WindowClass.projectName = self.project_list[row]
+            self.nameSignal.emit()
+            self.hide()
+
+        elif column == 2:
+            # 삭제
+            a = QMessageBox.question(self, "삭제 확인", "정말로 삭제 하시겠습니까?",
+                                 QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
+            if a == QMessageBox.Yes:
+                del_path = './learnData/' + self.project_list[row]
+                shutil.rmtree(del_path)
+                self.project_list = os.listdir('./learnData/')
+                self.hide()
 
     def projectNameFn(self):
         WindowClass.projectName = self.lineName.text()
@@ -315,9 +360,9 @@ class WindowClass(QMainWindow, form_class):
         self.sqlConnect()
 
         # ClassEditWidget 불러오기
-        # self.openClassEditWidget = ClassEditWidget(WindowClass.data)
+        self.openClassEditWidget = ClassEditWidget(WindowClass.data)
         # class Edit btn 클릭 => 위젯 열기
-        # self.classEditBtn.clicked.connect(self.ClassEditBtnFunc)
+        self.classEditBtn.clicked.connect(self.ClassEditBtnFunc)
         # edit 금지 모드
         self.classType.setEditTriggers(QAbstractItemView.NoEditTriggers)
         # 새로고침 버튼 ()
@@ -335,7 +380,7 @@ class WindowClass(QMainWindow, form_class):
         treeModel.setRootPath(QDir.rootPath())
         self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
         self.pjtTitle.setText(self.projectName)
-        
+
     def createProjectFn(self):
         if self.projectNameDisplay.isVisible():
             self.projectNameDisplay.hide()
@@ -346,11 +391,18 @@ class WindowClass(QMainWindow, form_class):
         if self.projectName:
             self.pathName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
                                                             QFileDialog.ShowDirsOnly)
+            self.class_names = os.listdir(self.pathName)
             print(self.pathName)
+            
+            # if self.pathName:
+            #     self.dirName = self.pathName.split('/')[-1]
+            #     set_directory.set_directory(
+            #         self.projectName, self.dirName, self.pathName)
             if self.pathName:
-                self.dirName = self.pathName.split('/')[-1]
-                set_directory.set_directory(
-                    self.projectName, self.dirName, self.pathName)
+                for dirName in self.class_names:
+                    set_directory.set_directory(
+                        self.projectName, dirName, self.pathName + '/' + dirName
+                    )
                 # self.setWindowTitle(self.projectName)
         else:
             self.warningMSG("주의", "프로젝트를 먼저 생성/선택 해주십시오.")
@@ -430,8 +482,8 @@ class WindowClass(QMainWindow, form_class):
         # test_function2.test()
 
     # ClassEditWidget띄우기
-    # def ClassEditBtnFunc(self):
-    #     self.openClassEditWidget.show()
+    def ClassEditBtnFunc(self):
+        self.openClassEditWidget.show()
 
     def f5BtnFunc(self):
         print("새로고침")
@@ -535,9 +587,9 @@ class WindowClass(QMainWindow, form_class):
         print("DB close!")
         self.conn.close()
 
-    # def ClassEditBtnFunc(self):
-    #     # ClassEditWidget띄우기
-    #     self.openClassEditWidget.show()
+    def ClassEditBtnFunc(self):
+        # ClassEditWidget띄우기
+        self.openClassEditWidget.show()
 
     # Navigator
     def loadNavi(self):

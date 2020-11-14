@@ -75,7 +75,7 @@ def test():
     # print(real)
 
 
-    class_names = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
+    # class_names = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
     
     def plot_confusion_matrix(y_true, y_pred, classes,
                             normalize=False,
@@ -96,7 +96,8 @@ def test():
         cm = confusion_matrix(y_true, y_pred)
         # Only use the labels that appear in the data
         # classes = classes[unique_labels(y_true, y_pred)]
-        classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
+        # classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
+        classes = class_names
         # print('dsfgfdgfdgfdgfdsfasdfsfdsgredtygdrafsdfdsayhetrsdfdsf',classes)
         if normalize:
             cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
