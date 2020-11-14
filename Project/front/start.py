@@ -141,13 +141,13 @@ class AnotherFormLayout(QDialog):
         # Augmentation
         self.formAugmentation = QGroupBox("Augmentation")
         layout = QFormLayout()
-        self.checkBoxHorizantal = QCheckBox("Horizantal Flip", self)
+        self.checkBoxHorizantal = QCheckBox("[H] Horizantal Flip", self)
         layout.addRow(self.checkBoxHorizantal)
-        self.checkBoxVertical = QCheckBox("Vertical Flip", self)
+        self.checkBoxVertical = QCheckBox("[V] Vertical Flip", self)
         layout.addRow(self.checkBoxVertical)
-        self.checkBoxRotation90 = QCheckBox("Rotation 90", self)
+        self.checkBoxRotation90 = QCheckBox("[R-90] Rotation 90", self)
         layout.addRow(self.checkBoxRotation90)
-        self.checkBoxRotation180 = QCheckBox("Rotation 180", self)
+        self.checkBoxRotation180 = QCheckBox("[R-180] Rotation 180", self)
         layout.addRow(self.checkBoxRotation180)
         self.formAugmentation.setLayout(layout)
         # data preprocessing
