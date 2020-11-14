@@ -354,8 +354,8 @@ class WindowClass(QMainWindow, form_class):
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
         self.fig = plt.Figure()
-        self.tabWidget.Plot = FigureCanvas(self.fig)
-        # self.Plot.addWidget(self.canvas)
+        self.canvas = FigureCanvas(self.fig)
+        self.plotLayout.addWidget(self.canvas)
 
         self.setWindowTitle('SSAKIT')
 
