@@ -388,15 +388,25 @@ class ProjectNameClass(QDialog):
             self.nameSignal.emit()
             self.hide()
 
+
+# Test Model Seclet #영환오빠
 class TestModelSelect(QDialog):
     def __init__(self):
         super().__init__()
+        self.setGeometry(760,300,400,400)
+        self.setStyleSheet("background-color: #847f7f;")
+        self.setWindowTitle("Test Model Select")
+
         self.label = QLabel()
         # if len(os.listdir("../back/learning_test/checkpoint")) == 0:
         #     self.label = QLabel("학습된 모델이 없습니다.", self)
         # else:
-        self.label = QLabel("모델을 선택해 주세요", self)
+        self.label = QLabel("Model Select", self)
+        self.label.setStyleSheet("font: 18pt 'a로케트'; color: rgb(255, 238, 228);")
+        # background-color: rgb(241, 127, 66); 
+
         self.listW = QListWidget()
+        self.listW.setStyleSheet("background-color: rgb(255, 255, 255); font: 14pt 'a디딤돌'; color: rgb(0, 0,0);")
         for i in range(len(os.listdir("../back/learning_test/checkpoint"))):
             self.listW.addItem(os.listdir("../back/learning_test/checkpoint")[i])
         self.listW.itemActivated.connect(self.itemActivated_event)
@@ -404,7 +414,7 @@ class TestModelSelect(QDialog):
         vbox.addWidget(self.label)
         vbox.addWidget(self.listW)
         self.setLayout(vbox)
-        self.setGeometry(300, 300, 300, 300)
+        # self.setGeometry(300, 300, 300, 300)
 
     def itemActivated_event(self, item):
         self.hide()
