@@ -145,9 +145,11 @@ class AnotherFormLayout(QDialog):
         layout.addRow(self.checkBoxHorizantal)
         self.checkBoxVertical = QCheckBox("[V] Vertical Flip", self)
         layout.addRow(self.checkBoxVertical)
-        self.checkBoxRotation90 = QCheckBox("[R-90] Rotation 90", self)
+        self.checkBoxBrightness = QCheckBox("[B] Brightness", self)
+        layout.addRow(self.checkBoxBrightness)
+        self.checkBoxRotation90 = QRadioButton("[R-90] Rotation 90", self)
         layout.addRow(self.checkBoxRotation90)
-        self.checkBoxRotation180 = QCheckBox("[R-180] Rotation 180", self)
+        self.checkBoxRotation180 = QRadioButton("[R-180] Rotation 180", self)
         layout.addRow(self.checkBoxRotation180)
         self.formAugmentation.setLayout(layout)
         # data preprocessing
@@ -181,13 +183,17 @@ class AnotherFormLayout(QDialog):
     def accept(self):
         settings_data = []
         settings_data.append(self.comboBoxNN.currentText())
-        aug = [False, False, 0]
+        aug = [False, False, None, 0]
         if self.checkBoxHorizantal.isChecked() == True:
             aug[0] = True
         if self.checkBoxVertical.isChecked() == True:
             aug[1] = True
+        if self.checkBoxBrightness.isChecked() == True:
+            aug[2] = [0.2, 1.2]
         if self.checkBoxRotation90.isChecked() == True:
-            aug[2] = 90
+            aug[3] = 90
+        if self.checkBoxRotation180.isChecked() == True:
+            aug[3] = 180
         # if self.checkBoxRotation180.isChecked() == True:
         #     WindowClass.settingsData.append("Rotation 180")
         settings_data.append(aug)
