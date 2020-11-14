@@ -127,6 +127,7 @@ class AnotherFormLayout(QDialog):
         buttonBox.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
 
         mainLayout = QVBoxLayout()
+        mainLayout.addWidget(self.formModelName)
         mainLayout.addWidget(self.formAugmentation)
         # mainLayout.addWidget(self.formDataPreprocessing)
         mainLayout.addWidget(self.formNeuralNetwork)
@@ -140,6 +141,16 @@ class AnotherFormLayout(QDialog):
         self.setTLTables()
 
     def createFormGroupBox(self):
+        # model name
+        self.formModelName = QGroupBox("Set Model Name")
+        self.formModelName.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
+        layoutMN = QFormLayout()
+        self.setModelName = QLineEdit()
+        self.setModelName.setPlaceholderText("모델 이름 설정")
+        self.setModelName.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
+        layoutMN.addRow(QLabel("Model Name : "), self.setModelName)
+        self.formModelName.setLayout(layoutMN)
+
         # Augmentation
         self.formAugmentation = QGroupBox("Augmentation")
         self.formAugmentation.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
