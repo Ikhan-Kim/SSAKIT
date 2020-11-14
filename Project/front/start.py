@@ -393,7 +393,10 @@ class WindowClass(QMainWindow, form_class):
     settingsData = []
     class_names = []
     projectName = ''
+    learnDataPath = ''
     learn_train_path = ''
+    # class 갯수, train img 갯수, val img 갯수 순임.
+    learn_num_data = []
     # learn_val_path = ''
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
@@ -466,18 +469,19 @@ class WindowClass(QMainWindow, form_class):
 
     def createNameFn(self):
         self.setWindowTitle('SSAKIT -' + self.projectName)
-        self.testPath = './learnData/' + self.projectName
+        self.learnDataPath = './learnData/' + self.projectName
         create_dir.create_dir_flow(self.projectName)
         treeModel = QFileSystemModel()
         self.dirTreeView.setModel(treeModel)
         treeModel.setRootPath(QDir.rootPath())
-        self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
+        self.dirTreeView.setRootIndex(treeModel.index(self.learnDataPath))
         self.pjtTitle.setText(self.projectName)
-        self.class_names = os.listdir(self.testPath + '/train')
+        self.class_names = os.listdir(self.learnDataPath + '/train')
         self.mainWidget.hide()
         
     def changeColorFn(self):
         self.btnColorChange(self.btnTraining)
+        self.cnt_file()
 
     def createProjectFn(self):
         if self.projectNameDisplay.isVisible():
@@ -705,6 +709,18 @@ class WindowClass(QMainWindow, form_class):
         self.extension.setText("확장자")
         self.channel.setText("채널")
         self.bit.setText("비트")
+
+    def cnt_file(self):
+        self.learn_num_data = []
+        self.learn_num_data.append(len(class_names))
+        cnt_train = 0
+        cnt_val = 0
+        file_path = self.learnDataPath + '/train/'
+        for folder in self.class_names:
+            cnt_train += len([name for name in os.listdir(self.learnDataPath + '/train/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/train/' + folder, name))])
+            cnt_val += len([name for name in os.listdir(self.learnDataPath + '/validation/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/validation/' + folder, name))])
+        self.learn_num_data.append(cnt_train)
+        self.learn_num_data.append(cnt_val)
 
 if __name__ == "__main__":
     try:
