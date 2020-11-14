@@ -397,8 +397,8 @@ class TestModelSelect(QDialog):
         # else:
         self.label = QLabel("모델을 선택해 주세요", self)
         self.listW = QListWidget()
-        for i in range(len(os.listdir("../back/learning_test/checkpoint"))):
-            self.listW.addItem(os.listdir("../back/learning_test/checkpoint")[i])
+        for i in range(len(os.listdir("./checkpoint"))):
+            self.listW.addItem(os.listdir("./checkpoint")[i])
         self.listW.itemActivated.connect(self.itemActivated_event)
         vbox = QVBoxLayout()
         vbox.addWidget(self.label)
