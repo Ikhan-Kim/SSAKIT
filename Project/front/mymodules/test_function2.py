@@ -110,7 +110,7 @@ def test(model_name, window):
             diagonal += cm[i][i]
             for j in cm[i]:
                 ssum += j
-        acc = round(diagonal / ssum, 2) * 100
+        acc = round(diagonal / ssum, 3) * 100
         print(acc)
 
         precision = []
