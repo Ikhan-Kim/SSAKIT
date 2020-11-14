@@ -862,11 +862,17 @@ from tensorflow import keras
   - `tf.keras.models.load_model()`
 - 저장 형식
   - 모델을 저장하는 데 사용할 수 있는 두 형식은 `TensorFlow SavedModel` 형식과 `이전 Keras H5 `형식임.
+
   - 하지만 SavedModel을 권장하며 model.save() 를 사용할 때의 기본값임.
     - H5 형식으로 전환하기 위한 방법. 
       - `save_format='h5'` 을 `save()`로 전달할 것.
       - `.h5` 또는 `.keras`로 끝나는 파일명을 `save()` 로 전달함.
+    
   - SavedModel이 포함하는 것.
+
+    - 저장 방법: `model.save('path/to/location')` 
+    - 로드 방법: `model = tf.keras.models.load_model('path/to/location')`
+
     - `assets`, `saved_model.pb`,  `variables`,
     - 모델 아키텍처 및 훈련 구성(optimizer, loss, metrics 포함.)은 saved_model.pb에 저장됌.
     - 가중치는 variables/ 디렉토리에 저장됌.
