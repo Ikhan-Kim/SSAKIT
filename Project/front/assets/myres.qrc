@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="imgUpload">
+    <file>img/imageUpload.png</file>
+  </qresource>
+  <qresource prefix="arrows">
+    <file>img/arrow.png</file>
+  </qresource>
+</RCC>

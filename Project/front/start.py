@@ -112,6 +112,7 @@ class Worker(QRunnable):
 class AnotherFormLayout(QDialog):
     NumGridRows = 3
     NumButtons = 4
+    colorSignal = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -192,6 +193,7 @@ class AnotherFormLayout(QDialog):
         settings_data.append(aug)
         settings_data.append(int(self.lineEpochs.text()))
         WindowClass.settingsData = settings_data
+        self.colorSignal.emit()
         print(WindowClass.settingsData)
         self.hide()
 
@@ -324,10 +326,9 @@ class WindowClass(QMainWindow, form_class):
 
     def __init__(self) :     
         super().__init__()
-
         # design
         # changing the background color to yellow 
-        # self.setStyleSheet("background-color: #767171;")
+        self.setStyleSheet("background-color: #847f7f;")
 
         self.setupUi(self)
         # 기본 설정?>
@@ -338,14 +339,16 @@ class WindowClass(QMainWindow, form_class):
         self.imgLabel.setPixmap(pixmap)
         # 버튼별 함수 실행
         self.btnCreateProject.clicked.connect(self.createProjectFn)
+        # self.btnDataLoad.setStyleSheet("background-image: url(front\assets\img\imageUpload.png);")
         self.btnDataLoad.clicked.connect(self.dataLoadFn)
         self.btnLearnSettings.clicked.connect(self.learnSettingsFn)
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         self.btnTraining.clicked.connect(self.training)
         self.projectNameDisplay.nameSignal.connect(self.createNameFn)
+        self.learnSettingDisplay.colorSignal.connect(self.changeColorFn)
         self.btnTest.clicked.connect(self.test)
         # 터미널
-        self.textBox_terminal.setGeometry(QtCore.QRect(0, 0, 1200, 190))
+        # self.textBox_terminal.setGeometry(QtCore.QRect(0, 0, 1200, 190))
         # live loss plot
         self.threadpool = QThreadPool()
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
@@ -371,6 +374,14 @@ class WindowClass(QMainWindow, form_class):
         # Navigator
         self.loadNavi()
 
+    def btnColorChange(self, btn):
+        # print(" btn change", btn)
+        btns = [self.btnLearnSettings,  self.btnTraining, self.btnTest, self.pushButton_5]
+        btns.remove(btn)
+        btn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a로케트'; color: rgb(255, 255, 255);")
+        for b in btns:
+            b.setStyleSheet("background-color: #ffeee4; font: 12pt 'a로케트'; color: rgb(0, 0, 0);")
+
     def createNameFn(self):
         self.setWindowTitle('SSAKIT -' + self.projectName)
         self.testPath = './learnData/' + self.projectName
@@ -380,6 +391,10 @@ class WindowClass(QMainWindow, form_class):
         treeModel.setRootPath(QDir.rootPath())
         self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
         self.pjtTitle.setText(self.projectName)
+        self.mainWidget.hide()
+        
+    def changeColorFn(self):
+        self.btnColorChange(self.btnTraining)
 
     def createProjectFn(self):
         if self.projectNameDisplay.isVisible():
@@ -463,6 +478,7 @@ class WindowClass(QMainWindow, form_class):
         self.btnTest.setEnabled(True)
 
     def training(self):
+        self.btnColorChange(self.btnTraining)
         if self.learn_train_path:
             self.btnDisable()
             # Pass the function to execute
@@ -480,6 +496,11 @@ class WindowClass(QMainWindow, form_class):
     def test(self):
         self.testModelSelectDisplay.show()
         # test_function2.test()
+        self.btnColorChange(self.btnTest)
+        if self.isTrained:
+            test_function2.test()
+        else:
+            self.warningMSG("주의", "모델 학습을 먼저 실행해 주십시오.")
 
     # ClassEditWidget띄우기
     def ClassEditBtnFunc(self):
