@@ -464,7 +464,7 @@ class WindowClass(QMainWindow, form_class):
         btn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a로케트'; color: rgb(255, 255, 255);")
         for b in btns:
             b.setStyleSheet("background-color: #ffeee4; font: 12pt 'a로케트'; color: rgb(0, 0, 0);")
-        self.widgetInfo.hide()
+        self.infoMSG.setText("Training 버튼을 클릭해 주세요.")
 
     def createNameFn(self):
         self.setWindowTitle('SSAKIT -' + self.projectName)
@@ -520,7 +520,7 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.hideColumn(2)
         self.dirTreeView.hideColumn(3)
         pixmap = QtGui.QPixmap(self.mainImg)
-        pixmap2 = pixmap.scaledToWidth(430)
+        pixmap2 = pixmap.scaledToWidth(600)
         self.imgLabel.setPixmap(pixmap2)
 
         img = Image.open(self.mainImg)
@@ -573,6 +573,7 @@ class WindowClass(QMainWindow, form_class):
 
     def training(self):
         self.btnColorChange(self.btnTraining)
+        self.infoMSG.setText("traing이 완료되면 Test 버튼을 클릭 해 주세요.")
         if self.learn_train_path:
             self.btnDisable()
             self.textBox_terminal.append('Ready for training...')
