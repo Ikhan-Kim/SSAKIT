@@ -128,16 +128,27 @@ class AnotherFormLayout(QDialog):
         buttonBox.rejected.connect(self.reject)
         buttonBox.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
 
+        self.formContinueNetwork.hide()
+        self.new_learn = QPushButton("New")
+        self.new_learn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+        self.continue_learn = QPushButton("Continue")
+        self.buttonsWidget = QWidget()
+        self.buttonsWidgetLayout = QHBoxLayout(self.buttonsWidget)
+        self.buttonsWidgetLayout.addWidget(self.new_learn)
+        self.buttonsWidgetLayout.addWidget(self.continue_learn)
+
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.formModelName)
         mainLayout.addWidget(self.formAugmentation)
-        # mainLayout.addWidget(self.formDataPreprocessing)
+        mainLayout.addWidget(self.buttonsWidget)
         mainLayout.addWidget(self.formNeuralNetwork)
+        mainLayout.addWidget(self.formContinueNetwork)
         mainLayout.addWidget(self.formLearn)
         mainLayout.addWidget(self.formTrainList)
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
-
+        self.new_learn.clicked.connect(self.newFn)
+        self.continue_learn.clicked.connect(self.continueFn)
         self.setWindowTitle("Train Wizard")
 
         self.setTLTables()
@@ -168,26 +179,24 @@ class AnotherFormLayout(QDialog):
         self.checkBoxRotation180 = QRadioButton("[R-180] Rotation 180", self)
         layout.addRow(self.checkBoxRotation180)
         self.formAugmentation.setLayout(layout)
-        # data preprocessing
-        # self.formDataPreprocessing = QGroupBox("Data Preprocessing")
-        # layout = QFormLayout()
-        # self.lineTarget = QLineEdit()
-        # layout.addRow(QLabel("target size:"), self.lineTarget)
-        # layout.addRow(QLabel("class mode:"), QComboBox())
-        # self.lineBatch = QLineEdit()
-        # layout.addRow(QLabel("batch size:"), self.lineBatch)
-        # self.lineRgb = QLineEdit()
-        # layout.addRow(QLabel("rgb:"), self.lineRgb)
-        # self.formDataPreprocessing.setLayout(layout)
         # nn setting
-        self.formNeuralNetwork = QGroupBox("Neural Network")
+        self.formNeuralNetwork = QGroupBox("New Neural Network")
         self.formNeuralNetwork.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
         layoutNN = QFormLayout()
         self.comboBoxNN = QComboBox()
         self.comboBoxNN.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
         self.comboBoxNN.addItems(["VGG", "InceptionV3", "ResNet152", "EfficientnetB4"])
-        layoutNN.addRow(QLabel("select NN:"), self.comboBoxNN)
+        layoutNN.addRow(QLabel("select :"), self.comboBoxNN)
         self.formNeuralNetwork.setLayout(layoutNN)
+        # continue nn setting
+        self.formContinueNetwork = QGroupBox("Continue Neural Network")
+        self.formContinueNetwork.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
+        layoutContinue = QFormLayout()
+        self.comboBoxContinue = QComboBox()
+        self.comboBoxContinue.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
+        self.comboBoxContinue.addItems(['test', '중', '입니다'])
+        layoutContinue.addRow(QLabel("select :"), self.comboBoxContinue)
+        self.formContinueNetwork.setLayout(layoutContinue)
         # Learn Settings
         self.formLearn = QGroupBox("Learn Settings")
         self.formLearn.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
@@ -231,6 +240,18 @@ class AnotherFormLayout(QDialog):
         self.colorSignal.emit()
         print(WindowClass.settingsData)
         self.hide()
+
+    def newFn(self):
+        self.formNeuralNetwork.show()
+        self.formContinueNetwork.hide()
+        self.new_learn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+        self.continue_learn.setStyleSheet("background-color: rgb(175, 171, 171); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+
+    def continueFn(self):
+        self.formNeuralNetwork.hide()
+        self.formContinueNetwork.show()
+        self.new_learn.setStyleSheet("background-color: rgb(175, 171, 171); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+        self.continue_learn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
 
     # DB 연결, 테이블 생성
     def trainListSqlConnect(self):
@@ -395,7 +416,10 @@ class WindowClass(QMainWindow, form_class):
     settingsData = []
     class_names = []
     projectName = ''
+    learnDataPath = ''
     learn_train_path = ''
+    # class 갯수, train img 갯수, val img 갯수 순임.
+    learn_num_data = []
     # learn_val_path = ''
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
@@ -468,18 +492,19 @@ class WindowClass(QMainWindow, form_class):
 
     def createNameFn(self):
         self.setWindowTitle('SSAKIT -' + self.projectName)
-        self.testPath = './learnData/' + self.projectName
+        self.learnDataPath = './learnData/' + self.projectName
         create_dir.create_dir_flow(self.projectName)
         treeModel = QFileSystemModel()
         self.dirTreeView.setModel(treeModel)
         treeModel.setRootPath(QDir.rootPath())
-        self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
+        self.dirTreeView.setRootIndex(treeModel.index(self.learnDataPath))
         self.pjtTitle.setText(self.projectName)
-        self.class_names = os.listdir(self.testPath + '/train')
+        self.class_names = os.listdir(self.learnDataPath + '/train')
         self.mainWidget.hide()
         
     def changeColorFn(self):
         self.btnColorChange(self.btnTraining)
+        self.cnt_file()
 
     def createProjectFn(self):
         if self.projectNameDisplay.isVisible():
@@ -717,6 +742,18 @@ class WindowClass(QMainWindow, form_class):
         self.extension.setText("확장자")
         self.channel.setText("채널")
         self.bit.setText("비트")
+
+    def cnt_file(self):
+        self.learn_num_data = []
+        self.learn_num_data.append(len(class_names))
+        cnt_train = 0
+        cnt_val = 0
+        file_path = self.learnDataPath + '/train/'
+        for folder in self.class_names:
+            cnt_train += len([name for name in os.listdir(self.learnDataPath + '/train/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/train/' + folder, name))])
+            cnt_val += len([name for name in os.listdir(self.learnDataPath + '/validation/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/validation/' + folder, name))])
+        self.learn_num_data.append(cnt_train)
+        self.learn_num_data.append(cnt_val)
 
 if __name__ == "__main__":
     try:
