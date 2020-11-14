@@ -18,9 +18,9 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
     INPUT_SIZE = 200
     CHANNELS = 3
     INPUT_SHAPE = (INPUT_SIZE, INPUT_SIZE, CHANNELS)
-    NUM_CLASSES = 10
-    NUM_TRAIN_IMGS = 3000
-    NUM_VAL_IMGS = 1000
+    NUM_CLASSES = window.learn_num_data[0]
+    NUM_TRAIN_IMGS = window.learn_num_data[1]
+    NUM_VAL_IMGS = window.learn_num_data[2]
     BATCH_SIZE = 32
 
     HORIZONTAL_FLIP = augmentation[0]
