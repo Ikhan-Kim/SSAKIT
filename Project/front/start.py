@@ -358,7 +358,7 @@ class TestModelSelect(QDialog):
 
     def itemActivated_event(self, item):
         self.hide()
-        test_function2.test(item.text(), myWindow.class_names)
+        test_function2.test(item.text(), myWindow)
 
 # MainWindow
 class WindowClass(QMainWindow, form_class):
@@ -537,6 +537,7 @@ class WindowClass(QMainWindow, form_class):
         self.btnColorChange(self.btnTraining)
         if self.learn_train_path:
             self.btnDisable()
+            self.textBox_terminal.append('Ready for training...')
             # Pass the function to execute
             worker = Worker(self.settingsData, self.learn_train_path, self.learn_val_path) # Any other args, kwargs are passed to the run function
             worker.signals.result.connect(self.print_output)

@@ -6,13 +6,14 @@ from keras_preprocessing import image
 import matplotlib.pyplot as plt
 import itertools
 from sklearn.utils.multiclass import unique_labels
+from PyQt5.QtWidgets import *
 
 
 from sklearn.metrics import plot_confusion_matrix
 from sklearn.metrics import confusion_matrix
 
 
-def test(model_name, class_names):
+def test(model_name, window):
     #path
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     model_path = os.path.join(BASE_DIR, 'checkpoint/'+model_name)
@@ -126,43 +127,48 @@ def test(model_name, class_names):
         print(precision)
         print(recall)
 
-        fig, ax = plt.subplots()
-        im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
-        ax.figure.colorbar(im, ax=ax)
-        # We want to show all ticks...
-        ax.set(xticks=np.arange(cm.shape[1]),
-            yticks=np.arange(cm.shape[0]),
-            # ... and label them with the respective list entries
-            xticklabels=classes, yticklabels=classes,
-            title=title,
-            ylabel='True label',
-            xlabel='Predicted label')
+        window.confusionMatrixTable.setColumnCount(len(cm))
+        window.confusionMatrixTable.setHorizontalHeaderLabels(classes)
+        window.confusionMatrixTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        window.confusionMatrixTable.setRowCount(len(cm))
 
-        # Rotate the tick labels and set their alignment.
-        plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
-                rotation_mode="anchor")
+        # fig, ax = plt.subplots()
+        # im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
+        # ax.figure.colorbar(im, ax=ax)
+        # # We want to show all ticks...
+        # ax.set(xticks=np.arange(cm.shape[1]),
+        #     yticks=np.arange(cm.shape[0]),
+        #     # ... and label them with the respective list entries
+        #     xticklabels=classes, yticklabels=classes,
+        #     title=title,
+        #     ylabel='True label',
+        #     xlabel='Predicted label')
 
-        # Loop over data dimensions and create text annotations.
-        fmt = '.2f' if normalize else 'd'
-        thresh = cm.max() / 2.
-        for i in range(cm.shape[0]):
-            for j in range(cm.shape[1]):
-                ax.text(j, i, format(cm[i, j], fmt),
-                        ha="center", va="center",
-                        color="white" if cm[i, j] > thresh else "black")
-        #자동 레이아웃 설정
-        fig.tight_layout()
-        return ax
+        # # Rotate the tick labels and set their alignment.
+        # plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+        #         rotation_mode="anchor")
+
+        # # Loop over data dimensions and create text annotations.
+        # fmt = '.2f' if normalize else 'd'
+        # thresh = cm.max() / 2.
+        # for i in range(cm.shape[0]):
+        #     for j in range(cm.shape[1]):
+        #         ax.text(j, i, format(cm[i, j], fmt),
+        #                 ha="center", va="center",
+        #                 color="white" if cm[i, j] > thresh else "black")
+        # #자동 레이아웃 설정
+        # fig.tight_layout()
+        # return ax
 
 
 
 
     # Plot non-normalized confusion matrix
-    # plot_confusion_matrix(real, predicted_labels, classes=class_names,
-    #                     title='Confusion matrix, without normalization')
+    plot_confusion_matrix(real, predicted_labels, classes=window.class_names,
+                        title='Confusion matrix, without normalization')
 
-    # Plot normalized confusion matrix
-    plot_confusion_matrix(real, predicted_labels, classes=class_names, normalize=True,
-                        title='Normalized confusion matrix')
+    # # Plot normalized confusion matrix
+    # plot_confusion_matrix(real, predicted_labels, classes=class_names, normalize=True,
+    #                     title='Normalized confusion matrix')
 
-    plt.show()
+    # plt.show()

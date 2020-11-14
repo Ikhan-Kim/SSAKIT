@@ -309,7 +309,7 @@ font: 9pt &quot;a스마일L&quot;;</string>
 font: 12pt &quot;a디딤돌&quot;;</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -357,6 +357,16 @@ font: 12pt &quot;a디딤돌&quot;;</string>
      <attribute name="title">
       <string>test result</string>
      </attribute>
+     <widget class="QTableWidget" name="confusionMatrixTable">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>331</width>
+        <height>331</height>
+       </rect>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="directory_widget" native="true">
