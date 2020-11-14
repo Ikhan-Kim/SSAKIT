@@ -445,6 +445,7 @@ class WindowClass(QMainWindow, form_class):
         self.testModelSelectDisplay = TestModelSelect()
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
+        self.btnOpenDir.setIcon(QIcon('./assets/folder.jpg')) 
         # 버튼별 함수 실행
         self.btnCreateProject.clicked.connect(self.createProjectFn)
         # self.btnDataLoad.setStyleSheet("background-image: url(front\assets\img\imageUpload.png);")
