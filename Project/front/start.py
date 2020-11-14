@@ -194,7 +194,8 @@ class AnotherFormLayout(QDialog):
         layoutContinue = QFormLayout()
         self.comboBoxContinue = QComboBox()
         self.comboBoxContinue.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
-        self.comboBoxContinue.addItems(['test', '중', '입니다'])
+        continue_list = os.listdir('./checkpoint')
+        self.comboBoxContinue.addItems(continue_list)
         layoutContinue.addRow(QLabel("select :"), self.comboBoxContinue)
         self.formContinueNetwork.setLayout(layoutContinue)
         # Learn Settings
@@ -548,6 +549,8 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.hideColumn(1)
         self.dirTreeView.hideColumn(2)
         self.dirTreeView.hideColumn(3)
+        self.dirTreeView.hideColumn(4)
+        self.dirTreeView.hideColumn(5)
         pixmap = QtGui.QPixmap(self.mainImg)
         pixmap2 = pixmap.scaledToWidth(600)
         self.imgLabel.setPixmap(pixmap2)
