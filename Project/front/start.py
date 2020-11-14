@@ -420,6 +420,7 @@ class WindowClass(QMainWindow, form_class):
     learn_train_path = ''
     # class 갯수, train img 갯수, val img 갯수 순임.
     learn_num_data = []
+    sIMG = ""
     # learn_val_path = ''
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
@@ -549,7 +550,7 @@ class WindowClass(QMainWindow, form_class):
         self.imgLabel.setPixmap(pixmap2)
 
         img = Image.open(self.mainImg)
-        print(img)
+        # print(img)
         st = os.stat(self.mainImg)
         self.fileName.setText(img.filename.split('/')[-1])
         self.fileSize.setText(str(st[ST_SIZE]))
@@ -679,15 +680,6 @@ class WindowClass(QMainWindow, form_class):
         # Table column 수, header 설정+너비
         self.classType.setColumnCount(4)
         self.classType.setHorizontalHeaderLabels(['color', 'class', 'train', 'val', 'test'])
-        
-        # Table 너비 조절
-        # self.classType.setColumnWidth(0,10)
-        # self.classType.setColumnWidth(0,50)
-        # self.classType.setColumnWidth(1,10)
-        # self.classType.setColumnWidth(3,10)
-        # self.classType.setColumnWidth(4,10)
-        # self.classType.setColumnWidth(5,10)
-        # self.classType.setColumnWidth(6,10)
         self.classType.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         
         cnt = len(rows)
@@ -731,17 +723,18 @@ class WindowClass(QMainWindow, form_class):
 
     # Navigator
     def loadNavi(self):
+        if self.sIMG == "":
+            self.detail_widget2.hide()
+        else:
+            self.detail_widget2.show()
         # dummydata
-        self.wValue.setText("너비")
-        self.hValue.setText("높이")
-        self.xValue.setText("0")
-        self.yValue.setText("0")
+        # self.wValue.setText("너비")
+        # self.hValue.setText("높이")
 
-        self.fileName.setText("파일명")
-        self.fileSize.setText("파일사이즈")
-        self.extension.setText("확장자")
-        self.channel.setText("채널")
-        self.bit.setText("비트")
+        # self.fileName.setText("파일명")
+        # self.fileSize.setText("파일사이즈")
+        # self.extension.setText("확장자")
+        # self.channel.setText("채널")
 
     def cnt_file(self):
         self.learn_num_data = []
