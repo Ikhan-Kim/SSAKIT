@@ -497,10 +497,6 @@ class WindowClass(QMainWindow, form_class):
         self.testModelSelectDisplay.show()
         # test_function2.test()
         self.btnColorChange(self.btnTest)
-        if self.isTrained:
-            test_function2.test()
-        else:
-            self.warningMSG("주의", "모델 학습을 먼저 실행해 주십시오.")
 
     # ClassEditWidget띄우기
     def ClassEditBtnFunc(self):
