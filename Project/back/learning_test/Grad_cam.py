@@ -92,7 +92,7 @@ def VGG16_Grad_cam():
 
     # overlay V2
     image_origin = tf.keras.preprocessing.image.load_img(IMAGE_PATH)
-    imgage_origin = tf.keras.preprocessing.image.img_to_array(image_origin)
+    image_origin = tf.keras.preprocessing.image.img_to_array(image_origin)
 
 
     heatmap = np.uint8(255 * heatmap)
