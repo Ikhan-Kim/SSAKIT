@@ -397,23 +397,34 @@ class ProjectNameClass(QDialog):
             self.nameSignal.emit()
             self.hide()
 
+
+# Test Model Seclet #영환오빠
 class TestModelSelect(QDialog):
     def __init__(self):
         super().__init__()
+        self.setGeometry(760,300,400,400)
+        self.setStyleSheet("background-color: #847f7f;")
+        self.setWindowTitle("Test Model Select")
+
         self.label = QLabel()
         # if len(os.listdir("../back/learning_test/checkpoint")) == 0:
         #     self.label = QLabel("학습된 모델이 없습니다.", self)
         # else:
-        self.label = QLabel("모델을 선택해 주세요", self)
+        self.label = QLabel("Model Select", self)
+        self.label.setStyleSheet("font: 18pt 'a로케트'; color: rgb(255, 238, 228);")
+        # background-color: rgb(241, 127, 66); 
+
         self.listW = QListWidget()
         for i in range(len(os.listdir("./checkpoint"))):
             self.listW.addItem(os.listdir("./checkpoint")[i])
+        self.listW.setStyleSheet("background-color: rgb(255, 255, 255); font: 14pt 'a디딤돌'; color: rgb(0, 0,0);")
+        
         self.listW.itemActivated.connect(self.itemActivated_event)
         vbox = QVBoxLayout()
         vbox.addWidget(self.label)
         vbox.addWidget(self.listW)
         self.setLayout(vbox)
-        self.setGeometry(300, 300, 300, 300)
+        # self.setGeometry(300, 300, 300, 300)
 
     def itemActivated_event(self, item):
         self.hide()
@@ -439,6 +450,15 @@ class WindowClass(QMainWindow, form_class):
     {"color": "#3372FF", "label": "4300", "train":50, "val":30, "test": 30},
     {"color": "#61FF33", "label": "4301", "train":50, "val":30, "test": 30},
     {"color": "#EA33FF", "label": "7501", "train":50, "val":30, "test": 30},
+    ]
+
+    # colors 리스트
+    colors = [
+        "#EA341B", "#EADA1B", "#71EA1B", "#1BEAD4", "#1B41EA",
+        "#E71BEA", "#EC9576", "#2A9614", "#144E96", "#521496",
+        "#48C9B0", "#F1C40F", "#5B2C6F ", "#A2D9CE", "#EC7063",
+        "#154360", "#F7DC6F", "#AED6F1", "#F09D28", "#E912C4",
+        "#60E91A", "#9E314C", "#F39C12", "#10A69B", "#A6A110",
     ]
 
     def __init__(self) :     
@@ -500,7 +520,6 @@ class WindowClass(QMainWindow, form_class):
         btn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a로케트'; color: rgb(255, 255, 255);")
         for b in btns:
             b.setStyleSheet("background-color: #ffeee4; font: 12pt 'a로케트'; color: rgb(0, 0, 0);")
-        self.infoMSG.setText("Training 버튼을 클릭해 주세요.")
 
     def createNameFn(self):
         self.setWindowTitle('SSAKIT -' + self.projectName)
@@ -516,6 +535,7 @@ class WindowClass(QMainWindow, form_class):
         
     def changeColorFn(self):
         self.btnColorChange(self.btnTraining)
+        self.infoMSG.setText("Training 버튼을 클릭해 주세요.")
         self.cnt_file()
 
     def createProjectFn(self):
@@ -541,6 +561,7 @@ class WindowClass(QMainWindow, form_class):
             self.warningMSG("주의", "프로젝트를 먼저 생성/선택 해주십시오.")
 
     def learnSettingsFn(self, checked):
+        self.tabWidget.setCurrentIndex(0)
         if self.projectName:
             if self.learnSettingDisplay.isVisible():
                 self.learnSettingDisplay.hide()
@@ -611,9 +632,10 @@ class WindowClass(QMainWindow, form_class):
         self.btnTest.setEnabled(True)
 
     def training(self):
-        self.btnColorChange(self.btnTraining)
-        self.infoMSG.setText("traing이 완료되면 Test 버튼을 클릭 해 주세요.")
+        self.infoMSG.setText("training이 완료되면 Test 버튼을 클릭 해 주세요.")
+        self.tabWidget.setCurrentIndex(1)
         if self.learn_train_path:
+            self.btnColorChange(self.btnTraining)
             self.btnDisable()
             self.textBox_terminal.append('Ready for training...')
             # Pass the function to execute
@@ -629,6 +651,7 @@ class WindowClass(QMainWindow, form_class):
         # self.btnEnable()
 
     def test(self):
+        self.tabWidget.setCurrentIndex(2)
         self.testModelSelectDisplay.show()
         # test_function2.test()
         self.btnColorChange(self.btnTest)
