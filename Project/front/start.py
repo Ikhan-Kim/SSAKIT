@@ -745,7 +745,7 @@ class WindowClass(QMainWindow, form_class):
 
     def cnt_file(self):
         self.learn_num_data = []
-        self.learn_num_data.append(len(class_names))
+        self.learn_num_data.append(len(self.class_names))
         cnt_train = 0
         cnt_val = 0
         file_path = self.learnDataPath + '/train/'

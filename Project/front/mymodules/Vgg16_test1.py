@@ -89,7 +89,7 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
                 metrics = ['accuracy'])
 
     # Callbacks
-    checkpoint_filepath = os.path.join(BASE_DIR, 'learning_test/checkpoint/VGG16_cifar10.h5')
+    checkpoint_filepath = os.path.join(BASE_DIR, 'checkpoint/VGG16_cifar10.h5')
 
     plotLosses = PlotLosses(input_epochs, window)
 
