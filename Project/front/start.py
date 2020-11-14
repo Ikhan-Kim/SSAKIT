@@ -112,6 +112,7 @@ class Worker(QRunnable):
 class AnotherFormLayout(QDialog):
     NumGridRows = 3
     NumButtons = 4
+    colorSignal = pyqtSignal()
 
     def __init__(self):
         super().__init__()
@@ -192,6 +193,7 @@ class AnotherFormLayout(QDialog):
         settings_data.append(aug)
         settings_data.append(int(self.lineEpochs.text()))
         WindowClass.settingsData = settings_data
+        self.colorSignal.emit()
         print(WindowClass.settingsData)
         self.hide()
 
@@ -262,8 +264,6 @@ class WindowClass(QMainWindow, form_class):
         # changing the background color to yellow 
         self.setStyleSheet("background-color: #847f7f;")
 
-        print(self.tabWidget.currentIndex)
-
         self.setupUi(self)
         # 기본 설정?>
         self.learnSettingDisplay = AnotherFormLayout()
@@ -278,6 +278,7 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         self.btnTraining.clicked.connect(self.training)
         self.projectNameDisplay.nameSignal.connect(self.createNameFn)
+        self.learnSettingDisplay.colorSignal.connect(self.changeColorFn)
         self.btnTest.clicked.connect(self.test)
         # 터미널
         # self.textBox_terminal.setGeometry(QtCore.QRect(0, 0, 1200, 190))
@@ -306,6 +307,14 @@ class WindowClass(QMainWindow, form_class):
         # Navigator
         self.loadNavi()
 
+    def btnColorChange(self, btn):
+        # print(" btn change", btn)
+        btns = [self.btnLearnSettings,  self.btnTraining, self.btnTest, self.pushButton_5]
+        btns.remove(btn)
+        btn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a로케트'; color: rgb(255, 255, 255);")
+        for b in btns:
+            b.setStyleSheet("background-color: #ffeee4; font: 12pt 'a로케트'; color: rgb(0, 0, 0);")
+
     def createNameFn(self):
         self.setWindowTitle('SSAKIT -' + self.projectName)
         self.testPath = './learnData/' + self.projectName
@@ -316,7 +325,11 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
         self.pjtTitle.setText(self.projectName)
         self.mainWidget.hide()
+        self.btnColorChange(self.btnLearnSettings)
         
+    def changeColorFn(self):
+        self.btnColorChange(self.btnTraining)
+
     def createProjectFn(self):
         if self.projectNameDisplay.isVisible():
             self.projectNameDisplay.hide()
@@ -392,6 +405,7 @@ class WindowClass(QMainWindow, form_class):
         self.btnTest.setEnabled(True)
 
     def training(self):
+        self.btnColorChange(self.btnTraining)
         if self.learn_train_path:
             self.btnDisable()
             # Pass the function to execute
@@ -408,6 +422,7 @@ class WindowClass(QMainWindow, form_class):
         # self.btnEnable()
 
     def test(self):
+        self.btnColorChange(self.btnTest)
         if self.isTrained:
             test_function2.test()
         else:

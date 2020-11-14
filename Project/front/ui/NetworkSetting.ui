@@ -89,7 +89,7 @@ alternate-background-color: rgb(255, 255, 255);</string>
       <rect>
        <x>20</x>
        <y>10</y>
-       <width>111</width>
+       <width>131</width>
        <height>61</height>
       </rect>
      </property>
@@ -106,9 +106,9 @@ Wizard</string>
     <widget class="QPushButton" name="btnTraining">
      <property name="geometry">
       <rect>
-       <x>180</x>
+       <x>210</x>
        <y>10</y>
-       <width>111</width>
+       <width>131</width>
        <height>61</height>
       </rect>
      </property>
@@ -123,7 +123,7 @@ background-color: rgb(255, 238, 228);</string>
     <widget class="QPushButton" name="pushButton_5">
      <property name="geometry">
       <rect>
-       <x>510</x>
+       <x>600</x>
        <y>10</y>
        <width>131</width>
        <height>61</height>
@@ -140,9 +140,9 @@ background-color: rgb(255, 238, 228);</string>
     <widget class="QPushButton" name="btnTest">
      <property name="geometry">
       <rect>
-       <x>340</x>
+       <x>400</x>
        <y>10</y>
-       <width>121</width>
+       <width>131</width>
        <height>61</height>
       </rect>
      </property>
@@ -157,7 +157,7 @@ background-color: rgb(255, 238, 228);</string>
     <widget class="QLabel" name="label_2">
      <property name="geometry">
       <rect>
-       <x>140</x>
+       <x>170</x>
        <y>30</y>
        <width>21</width>
        <height>21</height>
@@ -167,13 +167,13 @@ background-color: rgb(255, 238, 228);</string>
       <string notr="true">color: rgb(255, 255, 255);</string>
      </property>
      <property name="text">
-      <string/>
+      <string>▶</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_3">
      <property name="geometry">
       <rect>
-       <x>300</x>
+       <x>360</x>
        <y>30</y>
        <width>21</width>
        <height>21</height>
@@ -189,7 +189,7 @@ background-color: rgb(255, 238, 228);</string>
     <widget class="QLabel" name="label_4">
      <property name="geometry">
       <rect>
-       <x>470</x>
+       <x>560</x>
        <y>30</y>
        <width>21</width>
        <height>21</height>
@@ -309,7 +309,7 @@ font: 9pt &quot;a스마일L&quot;;</string>
 font: 12pt &quot;a디딤돌&quot;;</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -443,7 +443,7 @@ font: 15pt &quot;a로케트&quot;;</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>700</y>
+      <y>10</y>
       <width>1631</width>
       <height>821</height>
      </rect>
@@ -909,8 +909,6 @@ background-color: rgb(132, 127, 127);</string>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources>
-  <include location="../assets/myres.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>
