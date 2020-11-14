@@ -26,8 +26,8 @@ def Learn(augmentation, input_epochs, train_dir, val_dir, window):
 
     HORIZONTAL_FLIP = augmentation[0]
     VERTICAL_FLIP = augmentation[1]
-    BRIGHTNESS_RANGE = None
-    ROTATION_RANGE = augmentation[2]
+    BRIGHTNESS_RANGE = augmentation[2]
+    ROTATION_RANGE = augmentation[3]
 
     EPOCHS = input_epochs
     train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
