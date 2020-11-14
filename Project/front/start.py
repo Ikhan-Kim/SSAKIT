@@ -489,7 +489,6 @@ class WindowClass(QMainWindow, form_class):
         btn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a로케트'; color: rgb(255, 255, 255);")
         for b in btns:
             b.setStyleSheet("background-color: #ffeee4; font: 12pt 'a로케트'; color: rgb(0, 0, 0);")
-        self.infoMSG.setText("Training 버튼을 클릭해 주세요.")
 
     def createNameFn(self):
         self.setWindowTitle('SSAKIT -' + self.projectName)
@@ -505,6 +504,7 @@ class WindowClass(QMainWindow, form_class):
         
     def changeColorFn(self):
         self.btnColorChange(self.btnTraining)
+        self.infoMSG.setText("Training 버튼을 클릭해 주세요.")
         self.cnt_file()
 
     def createProjectFn(self):
@@ -530,6 +530,7 @@ class WindowClass(QMainWindow, form_class):
             self.warningMSG("주의", "프로젝트를 먼저 생성/선택 해주십시오.")
 
     def learnSettingsFn(self, checked):
+        self.tabWidget.setCurrentIndex(0)
         if self.projectName:
             if self.learnSettingDisplay.isVisible():
                 self.learnSettingDisplay.hide()
@@ -598,9 +599,10 @@ class WindowClass(QMainWindow, form_class):
         self.btnTest.setEnabled(True)
 
     def training(self):
-        self.btnColorChange(self.btnTraining)
-        self.infoMSG.setText("traing이 완료되면 Test 버튼을 클릭 해 주세요.")
+        self.infoMSG.setText("training이 완료되면 Test 버튼을 클릭 해 주세요.")
+        self.tabWidget.setCurrentIndex(1)
         if self.learn_train_path:
+            self.btnColorChange(self.btnTraining)
             self.btnDisable()
             self.textBox_terminal.append('Ready for training...')
             # Pass the function to execute
@@ -616,6 +618,7 @@ class WindowClass(QMainWindow, form_class):
         # self.btnEnable()
 
     def test(self):
+        self.tabWidget.setCurrentIndex(2)
         self.testModelSelectDisplay.show()
         # test_function2.test()
         self.btnColorChange(self.btnTest)

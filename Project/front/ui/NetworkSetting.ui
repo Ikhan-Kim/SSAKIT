@@ -523,7 +523,7 @@ color: rgb(255, 238, 228);</string>
     </widget>
     <widget class="QWidget" name="Plot">
      <attribute name="title">
-      <string>Plot</string>
+      <string>Live Plot</string>
      </attribute>
      <widget class="QWidget" name="formLayoutWidget">
       <property name="geometry">
@@ -583,7 +583,7 @@ font: 13pt &quot;a로케트&quot;;</string>
     </widget>
     <widget class="QWidget" name="test_result">
      <attribute name="title">
-      <string>test result</string>
+      <string>Test Result</string>
      </attribute>
      <widget class="QTableWidget" name="confusionMatrixTable">
       <property name="geometry">
@@ -669,7 +669,7 @@ font: 15pt &quot;a로케트&quot;;</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>-10</y>
+      <y>10</y>
       <width>1631</width>
       <height>821</height>
      </rect>
