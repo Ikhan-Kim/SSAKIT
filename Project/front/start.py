@@ -484,7 +484,7 @@ class WindowClass(QMainWindow, form_class):
             self.projectNameDisplay.hide()
         else:
             self.projectNameDisplay.show()
-
+    
     def dataLoadFn(self):
         if self.projectName:
             self.pathName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
@@ -494,9 +494,9 @@ class WindowClass(QMainWindow, form_class):
                 print(self.pathName)
                 
                 if self.pathName:
-                    for dirName in self.class_names:
+                    for idx, dirName in enumerate(self.class_names):
                         set_directory.set_directory(
-                            self.projectName, dirName, self.pathName + '/' + dirName
+                            self.projectName, dirName, self.pathName + '/' + dirName, idx
                         )
                     # self.setWindowTitle(self.projectName)
         else:
