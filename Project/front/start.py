@@ -238,6 +238,28 @@ class ProjectNameClass(QDialog):
         self.nameSignal.emit()
         self.hide()
 
+class TestModelSelect(QDialog):
+    def __init__(self):
+        super().__init__()
+        self.label = QLabel()
+        # if len(os.listdir("../back/learning_test/checkpoint")) == 0:
+        #     self.label = QLabel("학습된 모델이 없습니다.", self)
+        # else:
+        self.label = QLabel("모델을 선택해 주세요", self)
+        self.listW = QListWidget()
+        for i in range(len(os.listdir("../back/learning_test/checkpoint"))):
+            self.listW.addItem(os.listdir("../back/learning_test/checkpoint")[i])
+        self.listW.itemActivated.connect(self.itemActivated_event)
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.label)
+        vbox.addWidget(self.listW)
+        self.setLayout(vbox)
+        self.setGeometry(300, 300, 300, 300)
+
+    def itemActivated_event(self, item):
+        self.hide()
+        test_function2.test(item.text())
+
 # MainWindow
 class WindowClass(QMainWindow, form_class):
     mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
@@ -245,7 +267,6 @@ class WindowClass(QMainWindow, form_class):
     projectName = ''
     learn_train_path = ''
     # learn_val_path = ''
-    isTrained = False
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
     # DB에 넣을 데이터 불러오기 => 불러온 이미지의 label 기반
@@ -267,6 +288,7 @@ class WindowClass(QMainWindow, form_class):
         # 기본 설정?>
         self.learnSettingDisplay = AnotherFormLayout()
         self.projectNameDisplay = ProjectNameClass()
+        self.testModelSelectDisplay = TestModelSelect()
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
         # 버튼별 함수 실행
@@ -399,16 +421,13 @@ class WindowClass(QMainWindow, form_class):
 
             # Execute
             self.threadpool.start(worker)
-            self.isTrained = True
         else:
             self.warningMSG("주의", "데이터 로드 및 이미지 전처리를 먼저 실행해 주십시오.")
         # self.btnEnable()
 
     def test(self):
-        if self.isTrained:
-            test_function2.test()
-        else:
-            self.warningMSG("주의", "모델 학습을 먼저 실행해 주십시오.")
+        self.testModelSelectDisplay.show()
+        # test_function2.test()
 
     # ClassEditWidget띄우기
     # def ClassEditBtnFunc(self):
@@ -439,7 +458,7 @@ class WindowClass(QMainWindow, form_class):
         self.run()
 
         item_list = [list(item[:]) for item in self.cur.fetchall()]
-        print(item_list, len(item_list))
+        # print(item_list, len(item_list))
         if len(item_list) == 0:
             for d in self.data:
                 # print("d", d)

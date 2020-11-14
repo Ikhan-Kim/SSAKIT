@@ -12,17 +12,12 @@ from sklearn.metrics import plot_confusion_matrix
 from sklearn.metrics import confusion_matrix
 
 
-def test():
-    # path
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    TEST_dir = os.path.join(BASE_DIR, 'final1/test')
-
-
+def test(model_name):
     #path
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    model_path = os.path.join(BASE_DIR, 'learning_test/checkpoint/VGG16_stl10.h5')
+    model_path = os.path.join(BASE_DIR, 'checkpoint/'+model_name)
     # test_dir = os.path.join(BASE_DIR, 'test/test')
-    test_dir = os.path.join(BASE_DIR, 'final1/test')
+    test_dir = os.path.join(BASE_DIR, 'learnData/final1/test')
 
     # Define hyperparameter
     INPUT_SIZE = 200
