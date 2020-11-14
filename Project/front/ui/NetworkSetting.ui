@@ -190,6 +190,11 @@ background-color: rgb(255, 238, 228);</string>
        <height>28</height>
       </rect>
      </property>
+     <property name="styleSheet">
+      <string notr="true">font: 10pt &quot;a로케트&quot;;
+color: rgb(255, 255, 255);
+background-color: rgb(241, 127, 66);</string>
+     </property>
      <property name="text">
       <string>Edit</string>
      </property>
@@ -206,20 +211,25 @@ background-color: rgb(255, 238, 228);</string>
      <property name="styleSheet">
       <string notr="true">font: 13pt &quot;a로케트&quot;;
 background-color: rgb(132, 127, 127);
-color: rgb(255, 255, 255);</string>
+color: rgb(255, 238, 228);</string>
      </property>
      <property name="text">
-      <string>class</string>
+      <string>Class</string>
      </property>
     </widget>
     <widget class="QPushButton" name="f5Btn">
      <property name="geometry">
       <rect>
-       <x>150</x>
+       <x>160</x>
        <y>10</y>
        <width>31</width>
        <height>28</height>
       </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 10pt &quot;a로케트&quot;;
+color: rgb(255, 255, 255);
+background-color: rgb(241, 127, 66);</string>
      </property>
      <property name="text">
       <string>♻</string>
@@ -669,7 +679,7 @@ font: 15pt &quot;a로케트&quot;;</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>10</y>
+      <y>0</y>
       <width>1631</width>
       <height>821</height>
      </rect>
@@ -708,7 +718,7 @@ font: 20pt &quot;a로케트&quot;;</string>
 color: rgb(255, 238, 228);</string>
      </property>
      <property name="text">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;SSAKIT&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;SSA&lt;span style=&quot; color:#ffc000;&quot;&gt;K&lt;/span&gt;IT&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
     <widget class="QWidget" name="widget_2" native="true">

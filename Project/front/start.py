@@ -432,6 +432,15 @@ class WindowClass(QMainWindow, form_class):
     {"color": "#EA33FF", "label": "7501", "train":50, "val":30, "test": 30},
     ]
 
+    # colors 리스트
+    colors = [
+        "#EA341B", "#EADA1B", "#71EA1B", "#1BEAD4", "#1B41EA",
+        "#E71BEA", "#EC9576", "#2A9614", "#144E96", "#521496",
+        "#48C9B0", "#F1C40F", "#5B2C6F ", "#A2D9CE", "#EC7063",
+        "#154360", "#F7DC6F", "#AED6F1", "#F09D28", "#E912C4",
+        "#60E91A", "#9E314C", "#F39C12", "#10A69B", "#A6A110",
+    ]
+
     def __init__(self) :     
         super().__init__()
         # design
