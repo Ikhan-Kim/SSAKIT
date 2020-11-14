@@ -261,7 +261,7 @@ font: 9pt &quot;a스마일L&quot;;</string>
 font: 12pt &quot;a디딤돌&quot;;</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>3</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -273,10 +273,10 @@ font: 12pt &quot;a디딤돌&quot;;</string>
      <widget class="QLabel" name="imgLabel">
       <property name="geometry">
        <rect>
-        <x>80</x>
-        <y>20</y>
-        <width>441</width>
-        <height>291</height>
+        <x>50</x>
+        <y>50</y>
+        <width>561</width>
+        <height>441</height>
        </rect>
       </property>
       <property name="text">
@@ -286,21 +286,21 @@ font: 12pt &quot;a디딤돌&quot;;</string>
      <widget class="QWidget" name="detail_widget2" native="true">
       <property name="geometry">
        <rect>
-        <x>600</x>
-        <y>20</y>
+        <x>700</x>
+        <y>250</y>
         <width>301</width>
         <height>311</height>
        </rect>
       </property>
       <property name="styleSheet">
-       <string notr="true">background-color: rgb(255, 255, 255);</string>
+       <string notr="true">background-color: rgb(132, 127, 127);</string>
       </property>
       <widget class="QLabel" name="navigatorLabel">
        <property name="geometry">
         <rect>
-         <x>0</x>
+         <x>10</x>
          <y>0</y>
-         <width>301</width>
+         <width>131</width>
          <height>41</height>
         </rect>
        </property>
@@ -798,7 +798,7 @@ font: 15pt &quot;a로케트&quot;;</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>-20</y>
+      <y>10</y>
       <width>1631</width>
       <height>821</height>
      </rect>
@@ -809,7 +809,7 @@ font: 15pt &quot;a로케트&quot;;</string>
     <widget class="QPushButton" name="btnCreateProject">
      <property name="geometry">
       <rect>
-       <x>530</x>
+       <x>560</x>
        <y>460</y>
        <width>481</width>
        <height>61</height>
@@ -826,9 +826,9 @@ font: 20pt &quot;a로케트&quot;;</string>
     <widget class="QLabel" name="label">
      <property name="geometry">
       <rect>
-       <x>540</x>
+       <x>10</x>
        <y>270</y>
-       <width>471</width>
+       <width>1581</width>
        <height>131</height>
       </rect>
      </property>
@@ -837,7 +837,7 @@ font: 20pt &quot;a로케트&quot;;</string>
 color: rgb(255, 238, 228);</string>
      </property>
      <property name="text">
-      <string>SSAKIT</string>
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;SSAKIT&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
    </widget>
@@ -875,14 +875,31 @@ selection-color: rgb(255, 255, 255);</string>
     <property name="geometry">
      <rect>
       <x>260</x>
-      <y>750</y>
+      <y>100</y>
       <width>1011</width>
-      <height>361</height>
+      <height>621</height>
      </rect>
     </property>
     <property name="styleSheet">
      <string notr="true">background-color: rgb(132, 127, 127);</string>
     </property>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>30</x>
+       <y>190</y>
+       <width>961</width>
+       <height>231</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 13pt &quot;a스마일L&quot;;
+color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;데이터를 모두 업로드 했다면&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;Train Wizard 버튼을 클릭해주세요.&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
    </widget>
    <widget class="QLabel" name="pjtTitle_2">
     <property name="geometry">
@@ -910,23 +927,6 @@ font: 15pt &quot;a로케트&quot;;</string>
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;SSAKIT&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
-   <widget class="QLabel" name="label_6">
-    <property name="geometry">
-     <rect>
-      <x>250</x>
-      <y>100</y>
-      <width>1021</width>
-      <height>631</height>
-     </rect>
-    </property>
-    <property name="styleSheet">
-     <string notr="true">font: 13pt &quot;a스마일L&quot;;
-color: rgb(255, 255, 255);</string>
-    </property>
-    <property name="text">
-     <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;데이터를 모두 업로드 했다면&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;Train Wizard 버튼을 클릭해주세요.&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-    </property>
-   </widget>
    <zorder>button_widget</zorder>
    <zorder>detail_widget</zorder>
    <zorder>tabWidget</zorder>
@@ -936,7 +936,6 @@ color: rgb(255, 255, 255);</string>
    <zorder>line_3</zorder>
    <zorder>widgetInfo</zorder>
    <zorder>pjtTitle_2</zorder>
-   <zorder>label_6</zorder>
    <zorder>mainWidget</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
