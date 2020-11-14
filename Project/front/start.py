@@ -114,6 +114,7 @@ class Worker(QRunnable):
 class AnotherFormLayout(QDialog):
     NumGridRows = 3
     NumButtons = 4
+    sw_new_continue = 'new'
     colorSignal = pyqtSignal()
 
     def __init__(self):
@@ -194,7 +195,8 @@ class AnotherFormLayout(QDialog):
         layoutContinue = QFormLayout()
         self.comboBoxContinue = QComboBox()
         self.comboBoxContinue.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
-        self.comboBoxContinue.addItems(['test', '중', '입니다'])
+        continue_list = os.listdir('./checkpoint')
+        self.comboBoxContinue.addItems(continue_list)
         layoutContinue.addRow(QLabel("select :"), self.comboBoxContinue)
         self.formContinueNetwork.setLayout(layoutContinue)
         # Learn Settings
@@ -220,7 +222,10 @@ class AnotherFormLayout(QDialog):
 
     def accept(self):
         settings_data = []
-        settings_data.append(self.comboBoxNN.currentText())
+        if self.sw_new_continue == 'new':
+            settings_data.append(self.comboBoxNN.currentText())
+        else:
+            settings_data.append(self.comboBoxContinue.currentText())
         aug = [False, False, None, 0]
         if self.checkBoxHorizantal.isChecked() == True:
             aug[0] = True
@@ -236,18 +241,22 @@ class AnotherFormLayout(QDialog):
         #     WindowClass.settingsData.append("Rotation 180")
         settings_data.append(aug)
         settings_data.append(int(self.lineEpochs.text()))
+        settings_data.append(self.setModelName.text())
+        settings_data.append(self.sw_new_continue)
         WindowClass.settingsData = settings_data
         self.colorSignal.emit()
         print(WindowClass.settingsData)
         self.hide()
 
     def newFn(self):
+        self.sw_new_continue = 'new'
         self.formNeuralNetwork.show()
         self.formContinueNetwork.hide()
         self.new_learn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
         self.continue_learn.setStyleSheet("background-color: rgb(175, 171, 171); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
 
     def continueFn(self):
+        self.sw_new_continue = 'continue'
         self.formNeuralNetwork.hide()
         self.formContinueNetwork.show()
         self.new_learn.setStyleSheet("background-color: rgb(175, 171, 171); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
@@ -445,6 +454,7 @@ class WindowClass(QMainWindow, form_class):
         self.testModelSelectDisplay = TestModelSelect()
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
+        self.btnOpenDir.setIcon(QIcon('./assets/folder.jpg')) 
         # 버튼별 함수 실행
         self.btnCreateProject.clicked.connect(self.createProjectFn)
         # self.btnDataLoad.setStyleSheet("background-image: url(front\assets\img\imageUpload.png);")
@@ -455,6 +465,7 @@ class WindowClass(QMainWindow, form_class):
         self.projectNameDisplay.nameSignal.connect(self.createNameFn)
         self.learnSettingDisplay.colorSignal.connect(self.changeColorFn)
         self.btnTest.clicked.connect(self.test)
+        self.btnOpenDir.clicked.connect(self.openDirFn)
         # 터미널
         # self.textBox_terminal.setGeometry(QtCore.QRect(0, 0, 1200, 190))
         # live loss plot
@@ -545,6 +556,8 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.hideColumn(1)
         self.dirTreeView.hideColumn(2)
         self.dirTreeView.hideColumn(3)
+        self.dirTreeView.hideColumn(4)
+        self.dirTreeView.hideColumn(5)
         pixmap = QtGui.QPixmap(self.mainImg)
         pixmap2 = pixmap.scaledToWidth(600)
         self.imgLabel.setPixmap(pixmap2)
@@ -747,6 +760,9 @@ class WindowClass(QMainWindow, form_class):
             cnt_val += len([name for name in os.listdir(self.learnDataPath + '/validation/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/validation/' + folder, name))])
         self.learn_num_data.append(cnt_train)
         self.learn_num_data.append(cnt_val)
+
+    def openDirFn(self):
+        os.startfile(resource_path(self.learnDataPath))
 
 if __name__ == "__main__":
     try:
