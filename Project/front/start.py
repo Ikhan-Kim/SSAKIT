@@ -208,7 +208,7 @@ class AnotherFormLayout(QDialog):
         self.cur = self.conn.cursor()
 
         # 테이블 생성
-        self.createSql = "CREATE TABLE IF NOT EXISTS trainList (idx INTEGER PRIMARY KEY, Augmentation TEXT, Model selection TEXT, Epochs INTEGER, Loss INTEGER, Accuracy INTEGER, Date TEXT)"
+        self.createSql = "CREATE TABLE IF NOT EXISTS trainList (idx INTEGER PRIMARY KEY, Date TEXT,  Model selection TEXT, Augmentation TEXT, Epochs INTEGER, Loss INTEGER, Accuracy INTEGER)"
         self.cmd = self.createSql
         self.cur.execute(self.cmd)
         self.conn.commit()
@@ -216,7 +216,7 @@ class AnotherFormLayout(QDialog):
     def setTLTables(self):
         # Table column 수, header 설정+너비
         self.trainList.setColumnCount(6)
-        self.trainList.setHorizontalHeaderLabels(['Augmentation', 'Model selection', 'Epochs' , 'Loss' , 'Accuracy' , 'Date'])
+        self.trainList.setHorizontalHeaderLabels(['Date', 'Model selection', 'Augmentation',  'Epochs' , 'Loss' , 'Accuracy'])
         # accuracy, 
         # self.classTypeWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         # # Table 너비 조절
