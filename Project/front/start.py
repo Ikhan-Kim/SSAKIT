@@ -230,7 +230,6 @@ class AnotherFormLayout(QDialog):
 
 class ProjectNameClass(QDialog):
     nameSignal = pyqtSignal()
-    class_names = []
     project_list = []
     def __init__(self):
         super().__init__()
@@ -317,6 +316,7 @@ class TestModelSelect(QDialog):
 class WindowClass(QMainWindow, form_class):
     mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
     settingsData = []
+    class_names = []
     projectName = ''
     learn_train_path = ''
     # learn_val_path = ''
@@ -397,6 +397,7 @@ class WindowClass(QMainWindow, form_class):
         treeModel.setRootPath(QDir.rootPath())
         self.dirTreeView.setRootIndex(treeModel.index(self.testPath))
         self.pjtTitle.setText(self.projectName)
+        self.class_names = os.listdir(self.testPath + '/train')
         self.mainWidget.hide()
         
     def changeColorFn(self):
