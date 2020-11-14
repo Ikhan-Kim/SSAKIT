@@ -65,7 +65,7 @@ def test(model_name, window):
 
     for i in range(len(true_labels[0])):
         result_labels.append([true_labels[0][i], predicted_labels[i]])
-
+    print(result_labels)
     real = []
     for i in true_labels[0]:
         real.append(i)
@@ -100,8 +100,8 @@ def test(model_name, window):
             print("Normalized confusion matrix")
         else:
             print('Confusion matrix, without normalization')
-        print(classes)
-        print(cm)
+        # print(classes)
+        # print(cm)
         #대각선값
         diagonal = 0
         #전체값
@@ -111,7 +111,7 @@ def test(model_name, window):
             for j in cm[i]:
                 ssum += j
         acc = round(diagonal / ssum, 3) * 100
-        print(acc)
+        # print(acc)
 
         precision = []
         recall = []
@@ -125,11 +125,10 @@ def test(model_name, window):
             tmp = int(round(cm[i][i] / tmp, 2) * 100)
             precision.append(temp)
             recall.append(tmp)
-        print(precision)
-        print(recall)
         macro_precision = sum(precision) / len(precision)
         print(macro_precision)
-
+        # print(precision)
+        # print(recall)
 
         # classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
 
@@ -142,6 +141,37 @@ def test(model_name, window):
         for i in range(len(cm)):
             for j in range(len(cm)):
                 window.confusionMatrixTable.setItem(i, j, QTableWidgetItem(str(cm[i][j])))
+
+        window.precisionTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        window.precisionTable.setColumnCount(len(cm))
+        window.precisionTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        window.recallTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        window.recallTable.setRowCount(len(cm))
+        window.recallTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        tmpPrecision = []
+        tmpRecall = []
+        for i in range(len(cm)):
+            tmpPrecision.append(str(precision[i]) + "%")
+            tmpRecall.append(str(recall[i]) + "%")
+        window.precisionTable.setHorizontalHeaderLabels(tmpPrecision)
+        window.recallTable.setVerticalHeaderLabels(tmpRecall)
+
+        window.accuracyTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        window.accuracyTable.setColumnCount(1)
+        window.accuracyTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        window.accuracyTable.setHorizontalHeaderLabels([str(acc) + "%"])
+
+        # print(os.listdir('./'))
+        test_classes = os.listdir('./learnData/' + window.projectName + '/test/')
+        img_info = [[[] for j in range(len(cm))] for i in range(len(cm))]
+        for i in range(len(cm)):
+            for j in range(len(result_labels)//len(cm)):
+                img_info[i][result_labels[i * len(result_labels)//len(cm) + j][1]].append(os.listdir('./learndata/' + window.projectName + '/test/' + classes[i])[j])
+        
+        for i in range(10):
+            print(img_info[i])
+                
+
 
         # fig, ax = plt.subplots()
         # im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
