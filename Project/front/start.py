@@ -126,16 +126,27 @@ class AnotherFormLayout(QDialog):
         buttonBox.rejected.connect(self.reject)
         buttonBox.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
 
+        self.formContinueNetwork.hide()
+        self.new_learn = QPushButton("New")
+        self.new_learn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+        self.continue_learn = QPushButton("Continue")
+        self.buttonsWidget = QWidget()
+        self.buttonsWidgetLayout = QHBoxLayout(self.buttonsWidget)
+        self.buttonsWidgetLayout.addWidget(self.new_learn)
+        self.buttonsWidgetLayout.addWidget(self.continue_learn)
+
         mainLayout = QVBoxLayout()
         mainLayout.addWidget(self.formModelName)
         mainLayout.addWidget(self.formAugmentation)
-        # mainLayout.addWidget(self.formDataPreprocessing)
+        mainLayout.addWidget(self.buttonsWidget)
         mainLayout.addWidget(self.formNeuralNetwork)
+        mainLayout.addWidget(self.formContinueNetwork)
         mainLayout.addWidget(self.formLearn)
         mainLayout.addWidget(self.formTrainList)
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
-
+        self.new_learn.clicked.connect(self.newFn)
+        self.continue_learn.clicked.connect(self.continueFn)
         self.setWindowTitle("Train Wizard")
 
         self.setTLTables()
@@ -166,26 +177,24 @@ class AnotherFormLayout(QDialog):
         self.checkBoxRotation180 = QRadioButton("[R-180] Rotation 180", self)
         layout.addRow(self.checkBoxRotation180)
         self.formAugmentation.setLayout(layout)
-        # data preprocessing
-        # self.formDataPreprocessing = QGroupBox("Data Preprocessing")
-        # layout = QFormLayout()
-        # self.lineTarget = QLineEdit()
-        # layout.addRow(QLabel("target size:"), self.lineTarget)
-        # layout.addRow(QLabel("class mode:"), QComboBox())
-        # self.lineBatch = QLineEdit()
-        # layout.addRow(QLabel("batch size:"), self.lineBatch)
-        # self.lineRgb = QLineEdit()
-        # layout.addRow(QLabel("rgb:"), self.lineRgb)
-        # self.formDataPreprocessing.setLayout(layout)
         # nn setting
-        self.formNeuralNetwork = QGroupBox("Neural Network")
+        self.formNeuralNetwork = QGroupBox("New Neural Network")
         self.formNeuralNetwork.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
         layoutNN = QFormLayout()
         self.comboBoxNN = QComboBox()
         self.comboBoxNN.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
         self.comboBoxNN.addItems(["VGG", "InceptionV3", "ResNet152", "EfficientnetB4"])
-        layoutNN.addRow(QLabel("select NN:"), self.comboBoxNN)
+        layoutNN.addRow(QLabel("select :"), self.comboBoxNN)
         self.formNeuralNetwork.setLayout(layoutNN)
+        # continue nn setting
+        self.formContinueNetwork = QGroupBox("Continue Neural Network")
+        self.formContinueNetwork.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
+        layoutContinue = QFormLayout()
+        self.comboBoxContinue = QComboBox()
+        self.comboBoxContinue.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
+        self.comboBoxContinue.addItems(['test', '중', '입니다'])
+        layoutContinue.addRow(QLabel("select :"), self.comboBoxContinue)
+        self.formContinueNetwork.setLayout(layoutContinue)
         # Learn Settings
         self.formLearn = QGroupBox("Learn Settings")
         self.formLearn.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
@@ -229,6 +238,18 @@ class AnotherFormLayout(QDialog):
         self.colorSignal.emit()
         print(WindowClass.settingsData)
         self.hide()
+
+    def newFn(self):
+        self.formNeuralNetwork.show()
+        self.formContinueNetwork.hide()
+        self.new_learn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+        self.continue_learn.setStyleSheet("background-color: rgb(175, 171, 171); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+
+    def continueFn(self):
+        self.formNeuralNetwork.hide()
+        self.formContinueNetwork.show()
+        self.new_learn.setStyleSheet("background-color: rgb(175, 171, 171); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+        self.continue_learn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
 
     # DB 연결, 테이블 생성
     def trainListSqlConnect(self):
