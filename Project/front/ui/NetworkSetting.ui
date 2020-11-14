@@ -309,7 +309,7 @@ font: 9pt &quot;a스마일L&quot;;</string>
 font: 12pt &quot;a디딤돌&quot;;</string>
     </property>
     <property name="currentIndex">
-     <number>3</number>
+     <number>2</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -336,17 +336,6 @@ font: 12pt &quot;a디딤돌&quot;;</string>
      <attribute name="title">
       <string>Plot</string>
      </attribute>
-     <widget class="QWidget" name="formLayoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>1001</width>
-        <height>331</height>
-       </rect>
-      </property>
-      <layout class="QFormLayout" name="plotLayout"/>
-     </widget>
     </widget>
     <widget class="QWidget" name="result">
      <attribute name="title">
@@ -357,16 +346,6 @@ font: 12pt &quot;a디딤돌&quot;;</string>
      <attribute name="title">
       <string>test result</string>
      </attribute>
-     <widget class="QTableWidget" name="confusionMatrixTable">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>331</width>
-        <height>331</height>
-       </rect>
-      </property>
-     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="directory_widget" native="true">
@@ -452,7 +431,7 @@ font: 15pt &quot;a로케트&quot;;</string>
        <x>10</x>
        <y>10</y>
        <width>1251</width>
-       <height>191</height>
+       <height>181</height>
       </rect>
      </property>
      <property name="styleSheet">
@@ -464,7 +443,7 @@ font: 15pt &quot;a로케트&quot;;</string>
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>10</y>
+      <y>770</y>
       <width>1631</width>
       <height>821</height>
      </rect>
@@ -918,7 +897,7 @@ background-color: rgb(132, 127, 127);</string>
     <property name="geometry">
      <rect>
       <x>260</x>
-      <y>120</y>
+      <y>99</y>
       <width>1011</width>
       <height>361</height>
      </rect>
