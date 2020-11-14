@@ -489,19 +489,16 @@ class WindowClass(QMainWindow, form_class):
         if self.projectName:
             self.pathName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
                                                             QFileDialog.ShowDirsOnly)
-            self.class_names = os.listdir(self.pathName)
-            print(self.pathName)
-            
-            # if self.pathName:
-            #     self.dirName = self.pathName.split('/')[-1]
-            #     set_directory.set_directory(
-            #         self.projectName, self.dirName, self.pathName)
             if self.pathName:
-                for dirName in self.class_names:
-                    set_directory.set_directory(
-                        self.projectName, dirName, self.pathName + '/' + dirName
-                    )
-                # self.setWindowTitle(self.projectName)
+                self.class_names = os.listdir(self.pathName)
+                print(self.pathName)
+                
+                if self.pathName:
+                    for dirName in self.class_names:
+                        set_directory.set_directory(
+                            self.projectName, dirName, self.pathName + '/' + dirName
+                        )
+                    # self.setWindowTitle(self.projectName)
         else:
             self.warningMSG("주의", "프로젝트를 먼저 생성/선택 해주십시오.")
 
