@@ -4,6 +4,8 @@ from PyQt5.QtWidgets import *
 from PyQt5 import uic, QtGui, QtCore
 from PyQt5.QtGui import *
 import time
+from PIL import Image
+from stat import *
 
 # sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 # from back import create_dir, set_directory
@@ -498,7 +500,6 @@ class WindowClass(QMainWindow, form_class):
                         set_directory.set_directory(
                             self.projectName, dirName, self.pathName + '/' + dirName
                         )
-                    # self.setWindowTitle(self.projectName)
         else:
             self.warningMSG("주의", "프로젝트를 먼저 생성/선택 해주십시오.")
 
@@ -522,6 +523,19 @@ class WindowClass(QMainWindow, form_class):
         pixmap2 = pixmap.scaledToWidth(430)
         self.imgLabel.setPixmap(pixmap2)
 
+        img = Image.open(self.mainImg)
+        print(img)
+        st = os.stat(self.mainImg)
+        self.fileName.setText(img.filename.split('/')[-1])
+        self.fileSize.setText(str(st[ST_SIZE]))
+        self.extension.setText(img.format)
+        if img.mode == 'RGB':
+            self.channel.setText("3")
+        else:
+            self.channel.setText("1")
+        self.wValue.setText(str(img.width))
+        self.hValue.setText(str(img.height))
+       
     # ▼▼ codes for multiTrhead ▼▼
     def progress_fn(self, n):
         print("%d%% done" % n)
