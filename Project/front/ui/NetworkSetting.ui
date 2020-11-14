@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1613</width>
-    <height>738</height>
+    <height>780</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -309,7 +309,7 @@ font: 9pt &quot;a스마일L&quot;;</string>
 font: 12pt &quot;a디딤돌&quot;;</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>2</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -336,17 +336,6 @@ font: 12pt &quot;a디딤돌&quot;;</string>
      <attribute name="title">
       <string>Plot</string>
      </attribute>
-     <widget class="QWidget" name="formLayoutWidget">
-      <property name="geometry">
-       <rect>
-        <x>0</x>
-        <y>0</y>
-        <width>1001</width>
-        <height>331</height>
-       </rect>
-      </property>
-      <layout class="QFormLayout" name="plotLayout"/>
-     </widget>
     </widget>
     <widget class="QWidget" name="result">
      <attribute name="title">
@@ -861,7 +850,6 @@ background-color: rgb(132, 127, 127);</string>
     <zorder>hLabel</zorder>
     <zorder>hValue</zorder>
     <zorder>xValue</zorder>
-    <zorder>yLabel</zorder>
     <zorder>fileSize</zorder>
     <zorder>channel</zorder>
     <zorder>extension</zorder>
@@ -874,6 +862,7 @@ background-color: rgb(132, 127, 127);</string>
     <zorder>channelLabel</zorder>
     <zorder>yValue</zorder>
     <zorder>xLabel</zorder>
+    <zorder>yLabel</zorder>
    </widget>
    <widget class="Line" name="line_5">
     <property name="geometry">
@@ -904,6 +893,36 @@ background-color: rgb(132, 127, 127);</string>
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
+   <widget class="QWidget" name="widgetInfo" native="true">
+    <property name="geometry">
+     <rect>
+      <x>260</x>
+      <y>99</y>
+      <width>1011</width>
+      <height>361</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color: rgb(132, 127, 127);</string>
+    </property>
+    <widget class="QLabel" name="label_6">
+     <property name="geometry">
+      <rect>
+       <x>190</x>
+       <y>130</y>
+       <width>641</width>
+       <height>71</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">font: 13pt &quot;a스마일L&quot;;
+color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;데이터를 모두 업로드 했다면&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;Train Wizard 버튼을 클릭해주세요.&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+    </widget>
+   </widget>
    <zorder>button_widget</zorder>
    <zorder>detail_widget</zorder>
    <zorder>tabWidget</zorder>
@@ -916,6 +935,7 @@ background-color: rgb(132, 127, 127);</string>
    <zorder>line_5</zorder>
    <zorder>line_4</zorder>
    <zorder>label_5</zorder>
+   <zorder>widgetInfo</zorder>
    <zorder>mainWidget</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
