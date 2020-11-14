@@ -6,7 +6,7 @@ class PlotLosses(keras.callbacks.Callback):
         self.input_epochs = input_epochs
         self.textBox_terminal = window.textBox_terminal
         self.fig = window.fig
-        self.canvas = window.tabWidget.Plot
+        self.canvas = window.canvas
 
     def on_train_begin(self, logs={}):
         self.i = 0

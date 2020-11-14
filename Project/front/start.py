@@ -360,8 +360,8 @@ class WindowClass(QMainWindow, form_class):
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
 
         self.fig = plt.Figure()
-        self.tabWidget.Plot = FigureCanvas(self.fig)
-        # self.Plot.addWidget(self.canvas)
+        self.canvas = FigureCanvas(self.fig)
+        self.plotLayout.addWidget(self.canvas)
 
         self.setWindowTitle('SSAKIT')
 
@@ -503,10 +503,6 @@ class WindowClass(QMainWindow, form_class):
         self.testModelSelectDisplay.show()
         # test_function2.test()
         self.btnColorChange(self.btnTest)
-        if self.isTrained:
-            test_function2.test()
-        else:
-            self.warningMSG("주의", "모델 학습을 먼저 실행해 주십시오.")
 
     # ClassEditWidget띄우기
     def ClassEditBtnFunc(self):
