@@ -133,7 +133,7 @@ class AnotherFormLayout(QDialog):
         mainLayout.addWidget(buttonBox)
         self.setLayout(mainLayout)
 
-        self.setWindowTitle("Train Settings")
+        self.setWindowTitle("Train Wizard")
 
         self.setTLTables()
 
