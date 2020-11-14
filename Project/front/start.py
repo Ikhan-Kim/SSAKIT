@@ -236,6 +236,7 @@ class AnotherFormLayout(QDialog):
         #     WindowClass.settingsData.append("Rotation 180")
         settings_data.append(aug)
         settings_data.append(int(self.lineEpochs.text()))
+        settings_data.append(self.setModelName.text())
         WindowClass.settingsData = settings_data
         self.colorSignal.emit()
         print(WindowClass.settingsData)
