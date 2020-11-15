@@ -91,7 +91,6 @@ class Worker(QRunnable):
 
     @pyqtSlot()
     def run(self):
-<<<<<<< HEAD
         ### retrain test입니다.
         if self.settingsData[4] == 'new':
             if self.settingsData[0] == 'VGG':
@@ -107,34 +106,15 @@ class Worker(QRunnable):
                 print('ResNet')
                 ResNet152_test1.Learn(
                     self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
-            elif self.settingsData[0] == 'EfficientnetB4':
-                print('EfficientnetB4')
-                EfficientnetB4_test1.Learn(
+            elif self.settingsData[0] == 'EfficientnetB0':
+                print('EfficientnetB0')
+                EfficientnetB0_test1.Learn(
                     self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
         # elif self.settingsData[4] == 'continue':
         #     # 여기에 retrain
         #     Retrain_model.retrain(
         #         self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow
         #     )
-=======
-        if self.settingsData[0] == 'VGG':
-            print('VGG')
-            print(self.learn_train_path, self.learn_val_path)
-            Vgg16_test1.Learn(
-                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
-        elif self.settingsData[0] == 'InceptionV3':
-            print('Inception')
-            InceptionV3_test1.Learn(
-                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
-        elif self.settingsData[0] == 'ResNet152':
-            print('ResNet')
-            ResNet152_test1.Learn(
-                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
-        elif self.settingsData[0] == 'EfficientnetB0':
-            print('EfficientnetB0')
-            EfficientnetB0_test1.Learn(
-                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
->>>>>>> b7fa3988deeaf7c2d9e642f11baada6faa0058fd
         myWindow.btnEnable()
 
 # preprocess setting popup #train wizard
