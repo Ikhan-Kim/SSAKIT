@@ -11,7 +11,7 @@ from stat import *
 # from back import create_dir, set_directory
 # from back.learning_test import InceptionV3_test1, ResNet50_test1, Vgg16_test1, test_function2, EfficientnetB0_test1
 from mymodules import create_dir, set_directory
-from mymodules import InceptionV3_test1, ResNet50_test1, Vgg16_test1, EfficientnetB0_test1, test_function2, Retrain_model
+from mymodules import InceptionV3_test1, ResNet50_test1, Vgg16_test1, EfficientnetB0_test1, test_function2, Retrain_model, test_function3
 
 import tensorflow as tf
 import numpy as np
@@ -453,7 +453,15 @@ class TestModelSelect(QDialog):
 
     def itemActivated_event(self, item):
         self.hide()
-        test_function2.test(item.text(), myWindow)
+        # if myWindow.settingsData:
+        if item.text().split('_')[0] == 'EfficientnetB0':
+            print("3")
+            test_function3.test(item.text(), myWindow)
+
+        else:
+            test_function2.test(item.text(), myWindow)
+        # else:
+        #     print("error")
 
 # MainWindow
 class WindowClass(QMainWindow, form_class):
