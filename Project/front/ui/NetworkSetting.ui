@@ -694,7 +694,7 @@ font: 15pt &quot;a로케트&quot;;</string>
    <widget class="QWidget" name="mainWidget" native="true">
     <property name="geometry">
      <rect>
-      <x>-10</x>
+      <x>0</x>
       <y>0</y>
       <width>1631</width>
       <height>821</height>
@@ -807,25 +807,6 @@ color: rgb(255, 255, 255);</string>
       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;데이터를 모두 업로드 했다면 Train Wizard 버튼을 클릭해주세요.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="megaphone_2">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>0</y>
-       <width>51</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-     <property name="flat">
-      <bool>true</bool>
-     </property>
-    </widget>
    </widget>
    <widget class="QLabel" name="pjtTitle_2">
     <property name="geometry">
@@ -853,6 +834,25 @@ font: 40pt &quot;a로케트&quot;;</string>
      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;right&quot;&gt;SSA&lt;span style=&quot; color:#ffc000;&quot;&gt;K&lt;/span&gt;IT&lt;/p&gt;&lt;p align=&quot;right&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="megaphone_2">
+    <property name="enabled">
+     <bool>true</bool>
+    </property>
+    <property name="geometry">
+     <rect>
+      <x>0</x>
+      <y>770</y>
+      <width>71</width>
+      <height>41</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="flat">
+     <bool>true</bool>
+    </property>
+   </widget>
    <zorder>button_widget</zorder>
    <zorder>detail_widget</zorder>
    <zorder>tabWidget</zorder>
@@ -862,6 +862,7 @@ font: 40pt &quot;a로케트&quot;;</string>
    <zorder>line_3</zorder>
    <zorder>widgetInfo</zorder>
    <zorder>pjtTitle_2</zorder>
+   <zorder>megaphone_2</zorder>
    <zorder>mainWidget</zorder>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
