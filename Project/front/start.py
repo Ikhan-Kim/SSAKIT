@@ -497,10 +497,14 @@ class WindowClass(QMainWindow, form_class):
         # self.testModelSelectDisplay = TestModelSelect()
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
-        self.btnOpenDir.setIcon(QIcon('./assets/folder.jpg')) 
+        self.btnOpenDir.setIcon(QIcon('./assets/folder.png'))
+        self.btnOpenDir.setIconSize(QSize(23, 23)) 
         self.btnDataLoad.setIcon(QIcon('./assets/img/imageUpload.png'))
-        # self.megaphone_2.setEnabled(False)
-        self.megaphone_2.setIcon(QIcon('./assets/img/megaphone.png'))
+        self.btnDataLoad.setIconSize(QSize(25, 25))        
+        self.megaphone_2.setIcon(QIcon('./assets/img/megaphone1.png'))
+        self.megaphone_2.setIconSize(QSize(30, 30))
+        self.f5Btn.setIcon(QIcon('./assets/img/sync.png'))
+        self.f5Btn.setIconSize(QSize(20, 20))
         
         # 버튼별 함수 실행
         self.btnCreateProject.clicked.connect(self.createProjectFn)
