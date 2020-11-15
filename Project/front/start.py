@@ -655,6 +655,7 @@ class WindowClass(QMainWindow, form_class):
         self.testModelSelectDisplay.show()
         # test_function2.test()
         self.btnColorChange(self.btnTest)
+        self.cnt_file()
 
     # ClassEditWidget띄우기
     def ClassEditBtnFunc(self):
