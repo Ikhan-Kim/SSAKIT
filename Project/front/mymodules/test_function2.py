@@ -66,7 +66,7 @@ def test(model_name, window):
 
     for i in range(len(true_labels[0])):
         result_labels.append([true_labels[0][i], predicted_labels[i]])
-
+    # print(result_labels)
     real = []
     for i in true_labels[0]:
         real.append(i)
@@ -101,8 +101,8 @@ def test(model_name, window):
             print("Normalized confusion matrix")
         else:
             print('Confusion matrix, without normalization')
-        print(classes)
-        print(cm)
+        # print(classes)
+        # print(cm)
         #대각선값
         diagonal = 0
         #전체값
@@ -112,7 +112,7 @@ def test(model_name, window):
             for j in cm[i]:
                 ssum += j
         acc = round(diagonal / ssum, 3) * 100
-        print(acc)
+        # print(acc)
 
         precision = []
         recall = []
@@ -126,14 +126,43 @@ def test(model_name, window):
             tmp = int(round(cm[i][i] / tmp, 2) * 100)
             precision.append(temp)
             recall.append(tmp)
-        print(precision)
-        print(recall)
         macro_precision = sum(precision) / len(precision)
         print(macro_precision)
-
+        # print(precision)
+        # print(recall)
 
         # classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
 
+        # confusion matrix에 대응되는 이미지 파일 주소를 저장
+        test_classes = os.listdir('./learnData/' + window.projectName + '/test/')
+        img_info = [[[] for j in range(len(cm))] for i in range(len(cm))]
+        for i in range(len(cm)):
+            for j in range(len(result_labels)//len(cm)):
+                img_info[i][result_labels[i * len(result_labels)//len(cm) + j][1]].append(os.listdir('./learndata/' + window.projectName + '/test/' + classes[i])[j])
+        
+        def show_img(i, j):
+            for x in reversed(range(window.testedImageLayout.count())): 
+                window.testedImageLayout.itemAt(x).widget().setParent(None)
+            print(i, j, img_info[i][j])
+            img_path = './learnData/' + window.projectName + '/test/' + classes[i] + '/'
+            scrollArea = QScrollArea()
+            # scrollArea.setWidgetResizable(True)
+            # scrollArea.setGeometry(750, 40, 150, 1000)
+            l = QVBoxLayout()
+            for file in img_info[i][j]:
+                pixmap = QPixmap(os.path.join(img_path, file))
+                if not pixmap.isNull():
+                    pixmap = pixmap.scaled(96, 96)
+                    imgLabel = QLabel(pixmap=pixmap)
+                    # scrollArea.setWidget(imgLabel)
+                    # window.testedImageLayout.addWidget(imgLabel)
+                    l.addWidget(imgLabel)
+            w = QWidget()
+            w.setLayout(l)
+            scrollArea.setWidget(w)
+            window.testedImageLayout.addWidget(scrollArea)
+
+        # show confusion matrix
         window.confusionMatrixTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         window.confusionMatrixTable.setColumnCount(len(cm))
         window.confusionMatrixTable.setHorizontalHeaderLabels(classes)
@@ -143,6 +172,34 @@ def test(model_name, window):
         for i in range(len(cm)):
             for j in range(len(cm)):
                 window.confusionMatrixTable.setItem(i, j, QTableWidgetItem(str(cm[i][j])))
+        
+        # show confusion matrix image
+        window.confusionMatrixTable.cellClicked.connect(show_img)
+
+
+        # show precision, recall, accuracy
+        window.precisionTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        window.precisionTable.setColumnCount(len(cm))
+        window.precisionTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        window.recallTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        window.recallTable.setRowCount(len(cm))
+        window.recallTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        tmpPrecision = []
+        tmpRecall = []
+        for i in range(len(cm)):
+            tmpPrecision.append(str(precision[i]) + "%")
+            tmpRecall.append(str(recall[i]) + "%")
+        window.precisionTable.setHorizontalHeaderLabels(tmpPrecision)
+        window.recallTable.setVerticalHeaderLabels(tmpRecall)
+
+        window.accuracyTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        window.accuracyTable.setColumnCount(1)
+        window.accuracyTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        window.accuracyTable.setHorizontalHeaderLabels([str(acc) + "%"])
+
+        
+
+
 
         # fig, ax = plt.subplots()
         # im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
