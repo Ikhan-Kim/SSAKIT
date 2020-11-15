@@ -548,6 +548,9 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.setModel(treeModel)
         treeModel.setRootPath(QDir.rootPath())
         self.dirTreeView.setRootIndex(treeModel.index(self.learnDataPath))
+        self.dirTreeView.hideColumn(1)
+        self.dirTreeView.hideColumn(2)
+        self.dirTreeView.hideColumn(3)
         self.pjtTitle.setText(self.projectName)
         self.class_names = os.listdir(self.learnDataPath + '/train')
         self.mainWidget.hide()
@@ -594,11 +597,6 @@ class WindowClass(QMainWindow, form_class):
 
     def fileViewFn(self, index):
         self.mainImg = self.dirTreeView.model().filePath(index)
-        self.dirTreeView.hideColumn(1)
-        self.dirTreeView.hideColumn(2)
-        self.dirTreeView.hideColumn(3)
-        self.dirTreeView.hideColumn(4)
-        self.dirTreeView.hideColumn(5)
         pixmap = QtGui.QPixmap(self.mainImg)
         pixmap2 = pixmap.scaledToWidth(600)
         self.imgLabel.setPixmap(pixmap2)
