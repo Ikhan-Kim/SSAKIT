@@ -143,19 +143,14 @@ def test(model_name, window):
         def show_img(i, j):
             for x in reversed(range(window.testedImageLayout.count())): 
                 window.testedImageLayout.itemAt(x).widget().setParent(None)
-            print(i, j, img_info[i][j])
             img_path = './learnData/' + window.projectName + '/test/' + classes[i] + '/'
             scrollArea = QScrollArea()
-            # scrollArea.setWidgetResizable(True)
-            # scrollArea.setGeometry(750, 40, 150, 1000)
             l = QVBoxLayout()
             for file in img_info[i][j]:
                 pixmap = QPixmap(os.path.join(img_path, file))
                 if not pixmap.isNull():
                     pixmap = pixmap.scaled(96, 96)
                     imgLabel = QLabel(pixmap=pixmap)
-                    # scrollArea.setWidget(imgLabel)
-                    # window.testedImageLayout.addWidget(imgLabel)
                     l.addWidget(imgLabel)
             w = QWidget()
             w.setLayout(l)
@@ -196,6 +191,8 @@ def test(model_name, window):
         window.accuracyTable.setColumnCount(1)
         window.accuracyTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         window.accuracyTable.setHorizontalHeaderLabels([str(acc) + "%"])
+        
+        window.macroPrecisionLabel.setText(str(macro_precision) + "%")
 
         
 
