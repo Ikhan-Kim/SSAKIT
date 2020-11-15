@@ -632,9 +632,9 @@ class WindowClass(QMainWindow, form_class):
         self.btnTest.setEnabled(True)
 
     def training(self):
-        self.infoMSG.setText("training이 완료되면 Test 버튼을 클릭 해 주세요.")
-        self.tabWidget.setCurrentIndex(1)
         if self.learn_train_path:
+            self.infoMSG.setText("training이 완료되면 Test 버튼을 클릭 해 주세요.")
+            self.tabWidget.setCurrentIndex(1)
             self.btnColorChange(self.btnTraining)
             self.btnDisable()
             self.textBox_terminal.append('Ready for training...')
