@@ -18,15 +18,15 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
     INPUT_SIZE = 200
     CHANNELS = 3
     INPUT_SHAPE = (INPUT_SIZE, INPUT_SIZE, CHANNELS)
-    NUM_CLASSES = window.learn_num_data[0]
-    NUM_TRAIN_IMGS = window.learn_num_data[1]
-    NUM_VAL_IMGS = window.learn_num_data[2]
+    NUM_CLASSES = 10
+    NUM_TRAIN_IMGS = 3000
+    NUM_VAL_IMGS = 1000
     BATCH_SIZE = 32
 
     HORIZONTAL_FLIP = augmentation[0]
     VERTICAL_FLIP = augmentation[1]
-    BRIGHTNESS_RANGE = augmentation[2]
-    ROTATION_RANGE = augmentation[3]
+    BRIGHTNESS_RANGE = None
+    ROTATION_RANGE = augmentation[2]
 
     EPOCHS = input_epochs
     train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
@@ -61,7 +61,7 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
 
 
     # Load pre-trained model
-    base_model = tf.keras.applications.ResNet152(include_top=False, 
+    base_model = tf.keras.applications.ResNet50(include_top=False, 
                                                 weights='imagenet', 
                                                 input_shape=INPUT_SHAPE,)
 
@@ -73,9 +73,9 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
     model.add(base_model)
     model.add(tf.keras.layers.Flatten())
     model.add(tf.keras.layers.Dense(512, activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.5))
+    # model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(256, activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.5))
+    # model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(NUM_CLASSES, activation='softmax'))
 
     model.summary()
@@ -86,17 +86,17 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
                 metrics = ['accuracy'])
 
     # Callbacks
-    checkpoint_filepath = os.path.join(BASE_DIR, 'checkpoint', window.settingsData[3] + '.h5')
+    checkpoint_filepath = os.path.join(BASE_DIR, 'learning_test/checkpoint/ResNet152_cifar10.h5')
 
     plotLosses = PlotLosses(input_epochs, window)
 
     callbacks = [
-        tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_loss',
+        tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_accuracy',
                                         #  restore_best_weights=True
                                         ),
         tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
-                                            monitor='val_loss',
-                                            mode='min',
+                                            monitor='val_accuracy',
+                                            mode='max',
                                             save_best_only=True,
                                             # save_weights_only=True,
                                         ),
@@ -109,9 +109,10 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
     window.textBox_terminal.append("Training Done!")
     val_loss = history.history['val_loss']
     val_accuracy = history.history['val_accuracy']
-    
-    Max_val_accuracy = round(np.max(val_accuracy), 4))
-    Min_val_loss = round(np.min(val_loss), 4)
-    message = "Epoch: "+ str(np.argmin(val_loss)+1)+ " , Min val_loss: "+ str(Min_val_loss)
+
+    max_val_accuracy = round(np.max(val_accuracy), 4))
+    min_val_loss = round(np.min(val_loss), 4)
+    message = "Epoch: "+ str(np.argmin(val_loss)+1)+ " , Min val_loss: "+ str(min_val_loss)
     window.textBox_terminal.append(message)
+
     plt.close()
