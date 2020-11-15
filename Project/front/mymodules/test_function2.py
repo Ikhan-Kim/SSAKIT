@@ -112,8 +112,15 @@ def test(model_name, window):
             for j in range(len(cm)):
                 temp += cm[j][i]
                 tmp += cm[i][j]
-            temp = int(round(cm[i][i] / temp, 2) * 100)
-            tmp = int(round(cm[i][i] / tmp, 2) * 100)
+            if temp == 0:
+                temp = 0
+            else:
+                temp = int(round(cm[i][i] / temp, 2) * 100)
+            if tmp == 0:
+                tmp = 0
+            else:
+                tmp = int(round(cm[i][i] / tmp, 2) * 100)
+
             precision.append(temp)
             recall.append(tmp)
         macro_precision = sum(precision) / len(precision)

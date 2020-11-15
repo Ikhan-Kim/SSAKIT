@@ -541,7 +541,7 @@ class WindowClass(QMainWindow, form_class):
         self.loadNavi()
 
         # TL_insert()
-        # self.ResultSave.clicked.connect(self.TL_insert)
+        self.ResultSave.clicked.connect(self.TL_insert)
 
     def btnColorChange(self, btn):
         # print(" btn change", btn)
