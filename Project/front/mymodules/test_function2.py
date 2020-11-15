@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import itertools
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from .Grad_cam import *
 
 from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics import plot_confusion_matrix
@@ -124,6 +126,25 @@ def test(model_name, window):
             for j in range(len(result_labels)//len(cm)):
                 img_info[i][result_labels[i * len(result_labels)//len(cm) + j][1]].append([os.listdir('./learndata/' + window.projectName + '/test/' + classes[i])[j], result_labels[i * len(cm) + j][2]])
         
+        # click 함수가 없는 Widget들을 클릭 가능하게 해주는 함수
+        def clickable(widget):
+            class Filter(QObject):
+                clicked = pyqtSignal()	#pyside2 사용자는 pyqtSignal() -> Signal()로 변경
+                def eventFilter(self, obj, event):
+                    if obj == widget:
+                        if event.type() == QEvent.MouseButtonRelease:
+                            if obj.rect().contains(event.pos()):
+                                self.clicked.emit()
+                                # The developer can opt for .emit(obj) to get the object within the slot.
+                                return True
+                    
+                    return False
+            
+            filter = Filter(widget)
+            widget.installEventFilter(filter)
+            return filter.clicked
+        
+
         def show_img(i, j):
             for x in reversed(range(window.testedImageLayout.count())): 
                 window.testedImageLayout.itemAt(x).widget().setParent(None)
@@ -135,6 +156,11 @@ def test(model_name, window):
                 if not pixmap.isNull():
                     pixmap = pixmap.scaled(96, 96)
                     imgLabel = QLabel(pixmap=pixmap)
+                    
+                    def show_cam():
+                        VGG16_Grad_cam(classes[i], file[0])
+                    clickable(imgLabel).connect(show_cam)
+                    # clickable(imgLabel).connect(show_cam(classes[i], file[0]))
                     imgLabelFileName = QLabel(file[0])
                     imgPrediction = QLabel(str(file[1]) + "%")
                     l.addWidget(imgLabel)
