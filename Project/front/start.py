@@ -515,7 +515,7 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         self.btnTraining.clicked.connect(self.training)
         self.projectNameDisplay.nameSignal.connect(self.createNameFn)
-        
+        self.pushButton_5.clicked.connect(self.ikhantest)
         self.btnTest.clicked.connect(self.test)
         self.btnOpenDir.clicked.connect(self.openDirFn)
         # 터미널
@@ -542,7 +542,8 @@ class WindowClass(QMainWindow, form_class):
 
         # TL_insert()
         self.ResultSave.clicked.connect(self.TL_insert)
-
+    def ikhantest(self):
+        print(self.settingsData)
     def btnColorChange(self, btn):
         # print(" btn change", btn)
         btns = [self.btnLearnSettings,  self.btnTraining, self.btnTest]
@@ -854,7 +855,7 @@ class WindowClass(QMainWindow, form_class):
         else:
             Date = month +'/' + day +' ' + hour + ':' + minute
             print(Date)
-            Network, Augmentation, Epochs, Model_Name, Loss , Accuracy = self.settingsData[:]
+            Network, Augmentation, Epochs, Model_Name, sibal, Loss , Accuracy = self.settingsData[:]
             # print("Network, Augmentation, Epochs, Model_Name, Loss , Accuracy", Network, Augmentation, Epochs, Model_Name, Loss , Accuracy)
 
             Aug_lst = []
