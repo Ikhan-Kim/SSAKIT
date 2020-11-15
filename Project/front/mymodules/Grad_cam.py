@@ -118,8 +118,8 @@ def EFFICIENTNETB0_Grad_cam(class_name, image_name, project_name):
     CLASS_NAME = class_name
     IMAGE_NAME = image_name
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    test_dir = os.path.join(BASE_DIR, project_name + '/test')
-    IMAGE_PATH = os.path.join(BASE_DIR, project_name + '/test/'+CLASS_NAME +'/' +IMAGE_NAME)
+    test_dir = os.path.join(BASE_DIR, 'learnData/' + project_name +'/test')
+    IMAGE_PATH = os.path.join(BASE_DIR, 'learnData/'+ project_name +'/test/'+CLASS_NAME +'/' +IMAGE_NAME)
     # Define hyperparameter
     INPUT_SIZE = 224
     CHANNELS = 3
@@ -177,8 +177,8 @@ def RESNET50_Grad_cam(class_name, image_name, project_name):
     CLASS_NAME = class_name
     IMAGE_NAME = image_name
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    test_dir = os.path.join(BASE_DIR, project_name + '/test')
-    IMAGE_PATH = os.path.join(BASE_DIR, project_name + '/test/'+CLASS_NAME +'/' +IMAGE_NAME)
+    test_dir = os.path.join(BASE_DIR, 'learnData/' + project_name +'/test')
+    IMAGE_PATH = os.path.join(BASE_DIR, 'learnData/'+ project_name +'/test/'+CLASS_NAME +'/' +IMAGE_NAME)
     # Define hyperparameter
     INPUT_SIZE = 224
     CHANNELS = 3
