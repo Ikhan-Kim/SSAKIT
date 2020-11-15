@@ -738,7 +738,7 @@ font: 13pt &quot;a로케트&quot;;</string>
       <property name="geometry">
        <rect>
         <x>670</x>
-        <y>10</y>
+        <y>30</y>
         <width>61</width>
         <height>31</height>
        </rect>
@@ -909,7 +909,7 @@ color: rgb(255, 255, 255);</string>
 color: rgb(255, 255, 255);</string>
        </property>
        <property name="text">
-        <string>Delete</string>
+        <string>No</string>
        </property>
       </widget>
       <widget class="QLabel" name="label_7">
@@ -1039,7 +1039,7 @@ font: 15pt &quot;a로케트&quot;;</string>
     <property name="geometry">
      <rect>
       <x>-10</x>
-      <y>10</y>
+      <y>0</y>
       <width>1631</width>
       <height>821</height>
      </rect>
