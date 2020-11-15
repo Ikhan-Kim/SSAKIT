@@ -11,11 +11,7 @@ from stat import *
 # from back import create_dir, set_directory
 # from back.learning_test import InceptionV3_test1, ResNet50_test1, Vgg16_test1, test_function2, EfficientnetB0_test1
 from mymodules import create_dir, set_directory
-<<<<<<< HEAD
-from mymodules import InceptionV3_test1, ResNet152_test1, Vgg16_test1, EfficientnetB0_test1, test_function2, Retrain_model
-=======
-from mymodules import InceptionV3_test1, ResNet50_test1, Vgg16_test1, EfficientnetB0_test1, test_function2
->>>>>>> feature/update_functions
+from mymodules import InceptionV3_test1, ResNet50_test1, Vgg16_test1, EfficientnetB0_test1, test_function2, Retrain_model
 
 import tensorflow as tf
 import numpy as np
