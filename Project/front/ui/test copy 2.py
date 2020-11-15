@@ -51,7 +51,7 @@ class WindowClass(QMainWindow, form_class) :
     # DB)-1. SQL 연결 및 테이블 생성
     def sqlConnect(self):
         try: 
-            self.conn = sqlite3.connect("SSAKIT_DB.db", isolation_level=None)
+            self.conn = sqlite3.connect("dbName", isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
@@ -118,7 +118,7 @@ class WindowClass(QMainWindow, form_class) :
         # # self.setTables(rows)
 
         # #데이터베이스 내부 테이블의 내용을 모두 추출
-        # self.conn = sqlite3.connect("SSAKIT_DB.db")
+        # self.conn = sqlite3.connect("dbName")
         # self.cur = conn.cursor()
         
         # self.sql = "SELECT * FROM classLabel"

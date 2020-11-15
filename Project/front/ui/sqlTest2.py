@@ -14,7 +14,7 @@ class sql(QWidget):
     def sqlConnect(self):
         # sql 연결
         try: 
-            self.conn = sqlite3.connect("SSAKIT_DB.db", isolation_level=None)
+            self.conn = sqlite3.connect("dbName", isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)

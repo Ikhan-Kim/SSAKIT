@@ -274,7 +274,7 @@ class AnotherFormLayout(QDialog):
     # DB 연결, 테이블 생성
     def trainListSqlConnect(self):
         try: 
-            self.conn = sqlite3.connect("SSAKIT_DB.db", isolation_level=None)
+            self.conn = sqlite3.connect("dbName", isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
@@ -463,13 +463,6 @@ class WindowClass(QMainWindow, form_class):
     # learn_val_path = ''
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
-    # DB에 넣을 데이터 불러오기 => 불러온 이미지의 label 기반
-    data = [
-    {"color": "#FF5733", "label": "12R0", "train":50, "val":30, "test": 30},
-    {"color": "#3372FF", "label": "4300", "train":50, "val":30, "test": 30},
-    {"color": "#61FF33", "label": "4301", "train":50, "val":30, "test": 30},
-    {"color": "#EA33FF", "label": "7501", "train":50, "val":30, "test": 30},
-    ]
     # colors 리스트
     colors = [
         "#EA341B", "#EADA1B", "#71EA1B", "#1BEAD4", "#1B41EA",
@@ -520,7 +513,7 @@ class WindowClass(QMainWindow, form_class):
         self.sqlConnect()
 
         # ClassEditWidget 불러오기
-        self.openClassEditWidget = ClassEditWidget(WindowClass.data)
+        self.openClassEditWidget = ClassEditWidget(WindowClass.class_data)
         # class Edit btn 클릭 => 위젯 열기
         self.classEditBtn.clicked.connect(self.ClassEditBtnFunc)
         # edit 금지 모드
@@ -687,8 +680,9 @@ class WindowClass(QMainWindow, form_class):
 
     # DB) SQL 연결 및 테이블 생성
     def sqlConnect(self):
+        dbName = WindowClass.projectName + ".db"
         try: 
-            self.conn = sqlite3.connect("SSAKIT_DB.db", isolation_level=None)
+            self.conn = sqlite3.connect("dbName", isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
