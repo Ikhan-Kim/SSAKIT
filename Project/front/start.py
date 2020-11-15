@@ -32,7 +32,7 @@ def resource_path(relative_path):
  
 
 # 연결할 ui 파일의 경로 설정
-form = resource_path('./ui/NetworkSetting.ui')
+form = resource_path('./NetworkSetting.ui')
 form_class = uic.loadUiType(form)[0]
 
 # multiThread
@@ -862,7 +862,9 @@ if __name__ == "__main__":
         os.chdir(os.getcwd())
     # QApplication : 프로그램을 실행시켜주는 클래스
     app = QApplication(sys.argv)
-
+    os.makedirs("./checkpoint", exist_ok=True)
+    os.makedirs("./learnData", exist_ok=True)
+    os.makedirs("./result_logs", exist_ok=True)
     # WindowClass의 인스턴스 생성
     myWindow = WindowClass()
 
