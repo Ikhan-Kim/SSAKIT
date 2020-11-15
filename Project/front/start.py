@@ -130,6 +130,7 @@ class AnotherFormLayout(QDialog):
         self.createFormGroupBox()
 
         self.setStyleSheet("background-color: #847f7f;")
+
         buttonBox = QDialogButtonBox(
             QDialogButtonBox.Save | QDialogButtonBox.Cancel)
         buttonBox.accepted.connect(self.accept)
@@ -428,9 +429,18 @@ class TestModelSelect(QDialog):
         self.listW.setStyleSheet("background-color: rgb(255, 255, 255); font: 14pt 'a디딤돌'; color: rgb(0, 0,0);")
         
         self.listW.itemActivated.connect(self.itemActivated_event)
+
+        # 확인버튼
+        buttonBox = QDialogButtonBox(
+            QDialogButtonBox.Save | QDialogButtonBox.Cancel)
+        buttonBox.accepted.connect(self.accept)
+        buttonBox.rejected.connect(self.reject)
+        buttonBox.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+
         vbox = QVBoxLayout()
         vbox.addWidget(self.label)
         vbox.addWidget(self.listW)
+        vbox.addWidget(buttonBox)
         self.setLayout(vbox)
         # self.setGeometry(300, 300, 300, 300)
 
