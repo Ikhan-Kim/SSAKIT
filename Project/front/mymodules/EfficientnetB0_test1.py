@@ -33,14 +33,14 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
 
     # Data Preprocessing
     training_datagen = ImageDataGenerator(
-                            rescale = 1./255,
+                            # rescale = 1./255,
                             horizontal_flip = HORIZONTAL_FLIP,
                             vertical_flip = VERTICAL_FLIP,
                             brightness_range = BRIGHTNESS_RANGE,
                             rotation_range = ROTATION_RANGE,
                             )
     validation_datagen = ImageDataGenerator(
-                            rescale = 1./255
+                            # rescale = 1./255
                             )
 
 
@@ -60,7 +60,7 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
 
 
     # Load pre-trained model
-    base_model = tf.keras.applications.EfficientNetB4(include_top=False, 
+    base_model = tf.keras.applications.EfficientNetB0(include_top=False, 
                                                 weights='imagenet', 
                                                 input_shape=INPUT_SHAPE,)
 
@@ -70,12 +70,10 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
     # Add a fully connected layer
     model = tf.keras.Sequential()
     model.add(base_model)
-    model.add(tf.keras.layers.Flatten())
-    model.add(tf.keras.layers.Dense(512, activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.5))
-    model.add(tf.keras.layers.Dense(256, activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.5))
-    model.add(tf.keras.layers.Dense(NUM_CLASSES, activation='softmax'))
+    model.add(tf.keras.layers.GlobalMaxPooling2D(name="max_pooling2d"))
+    model.add(tf.keras.layers.Dropout(0.2, name="dropout_out"))
+    model.add(tf.keras.layers.Dense(10, activation='softmax', name="predictions"))
+
 
     model.summary()
 
@@ -90,12 +88,12 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
     plotLosses = PlotLosses(input_epochs, window)
 
     callbacks = [
-        tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_accuracy',
+        tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_loss',
                                         #  restore_best_weights=True
                                         ),
         tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
-                                            monitor='val_accuracy',
-                                            mode='max',
+                                            monitor='val_loss',
+                                            mode='min',
                                             save_best_only=True,
                                             # save_weights_only=True,
                                         ),
