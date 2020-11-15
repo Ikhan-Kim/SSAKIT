@@ -239,7 +239,7 @@ class AnotherFormLayout(QDialog):
             settings_data.append(self.comboBoxNN.currentText())
         else:
             settings_data.append(self.comboBoxContinue.currentText())
-        aug = [False, False, False, False]
+        aug = [False, False, None, False]
         if self.checkBoxHorizantal.isChecked() == True:
             aug[0] = True
         if self.checkBoxVertical.isChecked() == True:
@@ -866,7 +866,8 @@ class WindowClass(QMainWindow, form_class):
                     elif idx == 1:
                         Aug_lst.append('V')
                     elif idx == 2:
-                        Aug_lst.append('V')
+                        if a != None:
+                            Aug_lst.append('B')
                     elif idx == 3:
                         if a == 90:
                             Aug_lst.append('R-90')
