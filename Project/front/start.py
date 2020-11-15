@@ -33,7 +33,7 @@ def resource_path(relative_path):
  
 
 # 연결할 ui 파일의 경로 설정
-form = resource_path('./ui/NetworkSetting.ui')
+form = resource_path('./NetworkSetting.ui')
 form_class = uic.loadUiType(form)[0]
 
 # multiThread
@@ -116,6 +116,7 @@ class Worker(QRunnable):
             Retrain_model.Retrain(
                 self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow, 'checkpoint/' + self.settingsData[0]
             )
+        myWindow.textBox_terminal.moveCursor(QtGui.QTextCursor.End)
         myWindow.btnEnable()
 
 # preprocess setting popup #train wizard
@@ -496,7 +497,7 @@ class WindowClass(QMainWindow, form_class):
         # self.testModelSelectDisplay = TestModelSelect()
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
-        self.btnOpenDir.setIcon(QIcon('./assets/folder.jpg'))
+        self.btnOpenDir.setIcon(QIcon('./assets/img/folder.jpg'))
         self.btnOpenDir.setIconSize(QSize(23, 23)) 
         self.btnDataLoad.setIcon(QIcon('./assets/img/imageUpload.jpg'))
         self.btnDataLoad.setIconSize(QSize(25, 25))        
@@ -929,7 +930,9 @@ if __name__ == "__main__":
         os.chdir(os.getcwd())
     # QApplication : 프로그램을 실행시켜주는 클래스
     app = QApplication(sys.argv)
-
+    os.makedirs("./checkpoint", exist_ok=True)
+    os.makedirs("./learnData", exist_ok=True)
+    os.makedirs("./result_logs", exist_ok=True)
     # WindowClass의 인스턴스 생성
     myWindow = WindowClass()
 

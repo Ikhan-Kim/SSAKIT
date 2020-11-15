@@ -1,4 +1,4 @@
-import sys
+import sys, os
 from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5 import uic
@@ -16,7 +16,7 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 # 연결할 ui 파일의 경로 설정
-form = 'ui/ClassEdit.ui'
+form = resource_path('./ClassEdit.ui')
 form_class = uic.loadUiType(form)[0]
 
 class ClassEditWidget(QMainWindow, form_class) :
