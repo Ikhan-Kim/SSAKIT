@@ -467,7 +467,7 @@ class WindowClass(QMainWindow, form_class):
         # self.testModelSelectDisplay = TestModelSelect()
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
-        self.btnOpenDir.setIcon(QIcon('./assets/folder.jpg'))
+        self.btnOpenDir.setIcon(QIcon('./assets/img/folder.jpg'))
         self.btnOpenDir.setIconSize(QSize(23, 23)) 
         self.btnDataLoad.setIcon(QIcon('./assets/img/imageUpload.jpg'))
         self.btnDataLoad.setIconSize(QSize(25, 25))        
