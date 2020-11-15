@@ -5,11 +5,12 @@ import keras_preprocessing
 from keras_preprocessing import image
 import matplotlib.pyplot as plt
 import itertools
-from sklearn.utils.multiclass import unique_labels
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import *
+from PyQt5.QtCore import *
+from .Grad_cam import *
 
-
+from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics import plot_confusion_matrix
 from sklearn.metrics import confusion_matrix
 
@@ -18,7 +19,6 @@ def test(model_name, window):
     #path
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     model_path = os.path.join(BASE_DIR, 'checkpoint/'+model_name)
-    # test_dir = os.path.join(BASE_DIR, 'test/test')
     test_dir = os.path.join(BASE_DIR, 'learnData/final1/test')
 
     # Define hyperparameter
@@ -31,12 +31,10 @@ def test(model_name, window):
     NUM_VAL_IMGS = window.learn_num_data[2]
     BATCH_SIZE = 32
 
-
     # Data Preprocessing
     test_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
                                                             rescale = 1./255
                                                             )
-
 
     test_generator = test_datagen.flow_from_directory(
         test_dir,
@@ -48,29 +46,26 @@ def test(model_name, window):
 
     true_labels = test_generator.classes[test_generator.index_array]
 
-
     # load model
     new_model = tf.keras.models.load_model(model_path)
 
-
     # testing files
     test_classifications = new_model.predict(test_generator)
-    # print(test_classifications[0])
 
     # making list of true_label and predicted_label
     predicted_labels = []
     result_labels = []
+    predictions = []
 
     for test_classification in test_classifications:
         predicted_labels.append(np.argmax(test_classification))
+        predictions.append(int(round(np.max(test_classification), 2)*100))
 
     for i in range(len(true_labels[0])):
-        result_labels.append([true_labels[0][i], predicted_labels[i]])
-    # print(result_labels)
+        result_labels.append([true_labels[0][i], predicted_labels[i], predictions[i]])
     real = []
     for i in true_labels[0]:
         real.append(i)
-    # print(real)
 
 
     # class_names = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
@@ -93,16 +88,11 @@ def test(model_name, window):
         # Compute confusion matrix
         cm = confusion_matrix(y_true, y_pred)
         # Only use the labels that appear in the data
-        # classes = classes[unique_labels(y_true, y_pred)]
-        # classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
-        # print('dsfgfdgfdgfdgfdsfasdfsfdsgredtygdrafsdfdsayhetrsdfdsf',classes)
         if normalize:
             cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
             print("Normalized confusion matrix")
         else:
             print('Confusion matrix, without normalization')
-        # print(classes)
-        # print(cm)
         #대각선값
         diagonal = 0
         #전체값
@@ -112,7 +102,6 @@ def test(model_name, window):
             for j in cm[i]:
                 ssum += j
         acc = round(diagonal / ssum, 3) * 100
-        # print(acc)
 
         precision = []
         recall = []
@@ -127,9 +116,6 @@ def test(model_name, window):
             precision.append(temp)
             recall.append(tmp)
         macro_precision = sum(precision) / len(precision)
-        print(macro_precision)
-        # print(precision)
-        # print(recall)
 
         # classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
 
@@ -138,8 +124,27 @@ def test(model_name, window):
         img_info = [[[] for j in range(len(cm))] for i in range(len(cm))]
         for i in range(len(cm)):
             for j in range(len(result_labels)//len(cm)):
-                img_info[i][result_labels[i * len(result_labels)//len(cm) + j][1]].append(os.listdir('./learndata/' + window.projectName + '/test/' + classes[i])[j])
+                img_info[i][result_labels[i * len(result_labels)//len(cm) + j][1]].append([os.listdir('./learndata/' + window.projectName + '/test/' + classes[i])[j], result_labels[i * len(cm) + j][2]])
         
+        # click 함수가 없는 Widget들을 클릭 가능하게 해주는 함수
+        def clickable(widget):
+            class Filter(QObject):
+                clicked = pyqtSignal()	#pyside2 사용자는 pyqtSignal() -> Signal()로 변경
+                def eventFilter(self, obj, event):
+                    if obj == widget:
+                        if event.type() == QEvent.MouseButtonRelease:
+                            if obj.rect().contains(event.pos()):
+                                self.clicked.emit()
+                                # The developer can opt for .emit(obj) to get the object within the slot.
+                                return True
+                    
+                    return False
+            
+            filter = Filter(widget)
+            widget.installEventFilter(filter)
+            return filter.clicked
+        
+
         def show_img(i, j):
             for x in reversed(range(window.testedImageLayout.count())): 
                 window.testedImageLayout.itemAt(x).widget().setParent(None)
@@ -147,11 +152,20 @@ def test(model_name, window):
             scrollArea = QScrollArea()
             l = QVBoxLayout()
             for file in img_info[i][j]:
-                pixmap = QPixmap(os.path.join(img_path, file))
+                pixmap = QPixmap(os.path.join(img_path, file[0]))
                 if not pixmap.isNull():
                     pixmap = pixmap.scaled(96, 96)
                     imgLabel = QLabel(pixmap=pixmap)
+                    
+                    def show_cam():
+                        VGG16_Grad_cam(classes[i], file[0])
+                    clickable(imgLabel).connect(show_cam)
+                    # clickable(imgLabel).connect(show_cam(classes[i], file[0]))
+                    imgLabelFileName = QLabel(file[0])
+                    imgPrediction = QLabel(str(file[1]) + "%")
                     l.addWidget(imgLabel)
+                    l.addWidget(imgLabelFileName)
+                    l.addWidget(imgPrediction)
             w = QWidget()
             w.setLayout(l)
             scrollArea.setWidget(w)
@@ -236,5 +250,3 @@ def test(model_name, window):
     # # Plot normalized confusion matrix
     # plot_confusion_matrix(real, predicted_labels, classes=class_names, normalize=True,
     #                     title='Normalized confusion matrix')
-
-    # plt.show()

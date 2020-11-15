@@ -111,9 +111,11 @@ def Learn(augmentation, input_epochs, train_dir, val_dir, window):
     window.textBox_terminal.append("Training Done!")
     val_loss = history.history['val_loss']
     val_accuracy = history.history['val_accuracy']
-    
-    Max_val_accuracy = round(np.max(val_accuracy), 4))
-    Min_val_loss = round(np.min(val_loss), 4)
-    message = "Epoch: "+ str(np.argmin(val_loss)+1)+ " , Min val_loss: "+ str(Min_val_loss)
+
+    max_val_accuracy = round(np.max(val_accuracy), 4)
+    min_val_loss = round(np.min(val_loss), 4)
+    message = "Epoch: "+ str(np.argmin(val_loss)+1)+ " , Min val_loss: "+ str(min_val_loss)
     window.textBox_terminal.append(message)
+    window.settingsData.append(min_val_loss)
+    window.settingsdata.append(max_val_accuracy)
     plt.close()
