@@ -1,5 +1,9 @@
 from tensorflow import keras
 import time
+from PyQt5.QtCore import *
+from PyQt5.QtWidgets import *
+from PyQt5 import uic, QtGui, QtCore
+from PyQt5.QtGui import *
 
 class PlotLosses(keras.callbacks.Callback):
     def __init__(self, input_epochs, window):
@@ -7,6 +11,8 @@ class PlotLosses(keras.callbacks.Callback):
         self.textBox_terminal = window.textBox_terminal
         self.fig = window.fig
         self.canvas = window.canvas
+        window.cursor = QTextCursor(self.textBox_terminal.document())
+        self.textBox_terminal.setTextCursor(window.cursor)
 
     def on_train_begin(self, logs={}):
         self.i = 0
@@ -30,7 +36,9 @@ class PlotLosses(keras.callbacks.Callback):
 
         # 터미널 출력
         self.textBox_terminal.append(
-            "Epoch {}/{} : loss = {}, accuracy = {}, val_loss = {}, val_accuracy = {}".format(self.i, self.input_epochs, round(self.losses[-1], 4), round(self.acc[-1], 4), round(self.val_losses[-1], 4), round(self.val_acc[-1], 4)))
+            "Epoch {}/{} : loss = {}, accuracy = {}, val_loss = {}, val_accuracy = {}".format(self.i, self.input_epochs, round(self.losses[-1], 4), round(self.acc[-1], 4), round(self.val_losses[-1], 4), round(self.val_acc[-1], 4))
+        )
+        self.textBox_terminal.moveCursor(QtGui.QTextCursor.End)
 
         self.fig.clear()
         ax1 = self.fig.add_subplot(121)
