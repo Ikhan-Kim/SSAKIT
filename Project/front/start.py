@@ -197,7 +197,7 @@ class AnotherFormLayout(QDialog):
         layoutNN = QFormLayout()
         self.comboBoxNN = QComboBox()
         self.comboBoxNN.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
-        self.comboBoxNN.addItems(["VGG", "InceptionV3", "ResNet50", "EfficientnetB0"])
+        self.comboBoxNN.addItems(["VGG", "ResNet50", "EfficientnetB0"])
         layoutNN.addRow(QLabel("select :"), self.comboBoxNN)
         self.formNeuralNetwork.setLayout(layoutNN)
         # continue nn setting

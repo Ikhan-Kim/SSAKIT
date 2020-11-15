@@ -84,7 +84,7 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
                 metrics = ['accuracy'])
 
     # Callbacks
-    checkpoint_filepath = os.path.join(BASE_DIR, 'checkpoint', window.settingsData[3] + '.h5')
+    checkpoint_filepath = os.path.join(BASE_DIR, 'checkpoint', window.settingsData[0] + '_' + window.settingsData[3] + '.h5')
 
     plotLosses = PlotLosses(input_epochs, window)
 
