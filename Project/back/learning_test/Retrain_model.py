@@ -103,6 +103,10 @@ def Retrain(augmentation, input_epochs, train_path, val_path, window, trained_mo
     history = model.fit(train_generator, epochs=EPOCHS, steps_per_epoch=train_steps_per_epoch, validation_data = validation_generator, validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
     window.textBox_terminal.append("Training Done!")
     val_loss = history.history['val_loss']
-    message = "Epoch: "+ str(np.argmin(val_loss)+1)+ " , Min val_loss: "+ str(round(np.min(val_loss), 4))
-    window.textBox_terminal.append("MRRRRRRmessage")
+    val_accuracy = history.history['val_accuracy']
+
+    max_val_accuracy = round(np.max(val_accuracy), 4)
+    min_val_loss = round(np.min(val_loss), 4)
+    message = "Epoch: "+ str(np.argmin(val_loss)+1)+ " , Min val_loss: "+ str(min_val_loss)
+    window.textBox_terminal.append(message)
     plt.close()
