@@ -491,6 +491,7 @@ class WindowClass(QMainWindow, form_class):
 
         self.setupUi(self)
         self.pushButton_5.hide()
+        self.label_4.hide()
         # 기본 설정?>
         
         self.projectNameDisplay = ProjectNameClass()
@@ -540,11 +541,11 @@ class WindowClass(QMainWindow, form_class):
         self.loadNavi()
 
         # TL_insert()
-        self.ResultSave.clicked.connect(self.TL_insert)
+        # self.ResultSave.clicked.connect(self.TL_insert)
 
     def btnColorChange(self, btn):
         # print(" btn change", btn)
-        btns = [self.btnLearnSettings,  self.btnTraining, self.btnTest, self.pushButton_5]
+        btns = [self.btnLearnSettings,  self.btnTraining, self.btnTest]
         btns.remove(btn)
         btn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a로케트'; color: rgb(255, 255, 255);")
         for b in btns:

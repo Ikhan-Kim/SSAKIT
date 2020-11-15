@@ -158,7 +158,24 @@ background-color: rgb(255, 238, 228);</string>
       <string>▶</string>
      </property>
     </widget>
+    <widget class="QLabel" name="label_4">
+     <property name="geometry">
+      <rect>
+       <x>560</x>
+       <y>30</y>
+       <width>21</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(255, 255, 255);</string>
+     </property>
+     <property name="text">
+      <string>▶</string>
+     </property>
+    </widget>
     <zorder>pushButton_5</zorder>
+    <zorder>label_4</zorder>
     <zorder>btnLearnSettings</zorder>
     <zorder>btnTraining</zorder>
     <zorder>btnTest</zorder>
@@ -1029,7 +1046,7 @@ font: 15pt &quot;a로케트&quot;;</string>
     <property name="geometry">
      <rect>
       <x>-10</x>
-      <y>10</y>
+      <y>0</y>
       <width>1631</width>
       <height>821</height>
      </rect>
