@@ -19,7 +19,8 @@ def test(model_name, window):
     #path
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     model_path = os.path.join(BASE_DIR, 'checkpoint/'+model_name)
-    test_dir = os.path.join(BASE_DIR, 'learnData/final1/test')
+    os.makedirs("./learnData/" + window.projectName + "/test", exist_ok=True)
+    test_dir = os.path.join(BASE_DIR, 'learnData', window.projectName , 'test')
 
     # Define hyperparameter
     INPUT_SIZE = 200
