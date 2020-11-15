@@ -312,6 +312,7 @@ class ProjectNameClass(QDialog):
         super().__init__()
 
         self.clickedRow = ""
+        self.setGeometry(660,200,600,600)
 
         # 기본 구조
         self.setStyleSheet("background-color: #847f7f;")
@@ -343,6 +344,7 @@ class ProjectNameClass(QDialog):
         # 새 프로젝트 생성
         self.lineName = QLineEdit()
         self.lineName.setPlaceholderText("프로젝트 이름 입력")
+        self.lineName.setFixedWidth(450)
         self.lineName.setStyleSheet("font: 10pt 'a스마일L'; background-color: rgb(255, 255, 255); color: black;")
         self.btnOk = QPushButton('생성하기')
         self.btnOk.setStyleSheet("font: 12pt 'a디딤돌'; background-color: rgb(241, 127, 66);")
