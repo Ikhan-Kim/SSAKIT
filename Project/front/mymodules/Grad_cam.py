@@ -5,15 +5,6 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 from keras_preprocessing.image import ImageDataGenerator
 
-#path
-CLASS_NAME = class_name
-IMAGE_NAME = image_name
-MODEL_NAME = model_name
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-test_dir = os.path.join(BASE_DIR, 'final1/test')
-IMAGE_PATH = os.path.join(BASE_DIR, 'final1/test/'+CLASS_NAME +'/' +IMAGE_NAME +'.png')
-MODEL_PATH = os.path.join(BASE_DIR, 'test_Pjt3/checkpoint/'+MODEL_NAME +'.h5')
-
 # grad-cam 
 def get_img_array(img_path, size):
 
@@ -21,7 +12,7 @@ def get_img_array(img_path, size):
 
     image_array = tf.keras.preprocessing.image.img_to_array(image)
 
-    image_array = np.expand_dims(array, axis=0)
+    image_array = np.expand_dims(image_array, axis=0)
     return image_array
 
 
@@ -61,7 +52,13 @@ def make_gradcam_heatmap(
 
 
 
-def VGG16_Grad_cam():
+def VGG16_Grad_cam(class_name, image_name):
+    #path
+    CLASS_NAME = class_name
+    IMAGE_NAME = image_name
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    test_dir = os.path.join(BASE_DIR, 'learnData/final1/test')
+    IMAGE_PATH = os.path.join(BASE_DIR, 'learnData/final1/test/'+CLASS_NAME +'/' +IMAGE_NAME)
     # Define hyperparameter
     INPUT_SIZE = 224
     CHANNELS = 3
@@ -82,7 +79,7 @@ def VGG16_Grad_cam():
     base_model.trainable = False
 
     # load model
-    new_model = tf.keras.models.load_model(MODEL_PATH)
+    # new_model = tf.keras.models.load_model(MODEL_PATH)
 
     image1 = tf.keras.applications.vgg16.preprocess_input(get_img_array(IMAGE_PATH, size=(INPUT_SIZE, INPUT_SIZE)))
 
@@ -103,19 +100,25 @@ def VGG16_Grad_cam():
 
     # heatmap 사진을 원본 사이즈에 맞추기
     jet_heatmap = tf.keras.preprocessing.image.array_to_img(jet_heatmap)
-    jet_heatmap = jet_heatmap.resize((imgage_origin.shape[1], imgage_origin.shape[0]))
+    jet_heatmap = jet_heatmap.resize((image_origin.shape[1], image_origin.shape[0]))
     jet_heatmap = tf.keras.preprocessing.image.img_to_array(jet_heatmap)
 
     # 원본 사진과 heatmap사진을 겹치기
-    superimposed_img = jet_heatmap * 0.7 + img
+    superimposed_img = jet_heatmap * 0.7 + image_origin
     superimposed_img = tf.keras.preprocessing.image.array_to_img(superimposed_img)
 
-    # plt.matshow(superimposed_img)
-    # plt.show()
+    plt.matshow(superimposed_img)
+    plt.show()
     return superimposed_img
 
 
-def EFFICIENTNETB0_Grad_cam():
+def EFFICIENTNETB0_Grad_cam(class_name, image_name):
+    #path
+    CLASS_NAME = class_name
+    IMAGE_NAME = image_name
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    test_dir = os.path.join(BASE_DIR, 'final1/test')
+    IMAGE_PATH = os.path.join(BASE_DIR, 'final1/test/'+CLASS_NAME +'/' +IMAGE_NAME)
     # Define hyperparameter
     INPUT_SIZE = 224
     CHANNELS = 3
@@ -136,7 +139,7 @@ def EFFICIENTNETB0_Grad_cam():
     base_model.trainable = False
 
     # load model
-    new_model = tf.keras.models.load_model(MODEL_PATH)
+    # new_model = tf.keras.models.load_model(MODEL_PATH)
 
     image1 = tf.keras.applications.vgg16.preprocess_input(get_img_array(IMAGE_PATH, size=(INPUT_SIZE, INPUT_SIZE)))
 
@@ -157,13 +160,13 @@ def EFFICIENTNETB0_Grad_cam():
 
     # heatmap 사진을 원본 사이즈에 맞추기
     jet_heatmap = tf.keras.preprocessing.image.array_to_img(jet_heatmap)
-    jet_heatmap = jet_heatmap.resize((imgage_origin.shape[1], imgage_origin.shape[0]))
+    jet_heatmap = jet_heatmap.resize((image_origin.shape[1], image_origin.shape[0]))
     jet_heatmap = tf.keras.preprocessing.image.img_to_array(jet_heatmap)
 
     # 원본 사진과 heatmap사진을 겹치기
-    superimposed_img = jet_heatmap * 0.7 + img
+    superimposed_img = jet_heatmap * 0.7 + image_origin
     superimposed_img = tf.keras.preprocessing.image.array_to_img(superimposed_img)
 
-    # plt.matshow(superimposed_img)
-    # plt.show()
+    plt.matshow(superimposed_img)
+    plt.show()
     return superimposed_img
