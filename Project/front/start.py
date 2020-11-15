@@ -274,7 +274,7 @@ class AnotherFormLayout(QDialog):
     # DB 연결, 테이블 생성
     def trainListSqlConnect(self):
         try: 
-            self.conn = sqlite3.connect("SSAKIT_DB.db", isolation_level=None)
+            self.conn = sqlite3.connect("dbName", isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
@@ -453,6 +453,7 @@ class WindowClass(QMainWindow, form_class):
     mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
     settingsData = []
     class_names = []
+    class_data = []
     projectName = ''
     learnDataPath = ''
     learn_train_path = ''
@@ -461,19 +462,6 @@ class WindowClass(QMainWindow, form_class):
     sIMG = ""
     # learn_val_path = ''
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
-
-    # DB에 넣을 데이터 불러오기 => 불러온 이미지의 label 기반
-    data = [
-    {"color": "#FF5733", "label": "12R0", "train":50, "val":30, "test": 30},
-    {"color": "#3372FF", "label": "4300", "train":50, "val":30, "test": 30},
-    {"color": "#61FF33", "label": "4301", "train":50, "val":30, "test": 30},
-    {"color": "#EA33FF", "label": "7501", "train":50, "val":30, "test": 30},
-    ]
-    class_data = [
-    ["ex01", 10, 10, 10],
-    ["ex01", 10, 10, 10],
-    ["ex01", 10, 10, 10]
-    ]
 
     # colors 리스트
     colors = [
@@ -533,7 +521,7 @@ class WindowClass(QMainWindow, form_class):
         self.sqlConnect()
 
         # ClassEditWidget 불러오기
-        self.openClassEditWidget = ClassEditWidget(WindowClass.data)
+        self.openClassEditWidget = ClassEditWidget(WindowClass.class_data)
         # class Edit btn 클릭 => 위젯 열기
         self.classEditBtn.clicked.connect(self.ClassEditBtnFunc)
         # edit 금지 모드
@@ -688,7 +676,7 @@ class WindowClass(QMainWindow, form_class):
         self.testModelSelectDisplay.show()
         # test_function2.test()
         self.btnColorChange(self.btnTest)
-        self.cnt_file()
+        # self.cnt_file()
 
     # ClassEditWidget띄우기
     def ClassEditBtnFunc(self):
@@ -700,8 +688,9 @@ class WindowClass(QMainWindow, form_class):
 
     # DB) SQL 연결 및 테이블 생성
     def sqlConnect(self):
+        dbName = WindowClass.projectName + ".db"
         try: 
-            self.conn = sqlite3.connect("SSAKIT_DB.db", isolation_level=None)
+            self.conn = sqlite3.connect("dbName", isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
@@ -805,12 +794,19 @@ class WindowClass(QMainWindow, form_class):
     def cnt_file(self):
         self.learn_num_data = []
         self.learn_num_data.append(len(self.class_names))
-        cnt_train = 0
-        cnt_val = 0
+        cnt_train, cnt_val, cnt_test = 0, 0, 0
+        sum_train, sum_val, sum_test = 0, 0, 0
         file_path = self.learnDataPath + '/train/'
         for folder in self.class_names:
-            cnt_train += len([name for name in os.listdir(self.learnDataPath + '/train/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/train/' + folder, name))])
-            cnt_val += len([name for name in os.listdir(self.learnDataPath + '/validation/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/validation/' + folder, name))])
+            cnt_train = len([name for name in os.listdir(self.learnDataPath + '/train/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/train/' + folder, name))])
+            cnt_val = len([name for name in os.listdir(self.learnDataPath + '/validation/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/validation/' + folder, name))])
+            cnt_test = len([name for name in os.listdir(self.learnDataPath + '/test/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/test/' + folder, name))])
+            sum_train += cnt_train
+            sum_val += cnt_val
+            sum_test += cnt_test
+            self.class_data.append([folder, cnt_train, cnt_val, cnt_test])
+        print(self.class_data)
+        self.sqlConnect()
         self.learn_num_data.append(cnt_train)
         self.learn_num_data.append(cnt_val)
 

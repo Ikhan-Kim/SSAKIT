@@ -52,7 +52,7 @@ class WindowClass(QMainWindow, form_class) :
     # DB) SQL 연결 및 테이블 생성
     def sqlConnect(self):
         try: 
-            self.conn = sqlite3.connect("SSAKIT_DB.db", isolation_level=None)
+            self.conn = sqlite3.connect("dbName", isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
