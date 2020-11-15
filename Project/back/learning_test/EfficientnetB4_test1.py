@@ -33,14 +33,14 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
 
     # Data Preprocessing
     training_datagen = ImageDataGenerator(
-                            rescale = 1./255,
+                            # rescale = 1./255,
                             horizontal_flip = HORIZONTAL_FLIP,
                             vertical_flip = VERTICAL_FLIP,
                             brightness_range = BRIGHTNESS_RANGE,
                             rotation_range = ROTATION_RANGE,
                             )
     validation_datagen = ImageDataGenerator(
-                            rescale = 1./255
+                            # rescale = 1./255
                             )
 
 
@@ -60,7 +60,7 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
 
 
     # Load pre-trained model
-    base_model = tf.keras.applications.EfficientNetB4(include_top=False, 
+    base_model = tf.keras.applications.EfficientNetB0(include_top=False, 
                                                 weights='imagenet', 
                                                 input_shape=INPUT_SHAPE,)
 
@@ -68,14 +68,20 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
     base_model.trainable = False
 
     # Add a fully connected layer
+    # model = tf.keras.Sequential()
+    # model.add(base_model)
+    # model.add(tf.keras.layers.Flatten())
+    # model.add(tf.keras.layers.Dense(512, activation='relu'))
+    # model.add(tf.keras.layers.Dropout(0.5))
+    # model.add(tf.keras.layers.Dense(256, activation='relu'))
+    # model.add(tf.keras.layers.Dropout(0.5))
+    # model.add(tf.keras.layers.Dense(NUM_CLASSES, activation='softmax'))
+
     model = tf.keras.Sequential()
     model.add(base_model)
-    model.add(tf.keras.layers.Flatten())
-    model.add(tf.keras.layers.Dense(512, activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.5))
-    model.add(tf.keras.layers.Dense(256, activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.5))
-    model.add(tf.keras.layers.Dense(NUM_CLASSES, activation='softmax'))
+    model.add(tf.keras.layers.GlobalMaxPooling2D(name="max_pooling2d"))
+    model.add(tf.keras.layers.Dropout(0.2, name="dropout_out"))
+    model.add(tf.keras.layers.Dense(10, activation='softmax', name="predictions"))
 
     model.summary()
 
@@ -106,4 +112,12 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
     # training model
     history = model.fit(train_generator, epochs=EPOCHS, steps_per_epoch=train_steps_per_epoch, validation_data = validation_generator, validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
     window.textBox_terminal.append("Training Done!")
+
+    val_loss = history.history['val_loss']
+    val_accuracy = history.history['val_accuracy']
+
+    max_val_accuracy = round(np.max(val_accuracy), 4))
+    min_val_loss = round(np.min(val_loss), 4)
+    message = "Epoch: "+ str(np.argmin(val_loss)+1)+ " , Min val_loss: "+ str(min_val_loss)
+    window.textBox_terminal.append(message)
     plt.close()

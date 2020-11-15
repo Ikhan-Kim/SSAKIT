@@ -110,6 +110,10 @@ def Learn(augmentation, input_epochs, train_dir, val_dir, window):
     history = model.fit(train_generator, epochs=EPOCHS, steps_per_epoch=train_steps_per_epoch, validation_data = validation_generator, validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
     window.textBox_terminal.append("Training Done!")
     val_loss = history.history['val_loss']
-    message = "Epoch: "+ str(np.argmin(val_loss)+1)+ " , Min val_loss: "+ str(round(np.min(val_loss), 4))
+    val_accuracy = history.history['val_accuracy']
+    
+    Max_val_accuracy = round(np.max(val_accuracy), 4))
+    Min_val_loss = round(np.min(val_loss), 4)
+    message = "Epoch: "+ str(np.argmin(val_loss)+1)+ " , Min val_loss: "+ str(Min_val_loss)
     window.textBox_terminal.append(message)
     plt.close()
