@@ -498,6 +498,10 @@ class WindowClass(QMainWindow, form_class):
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
         self.btnOpenDir.setIcon(QIcon('./assets/folder.jpg')) 
+        self.btnDataLoad.setIcon(QIcon('./assets/img/imageUpload.png'))
+        # self.megaphone_2.setDisable(True)
+        self.megaphone.setIcon(QIcon('./assets/img/megaphone.png'))
+        
         # 버튼별 함수 실행
         self.btnCreateProject.clicked.connect(self.createProjectFn)
         # self.btnDataLoad.setStyleSheet("background-image: url(front\assets\img\imageUpload.png);")
