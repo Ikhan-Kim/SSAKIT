@@ -776,7 +776,7 @@ class WindowClass(QMainWindow, form_class):
             # self.classType.setItem(x, 0, QTableWidgetItem(str(idx)))
             self.classType.setItem(x, 0, QTableWidgetItem(""))
             self.classType.item(x, 0).setBackground(QtGui.QColor(color))
-            self.classType.setItem(x, 1, QTableWidgetItem(label))
+            self.classType.setItem(x, 1, QTableWidgetItem('_'.join(label.split('_')[1:])))
             self.classType.setItem(x, 2, QTableWidgetItem(str(train)))
             self.classType.setItem(x, 3, QTableWidgetItem(str(val)))
             self.classType.setItem(x, 4, QTableWidgetItem(str(test)))
