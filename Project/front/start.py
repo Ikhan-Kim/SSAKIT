@@ -570,6 +570,7 @@ class WindowClass(QMainWindow, form_class):
 
     def learnSettingsFn(self, checked):
         self.tabWidget.setCurrentIndex(0)
+        self.class_names = os.listdir(self.learnDataPath + '/train')
         if self.projectName:
             if self.learnSettingDisplay.isVisible():
                 self.learnSettingDisplay.hide()
