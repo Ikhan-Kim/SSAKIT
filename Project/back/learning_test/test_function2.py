@@ -62,12 +62,14 @@ def test():
     # making list of true_label and predicted_label
     predicted_labels = []
     result_labels = []
+    predictions = []
 
     for test_classification in test_classifications:
         predicted_labels.append(np.argmax(test_classification))
+        predictions.append(round(np.max(test_classification)*100, 2))
 
     for i in range(len(true_labels[0])):
-        result_labels.append([true_labels[0][i], predicted_labels[i]])
+        result_labels.append([true_labels[0][i], predicted_labels[i], predictions[i]])
 
     real = []
     for i in true_labels[0]:
