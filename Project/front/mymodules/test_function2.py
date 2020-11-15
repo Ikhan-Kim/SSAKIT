@@ -172,7 +172,7 @@ def test(model_name, window):
 
             def make_fn(class_name, file_name):
                 def _function():
-                    VGG16_Grad_cam(class_name, file_name)
+                    VGG16_Grad_cam(class_name, file_name, window.projectName)
                 return _function
 
             # 익한 테스트
