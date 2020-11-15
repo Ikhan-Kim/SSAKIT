@@ -209,13 +209,16 @@ def test(model_name, window):
             scrollArea.setWidget(w)
             window.testedImageLayout.addWidget(scrollArea)
 
+        classes2 = []
+        for c in classes:
+            classes2.append('_'.join(c.split('_')[1:]))
         # show confusion matrix
         window.confusionMatrixTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         window.confusionMatrixTable.setColumnCount(len(cm))
-        window.confusionMatrixTable.setHorizontalHeaderLabels(classes)
+        window.confusionMatrixTable.setHorizontalHeaderLabels(classes2)
         window.confusionMatrixTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         window.confusionMatrixTable.setRowCount(len(cm))
-        window.confusionMatrixTable.setVerticalHeaderLabels(classes)
+        window.confusionMatrixTable.setVerticalHeaderLabels(classes2)
         for i in range(len(cm)):
             for j in range(len(cm)):
                 window.confusionMatrixTable.setItem(i, j, QTableWidgetItem(str(cm[i][j])))
