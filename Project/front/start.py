@@ -9,9 +9,13 @@ from stat import *
 
 # sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 # from back import create_dir, set_directory
-# from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1, test_function2, EfficientnetB0_test1
+# from back.learning_test import InceptionV3_test1, ResNet50_test1, Vgg16_test1, test_function2, EfficientnetB0_test1
 from mymodules import create_dir, set_directory
+<<<<<<< HEAD
 from mymodules import InceptionV3_test1, ResNet152_test1, Vgg16_test1, EfficientnetB0_test1, test_function2, Retrain_model
+=======
+from mymodules import InceptionV3_test1, ResNet50_test1, Vgg16_test1, EfficientnetB0_test1, test_function2
+>>>>>>> feature/update_functions
 
 import tensorflow as tf
 import numpy as np
@@ -102,9 +106,9 @@ class Worker(QRunnable):
                 print('Inception')
                 InceptionV3_test1.Learn(
                     self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
-            elif self.settingsData[0] == 'ResNet152':
+            elif self.settingsData[0] == 'ResNet50':
                 print('ResNet')
-                ResNet152_test1.Learn(
+                ResNet50_test1.Learn(
                     self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
             elif self.settingsData[0] == 'EfficientnetB0':
                 print('EfficientnetB0')
@@ -195,7 +199,7 @@ class AnotherFormLayout(QDialog):
         layoutNN = QFormLayout()
         self.comboBoxNN = QComboBox()
         self.comboBoxNN.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
-        self.comboBoxNN.addItems(["VGG", "InceptionV3", "ResNet152", "EfficientnetB0"])
+        self.comboBoxNN.addItems(["VGG", "InceptionV3", "ResNet50", "EfficientnetB0"])
         layoutNN.addRow(QLabel("select :"), self.comboBoxNN)
         self.formNeuralNetwork.setLayout(layoutNN)
         # continue nn setting

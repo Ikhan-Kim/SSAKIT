@@ -65,7 +65,7 @@ def Retrain(augmentation, input_epochs, train_path, val_path, window, trained_mo
     for layr in model.layers:
         if ('vgg16' in layr.name):
             layr.trainable = False
-        elif ('resnet152' in layr.name):
+        elif ('resnet50' in layr.name):
             layr.trainable = False
         elif ('efficientnetb0' in layr.name):
             layr.trainable = False

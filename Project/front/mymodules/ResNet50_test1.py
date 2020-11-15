@@ -61,7 +61,7 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
 
 
     # Load pre-trained model
-    base_model = tf.keras.applications.ResNet152(include_top=False, 
+    base_model = tf.keras.applications.ResNet50(include_top=False, 
                                                 weights='imagenet', 
                                                 input_shape=INPUT_SHAPE,)
 
@@ -72,10 +72,8 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
     model = tf.keras.Sequential()
     model.add(base_model)
     model.add(tf.keras.layers.Flatten())
-    model.add(tf.keras.layers.Dense(512, activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.5))
+    # model.add(tf.keras.layers.Dense(512, activation='relu'))
     model.add(tf.keras.layers.Dense(256, activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(NUM_CLASSES, activation='softmax'))
 
     model.summary()
@@ -110,7 +108,11 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
     val_loss = history.history['val_loss']
     val_accuracy = history.history['val_accuracy']
 
+<<<<<<< HEAD:Project/front/mymodules/ResNet152_test1.py
     max_val_accuracy = round(np.max(val_accuracy), 4)
+=======
+    max_val_accuracy = round(np.max(val_accuracy), 4))
+>>>>>>> feature/update_functions:Project/front/mymodules/ResNet50_test1.py
     min_val_loss = round(np.min(val_loss), 4)
     message = "Epoch: "+ str(np.argmin(val_loss)+1)+ " , Min val_loss: "+ str(min_val_loss)
     window.textBox_terminal.append(message)
