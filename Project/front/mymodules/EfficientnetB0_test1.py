@@ -112,5 +112,5 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
     message = "Epoch: "+ str(np.argmin(val_loss)+1)+ " , Min val_loss: "+ str(min_val_loss)
     window.textBox_terminal.append(message)
     window.settingsData.append(min_val_loss)
-    window.settingsdata.append(max_val_accuracy)
+    window.settingsData.append(max_val_accuracy)
     plt.close()
