@@ -220,7 +220,7 @@ class AnotherFormLayout(QDialog):
         self.formLearn.setLayout(layoutLS)
 
         # Train List
-        self.formTrainList = QGroupBox("Train List")
+        self.formTrainList = QGroupBox("previous train parameter")
         self.formTrainList.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
         self.trainList = QTableWidget()
         self.trainList.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
@@ -273,7 +273,7 @@ class AnotherFormLayout(QDialog):
     # DB 연결, 테이블 생성
     def trainListSqlConnect(self):
         try: 
-            self.conn = sqlite3.connect("test2.db", isolation_level=None)
+            self.conn = sqlite3.connect("SSAKIT_DB.db", isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
@@ -459,6 +459,11 @@ class WindowClass(QMainWindow, form_class):
     {"color": "#61FF33", "label": "4301", "train":50, "val":30, "test": 30},
     {"color": "#EA33FF", "label": "7501", "train":50, "val":30, "test": 30},
     ]
+    class_data = [
+    ["ex01", 10, 10, 10],
+    ["ex01", 10, 10, 10],
+    ["ex01", 10, 10, 10]
+    ]
 
     # colors 리스트
     colors = [
@@ -479,7 +484,7 @@ class WindowClass(QMainWindow, form_class):
         # 기본 설정?>
         self.learnSettingDisplay = AnotherFormLayout()
         self.projectNameDisplay = ProjectNameClass()
-        self.testModelSelectDisplay = TestModelSelect()
+        # self.testModelSelectDisplay = TestModelSelect()
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
         self.btnOpenDir.setIcon(QIcon('./assets/folder.jpg')) 
@@ -661,6 +666,7 @@ class WindowClass(QMainWindow, form_class):
 
     def test(self):
         self.tabWidget.setCurrentIndex(2)
+        self.testModelSelectDisplay = TestModelSelect()
         self.testModelSelectDisplay.show()
         # test_function2.test()
         self.btnColorChange(self.btnTest)
@@ -677,7 +683,7 @@ class WindowClass(QMainWindow, form_class):
     # DB) SQL 연결 및 테이블 생성
     def sqlConnect(self):
         try: 
-            self.conn = sqlite3.connect("test2.db", isolation_level=None)
+            self.conn = sqlite3.connect("SSAKIT_DB.db", isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
@@ -695,15 +701,18 @@ class WindowClass(QMainWindow, form_class):
         self.run()
 
         item_list = [list(item[:]) for item in self.cur.fetchall()]
-        # print(item_list, len(item_list))
+
         if len(item_list) == 0:
-            for d in self.data:
-                # print("d", d)
-                self.color = d["color"]
-                self.label = d["label"]
-                self.train = d["train"]
-                self.val = d["val"]
-                self.test = d["test"]
+            for class_data_idx, data in enumerate(self.class_data) :
+                print("class_data_idx, data : ", class_data_idx, data)
+                # self.label_idx = class_data_idx
+                self.color = self.colors[class_data_idx]
+                self.label = data[0]
+                self.train =  data[1]
+                self.val =  data[2]
+                self.test =  data[3]
+
+                print("===", self.color, self.label, self.train, self.val, self.test)
 
                 self.cmd = "insert into classLabel(`color`, `label`, `train`, `val`, `test`) values('{}', '{}', {}, {}, {})"\
                     .format(self.color, self.label, self.train, self.val, self.test)
@@ -724,8 +733,8 @@ class WindowClass(QMainWindow, form_class):
     # 불러온 데이터 table widget 에서 보여주기
     def setTables(self, rows):
         # Table column 수, header 설정+너비
-        self.classType.setColumnCount(4)
-        self.classType.setHorizontalHeaderLabels(['color', 'class', 'train', 'val', 'test'])
+        self.classType.setColumnCount(5)
+        self.classType.setHorizontalHeaderLabels(['color', 'class', 'train', 'val', 'test', ""])
         self.classType.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         
         cnt = len(rows)
@@ -738,13 +747,6 @@ class WindowClass(QMainWindow, form_class):
             
             # print("rows[x]", rows[x][0], rows[x][1], rows[x][2])
             # 테이블의 각 셀에 값 입력
-            # self.classType.setItem(x, 0, QTableWidgetItem(""))
-            # self.classType.item(x, 0).setBackground(QtGui.QColor(color))
-            # self.classType.setItem(x, 1, QTableWidgetItem(label))
-            # self.classType.setItem(x, 2, QTableWidgetItem(str(train)))
-            # self.classType.setItem(x, 3, QTableWidgetItem(str(val)))
-            # self.classType.setItem(x, 4, QTableWidgetItem(str(test)))
-
             # self.classType.setItem(x, 0, QTableWidgetItem(str(idx)))
             self.classType.setItem(x, 0, QTableWidgetItem(""))
             self.classType.item(x, 0).setBackground(QtGui.QColor(color))
