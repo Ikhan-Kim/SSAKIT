@@ -9,9 +9,9 @@ from stat import *
 
 # sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 # from back import create_dir, set_directory
-# from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1, test_function2, EfficientnetB0_test1
+# from back.learning_test import InceptionV3_test1, ResNet50_test1, Vgg16_test1, test_function2, EfficientnetB0_test1
 from mymodules import create_dir, set_directory
-from mymodules import InceptionV3_test1, ResNet152_test1, Vgg16_test1, EfficientnetB0_test1, test_function2, Retrain_model
+from mymodules import InceptionV3_test1, ResNet50_test1, Vgg16_test1, EfficientnetB0_test1, test_function2, Retrain_model
 
 import tensorflow as tf
 import numpy as np
@@ -102,9 +102,9 @@ class Worker(QRunnable):
                 print('Inception')
                 InceptionV3_test1.Learn(
                     self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
-            elif self.settingsData[0] == 'ResNet152':
+            elif self.settingsData[0] == 'ResNet50':
                 print('ResNet')
-                ResNet152_test1.Learn(
+                ResNet50_test1.Learn(
                     self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
             elif self.settingsData[0] == 'EfficientnetB0':
                 print('EfficientnetB0')
@@ -195,7 +195,7 @@ class AnotherFormLayout(QDialog):
         layoutNN = QFormLayout()
         self.comboBoxNN = QComboBox()
         self.comboBoxNN.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
-        self.comboBoxNN.addItems(["VGG", "InceptionV3", "ResNet152", "EfficientnetB0"])
+        self.comboBoxNN.addItems(["VGG", "InceptionV3", "ResNet50", "EfficientnetB0"])
         layoutNN.addRow(QLabel("select :"), self.comboBoxNN)
         self.formNeuralNetwork.setLayout(layoutNN)
         # continue nn setting
@@ -274,7 +274,7 @@ class AnotherFormLayout(QDialog):
     # DB 연결, 테이블 생성
     def trainListSqlConnect(self):
         try: 
-            self.conn = sqlite3.connect("dbName", isolation_level=None)
+            self.conn = sqlite3.connect(dbName, isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
@@ -485,13 +485,13 @@ class WindowClass(QMainWindow, form_class):
         # self.testModelSelectDisplay = TestModelSelect()
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
-        self.btnOpenDir.setIcon(QIcon('./assets/folder.png'))
+        self.btnOpenDir.setIcon(QIcon('./assets/folder.jpg'))
         self.btnOpenDir.setIconSize(QSize(23, 23)) 
-        self.btnDataLoad.setIcon(QIcon('./assets/img/imageUpload.png'))
+        self.btnDataLoad.setIcon(QIcon('./assets/img/imageUpload.jpg'))
         self.btnDataLoad.setIconSize(QSize(25, 25))        
-        self.megaphone_2.setIcon(QIcon('./assets/img/megaphone1.png'))
+        self.megaphone_2.setIcon(QIcon('./assets/img/megaphone1.jpg'))
         self.megaphone_2.setIconSize(QSize(30, 30))
-        self.f5Btn.setIcon(QIcon('./assets/img/sync.png'))
+        self.f5Btn.setIcon(QIcon('./assets/img/sync.jpg'))
         self.f5Btn.setIconSize(QSize(20, 20))
         
         # 버튼별 함수 실행
@@ -688,7 +688,7 @@ class WindowClass(QMainWindow, form_class):
     def sqlConnect(self):
         dbName = WindowClass.projectName + ".db"
         try: 
-            self.conn = sqlite3.connect("dbName", isolation_level=None)
+            self.conn = sqlite3.connect(dbName, isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)

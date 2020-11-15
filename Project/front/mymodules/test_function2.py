@@ -101,7 +101,7 @@ def test(model_name, window):
             diagonal += cm[i][i]
             for j in cm[i]:
                 ssum += j
-        acc = round(diagonal / ssum, 3) * 100
+        acc = int(round(diagonal / ssum, 3) * 100)
 
         precision = []
         recall = []

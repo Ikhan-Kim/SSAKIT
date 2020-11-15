@@ -61,7 +61,7 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
 
 
     # Load pre-trained model
-    base_model = tf.keras.applications.ResNet152(include_top=False, 
+    base_model = tf.keras.applications.ResNet50(include_top=False, 
                                                 weights='imagenet', 
                                                 input_shape=INPUT_SHAPE,)
 
@@ -72,10 +72,8 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
     model = tf.keras.Sequential()
     model.add(base_model)
     model.add(tf.keras.layers.Flatten())
-    model.add(tf.keras.layers.Dense(512, activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.5))
+    # model.add(tf.keras.layers.Dense(512, activation='relu'))
     model.add(tf.keras.layers.Dense(256, activation='relu'))
-    model.add(tf.keras.layers.Dropout(0.5))
     model.add(tf.keras.layers.Dense(NUM_CLASSES, activation='softmax'))
 
     model.summary()

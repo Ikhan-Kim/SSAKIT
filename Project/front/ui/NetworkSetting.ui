@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1618</width>
+    <width>1621</width>
     <height>848</height>
    </rect>
   </property>
@@ -610,93 +610,111 @@ font: 13pt &quot;a로케트&quot;;</string>
      <widget class="QTableWidget" name="confusionMatrixTable">
       <property name="geometry">
        <rect>
-        <x>80</x>
-        <y>60</y>
+        <x>120</x>
+        <y>40</y>
         <width>541</width>
-        <height>381</height>
+        <height>391</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 9pt &quot;a스마일L&quot;;</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_6">
       <property name="geometry">
        <rect>
-        <x>300</x>
-        <y>20</y>
-        <width>101</width>
-        <height>31</height>
+        <x>310</x>
+        <y>10</y>
+        <width>191</width>
+        <height>21</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <family>a디딤돌</family>
+        <family>a로케트</family>
         <pointsize>12</pointsize>
         <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">font: 12pt &quot;a로케트&quot;;</string>
+      </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;Prediction&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;Prediction&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_8">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>240</y>
-        <width>51</width>
+        <x>30</x>
+        <y>200</y>
+        <width>71</width>
         <height>31</height>
        </rect>
       </property>
       <property name="font">
        <font>
-        <family>a디딤돌</family>
+        <family>a로케트</family>
         <pointsize>12</pointsize>
         <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">font: 12pt &quot;a로케트&quot;;</string>
+      </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:18pt;&quot;&gt;True&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;True&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QTableWidget" name="precisionTable">
       <property name="geometry">
        <rect>
-        <x>80</x>
-        <y>470</y>
-        <width>541</width>
-        <height>51</height>
+        <x>150</x>
+        <y>440</y>
+        <width>511</width>
+        <height>41</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 9pt &quot;a스마일L&quot;;</string>
       </property>
      </widget>
      <widget class="QTableWidget" name="recallTable">
       <property name="geometry">
        <rect>
-        <x>660</x>
+        <x>670</x>
         <y>60</y>
         <width>51</width>
         <height>381</height>
        </rect>
       </property>
+      <property name="styleSheet">
+       <string notr="true">font: 9pt &quot;a스마일L&quot;;</string>
+      </property>
      </widget>
      <widget class="QTableWidget" name="accuracyTable">
       <property name="geometry">
        <rect>
-        <x>660</x>
+        <x>830</x>
         <y>470</y>
-        <width>51</width>
-        <height>51</height>
+        <width>101</width>
+        <height>41</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 11pt &quot;a디딤돌&quot;;</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_9">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>480</y>
-        <width>61</width>
+        <x>50</x>
+        <y>450</y>
+        <width>91</width>
         <height>31</height>
        </rect>
       </property>
@@ -709,15 +727,18 @@ font: 13pt &quot;a로케트&quot;;</string>
         <bold>false</bold>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;precision&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;precision&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_10">
       <property name="geometry">
        <rect>
-        <x>660</x>
-        <y>20</y>
+        <x>670</x>
+        <y>10</y>
         <width>61</width>
         <height>31</height>
        </rect>
@@ -732,15 +753,15 @@ font: 13pt &quot;a로케트&quot;;</string>
        </font>
       </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;recall&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:14pt;&quot;&gt;recall&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QLabel" name="label_11">
       <property name="geometry">
        <rect>
-        <x>660</x>
-        <y>450</y>
-        <width>61</width>
+        <x>840</x>
+        <y>440</y>
+        <width>81</width>
         <height>21</height>
        </rect>
       </property>
@@ -760,10 +781,10 @@ font: 13pt &quot;a로케트&quot;;</string>
      <widget class="QWidget" name="formLayoutWidget_2">
       <property name="geometry">
        <rect>
-        <x>740</x>
-        <y>30</y>
-        <width>241</width>
-        <height>491</height>
+        <x>800</x>
+        <y>50</y>
+        <width>151</width>
+        <height>381</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="testedImageLayout"/>
@@ -771,47 +792,157 @@ font: 13pt &quot;a로케트&quot;;</string>
      <widget class="QLabel" name="label_12">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>540</y>
-        <width>111</width>
+        <x>670</x>
+        <y>440</y>
+        <width>141</width>
         <height>31</height>
        </rect>
       </property>
       <property name="font">
        <font>
         <family>a디딤돌</family>
-        <pointsize>12</pointsize>
+        <pointsize>10</pointsize>
         <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">font: 10pt &quot;a디딤돌&quot;;</string>
+      </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;macro precision&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;macro precision&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
      <widget class="QLabel" name="macroPrecisionLabel">
       <property name="geometry">
        <rect>
-        <x>130</x>
-        <y>540</y>
-        <width>111</width>
-        <height>31</height>
+        <x>690</x>
+        <y>470</y>
+        <width>101</width>
+        <height>41</height>
        </rect>
       </property>
       <property name="font">
        <font>
         <family>a디딤돌</family>
-        <pointsize>12</pointsize>
+        <pointsize>11</pointsize>
         <weight>50</weight>
         <italic>false</italic>
         <bold>false</bold>
        </font>
       </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 170, 127);
+font: 11pt &quot;a디딤돌&quot;;</string>
+      </property>
       <property name="text">
-       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
+     <widget class="QLabel" name="label_13">
+      <property name="geometry">
+       <rect>
+        <x>800</x>
+        <y>10</y>
+        <width>151</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>a로케트</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 10pt &quot;a로케트&quot;;</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Image Viewer&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+     </widget>
+     <widget class="QWidget" name="widget_3" native="true">
+      <property name="geometry">
+       <rect>
+        <x>-20</x>
+        <y>540</y>
+        <width>1031</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 192, 0);
+background-color: rgb(64, 64, 64);</string>
+      </property>
+      <widget class="QPushButton" name="pushButton_2">
+       <property name="geometry">
+        <rect>
+         <x>830</x>
+         <y>0</y>
+         <width>81</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(241, 127, 66);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Save</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pushButton">
+       <property name="geometry">
+        <rect>
+         <x>930</x>
+         <y>0</y>
+         <width>81</width>
+         <height>41</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(132, 127, 127);
+color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>Delete</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_7">
+       <property name="geometry">
+        <rect>
+         <x>250</x>
+         <y>10</y>
+         <width>331</width>
+         <height>21</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(255, 255, 255);</string>
+       </property>
+       <property name="text">
+        <string>학습한 모델을 DB에 저장하시겠습니까? </string>
+       </property>
+      </widget>
+     </widget>
+     <zorder>confusionMatrixTable</zorder>
+     <zorder>label_6</zorder>
+     <zorder>label_8</zorder>
+     <zorder>precisionTable</zorder>
+     <zorder>accuracyTable</zorder>
+     <zorder>label_9</zorder>
+     <zorder>label_10</zorder>
+     <zorder>formLayoutWidget_2</zorder>
+     <zorder>label_12</zorder>
+     <zorder>macroPrecisionLabel</zorder>
+     <zorder>label_13</zorder>
+     <zorder>label_11</zorder>
+     <zorder>widget_3</zorder>
+     <zorder>recallTable</zorder>
     </widget>
    </widget>
    <widget class="QWidget" name="directory_widget" native="true">
@@ -908,7 +1039,7 @@ font: 15pt &quot;a로케트&quot;;</string>
     <property name="geometry">
      <rect>
       <x>-10</x>
-      <y>0</y>
+      <y>10</y>
       <width>1631</width>
       <height>821</height>
      </rect>
