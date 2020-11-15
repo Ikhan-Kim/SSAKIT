@@ -31,11 +31,11 @@ class ClassEditWidget(QMainWindow, form_class) :
         "#154360", "#F7DC6F", "#AED6F1", "#F09D28", "#E912C4",
         "#60E91A", "#9E314C", "#F39C12", "#10A69B", "#A6A110",
     ]
-    def __init__(self, class_data) :
+    def __init__(self, class_data, dbName) :
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle("Class Edit Widget")
-
+        self.dbName = dbName
         # self.lineEdit.setPlaceholderText("색상 코드 입력")
         self.lineEdit_2.setPlaceholderText("label 입력")
 
@@ -63,7 +63,7 @@ class ClassEditWidget(QMainWindow, form_class) :
     # DB) SQL 연결 및 테이블 생성
     def sqlConnect(self):
         try: 
-            self.conn = sqlite3.connect(dbName, isolation_level=None)
+            self.conn = sqlite3.connect(self.dbName, isolation_level=None)
         except:
             print("CEW_문제가 있네요!")
             exit(1)
@@ -147,7 +147,7 @@ class ClassEditWidget(QMainWindow, form_class) :
         if label == "":
             self.warningMSG("주의", "label을 입력해 주세요.")
         else:        
-            conn = sqlite3.connect(dbName)
+            conn = sqlite3.connect(self.dbName)
             cur = conn.cursor()
             
             insertSql = "INSERT INTO classLabel (color, label, train, val, test) VALUES (?,?,0,0,0)"
@@ -162,7 +162,7 @@ class ClassEditWidget(QMainWindow, form_class) :
         # update
         if column == 3:
             # print("수정버튼 클릭됨")
-            conn = sqlite3.connect(dbName)
+            conn = sqlite3.connect(self.dbName)
             cur = conn.cursor()
             a = QMessageBox.question(self, "수정 확인", "정말로 수정 하시겠습니까?",
                                  QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
@@ -196,7 +196,7 @@ class ClassEditWidget(QMainWindow, form_class) :
         ## 테이블 내부의 셀 클릭과 연결된 이벤트는 기본적으로 셀의 Row, Column을 인자로써 전달받는다.
         ## 삭제 셀이 눌렸을 때, 삭제 셀은 5번째 셀이므로 column 값이 4일 경우만 작동한다.
         elif column == 4:
-            conn = sqlite3.connect(dbName)
+            conn = sqlite3.connect(self.dbName)
             cur = conn.cursor()
             a = QMessageBox.question(self, "삭제 확인", "정말로 삭제 하시겠습니까?",
                                  QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
