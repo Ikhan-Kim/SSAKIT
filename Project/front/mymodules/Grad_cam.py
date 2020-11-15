@@ -118,7 +118,7 @@ def EFFICIENTNETB0_Grad_cam(class_name, image_name):
     IMAGE_NAME = image_name
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     test_dir = os.path.join(BASE_DIR, 'final1/test')
-    IMAGE_PATH = os.path.join(BASE_DIR, 'final1/test/'+CLASS_NAME +'/' +IMAGE_NAME +'.png')
+    IMAGE_PATH = os.path.join(BASE_DIR, 'final1/test/'+CLASS_NAME +'/' +IMAGE_NAME)
     # Define hyperparameter
     INPUT_SIZE = 224
     CHANNELS = 3
