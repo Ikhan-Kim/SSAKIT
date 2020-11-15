@@ -691,6 +691,8 @@ class WindowClass(QMainWindow, form_class):
         # self.btnEnable()
 
     def test(self):
+        self.infoMSG.setText("Image Viewer의 이미지를 클릭하면 CAM 을 확인 할 수 있습니다.")
+        self.btnColorChange(self.btnTest)
         self.tabWidget.setCurrentIndex(2)
         self.testModelSelectDisplay = TestModelSelect()
         self.testModelSelectDisplay.show()
