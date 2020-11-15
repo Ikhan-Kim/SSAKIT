@@ -26,9 +26,9 @@ def test(model_name, window):
     CHANNELS = 3
     INPUT_SHAPE = (INPUT_SIZE, INPUT_SIZE, CHANNELS)
     print(window.learn_num_data)
-    NUM_CLASSES = window.learn_num_data[0]
-    NUM_TRAIN_IMGS = window.learn_num_data[1]
-    NUM_VAL_IMGS = window.learn_num_data[2]
+    # NUM_CLASSES = window.learn_num_data[0]
+    # NUM_TRAIN_IMGS = window.learn_num_data[1]
+    # NUM_VAL_IMGS = window.learn_num_data[2]
     BATCH_SIZE = 32
 
     # Data Preprocessing
@@ -101,7 +101,7 @@ def test(model_name, window):
             diagonal += cm[i][i]
             for j in cm[i]:
                 ssum += j
-        acc = round(diagonal / ssum, 3) * 100
+        acc = int(round(diagonal / ssum, 3) * 100)
 
         precision = []
         recall = []
