@@ -453,6 +453,7 @@ class WindowClass(QMainWindow, form_class):
     mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
     settingsData = []
     class_names = []
+    class_data = []
     projectName = ''
     learnDataPath = ''
     learn_train_path = ''
@@ -469,12 +470,6 @@ class WindowClass(QMainWindow, form_class):
     {"color": "#61FF33", "label": "4301", "train":50, "val":30, "test": 30},
     {"color": "#EA33FF", "label": "7501", "train":50, "val":30, "test": 30},
     ]
-    class_data = [
-    ["ex01", 10, 10, 10],
-    ["ex01", 10, 10, 10],
-    ["ex01", 10, 10, 10]
-    ]
-
     # colors 리스트
     colors = [
         "#EA341B", "#EADA1B", "#71EA1B", "#1BEAD4", "#1B41EA",
@@ -680,7 +675,7 @@ class WindowClass(QMainWindow, form_class):
         self.testModelSelectDisplay.show()
         # test_function2.test()
         self.btnColorChange(self.btnTest)
-        self.cnt_file()
+        # self.cnt_file()
 
     # ClassEditWidget띄우기
     def ClassEditBtnFunc(self):
@@ -797,12 +792,19 @@ class WindowClass(QMainWindow, form_class):
     def cnt_file(self):
         self.learn_num_data = []
         self.learn_num_data.append(len(self.class_names))
-        cnt_train = 0
-        cnt_val = 0
+        cnt_train, cnt_val, cnt_test = 0, 0, 0
+        sum_train, sum_val, sum_test = 0, 0, 0
         file_path = self.learnDataPath + '/train/'
         for folder in self.class_names:
-            cnt_train += len([name for name in os.listdir(self.learnDataPath + '/train/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/train/' + folder, name))])
-            cnt_val += len([name for name in os.listdir(self.learnDataPath + '/validation/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/validation/' + folder, name))])
+            cnt_train = len([name for name in os.listdir(self.learnDataPath + '/train/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/train/' + folder, name))])
+            cnt_val = len([name for name in os.listdir(self.learnDataPath + '/validation/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/validation/' + folder, name))])
+            cnt_test = len([name for name in os.listdir(self.learnDataPath + '/test/' + folder) if os.path.isfile(os.path.join(self.learnDataPath + '/test/' + folder, name))])
+            sum_train += cnt_train
+            sum_val += cnt_val
+            sum_test += cnt_test
+            self.class_data.append([folder, cnt_train, cnt_val, cnt_test])
+        print(self.class_data)
+        self.sqlConnect()
         self.learn_num_data.append(cnt_train)
         self.learn_num_data.append(cnt_val)
 
