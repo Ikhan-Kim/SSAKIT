@@ -92,12 +92,12 @@ def Learn(augmentation, input_epochs, train_dir, val_dir, window):
     plotLosses = PlotLosses(input_epochs, window)
 
     callbacks = [
-        tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_accuracy',
+        tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_loss',
                                         #  restore_best_weights=True
                                         ),
         tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
-                                            monitor='val_accuracy',
-                                            mode='max',
+                                            monitor='val_loss',
+                                            mode='min',
                                             save_best_only=True,
                                             # save_weights_only=True,
                                         ),

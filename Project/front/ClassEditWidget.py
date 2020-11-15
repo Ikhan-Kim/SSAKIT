@@ -16,26 +16,31 @@ def resource_path(relative_path):
     return os.path.join(base_path, relative_path)
 
 # 연결할 ui 파일의 경로 설정
-form = 'ClassEdit.ui'
+form = 'ui/ClassEdit.ui'
 form_class = uic.loadUiType(form)[0]
 
 class ClassEditWidget(QMainWindow, form_class) :
     # Signal 선언부
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
-
+    
+    # colors 리스트
+    colors = [
+        "#EA341B", "#EADA1B", "#71EA1B", "#1BEAD4", "#1B41EA",
+        "#E71BEA", "#EC9576", "#2A9614", "#144E96", "#521496",
+        "#48C9B0", "#F1C40F", "#5B2C6F ", "#A2D9CE", "#EC7063",
+        "#154360", "#F7DC6F", "#AED6F1", "#F09D28", "#E912C4",
+        "#60E91A", "#9E314C", "#F39C12", "#10A69B", "#A6A110",
+    ]
     def __init__(self, data) :
         super().__init__()
         self.setupUi(self)
         self.setWindowTitle("Class Edit Widget")
 
-        self.lineEdit.setPlaceholderText("색상 코드 입력")
+        # self.lineEdit.setPlaceholderText("색상 코드 입력")
         self.lineEdit_2.setPlaceholderText("label 입력")
 
         # sql 연동
         self.sqlConnect()
-
-        # edit 금지 모드
-        # self.classTypeWidget.setEditTriggers(QAbstractItemView.NoEditTriggers)
 
         # 버튼 클릭시 데이터 입력
         self.pushButton.clicked.connect(self.insertData)
@@ -79,34 +84,35 @@ class ClassEditWidget(QMainWindow, form_class) :
     # 불러온 데이터 table widget 에서 보여주기
     def setTables(self, rows):
         # Table column 수, header 설정+너비
-        self.classTypeWidget.setColumnCount(4)
-        self.classTypeWidget.setHorizontalHeaderLabels(['color', 'label', '수정', '삭제'])
+        self.classTypeWidget.setColumnCount(5)
+        self.classTypeWidget.setHorizontalHeaderLabels(['idx','color', 'label', '수정', '삭제'])
         # self.classTypeWidget.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         
         # # Table 너비 조절
-        # self.classTypeWidget.setColumnWidth(0,40)
-        self.classTypeWidget.setColumnWidth(2,50)
+        # self.classTypeWidget.setColumnWidth(0,0)
+        self.classTypeWidget.hideColumn(0)
         self.classTypeWidget.setColumnWidth(3,50)
-        self.classTypeWidget.horizontalHeader().setSectionResizeMode(0, QHeaderView.Stretch)
+        self.classTypeWidget.setColumnWidth(4,50)
         self.classTypeWidget.horizontalHeader().setSectionResizeMode(1, QHeaderView.Stretch)
+        self.classTypeWidget.horizontalHeader().setSectionResizeMode(2, QHeaderView.Stretch)
         
-        cnt = len(rows)
-        self.classTypeWidget.setRowCount(cnt)
+        self.cnt = len(rows)
+        self.classTypeWidget.setRowCount(self.cnt)
 
-        for x in range(cnt):
+        for x in range(self.cnt):
             # 리스트 내부의 column쌍은 튜플로 반환하므로 튜플의 각 값을 변수에 저장
             # print(rows)
-            color, label = rows[x][1], rows[x][2]
+            idx, color, label = rows[x][0], rows[x][1], rows[x][2]
             # print("idx, color, label : ", idx, color, label)
             
             # print("rows[x]", rows[x][0], rows[x][1], rows[x][2])
             # 테이블의 각 셀에 값 입력
-            # self.classTypeWidget.setItem(x, 0, QTableWidgetItem(str(idx)))
-            self.classTypeWidget.setItem(x, 0, QTableWidgetItem(""))
-            self.classTypeWidget.item(x, 0).setBackground(QtGui.QColor(color))
-            self.classTypeWidget.setItem(x, 1, QTableWidgetItem(label))
-            self.classTypeWidget.setItem(x, 2, QTableWidgetItem("수정"))
-            self.classTypeWidget.setItem(x, 3, QTableWidgetItem("❌"))
+            self.classTypeWidget.setItem(x, 0, QTableWidgetItem(str(idx)))
+            self.classTypeWidget.setItem(x, 1, QTableWidgetItem(""))
+            self.classTypeWidget.item(x, 1).setBackground(QtGui.QColor(color))
+            self.classTypeWidget.setItem(x, 2, QTableWidgetItem(label))
+            self.classTypeWidget.setItem(x, 3, QTableWidgetItem("수정"))
+            self.classTypeWidget.setItem(x, 4, QTableWidgetItem("❌"))
 
     # DB) sql문 실행 함수
     def run(self):
@@ -130,14 +136,15 @@ class ClassEditWidget(QMainWindow, form_class) :
     # insert
     def insertData(self):
         #두개의 lineEdit에서 각각 색과 className를 받아온다.
-
-        color = self.lineEdit.text()
+        # color = self.lineEdit.text()
+        color = self.colors[self.cnt]
         label = self.lineEdit_2.text()
-        if color == "" and label == "":
-            self.warningMSG("주의", "color 및 label을 입력해주세요")
-        elif color == "" :
-            self.warningMSG("주의", "color를 입력해 주세요.")
-        elif label == "":
+        # if color == "" and label == "":
+        #     self.warningMSG("주의", "color 및 label을 입력해주세요")
+        # elif color == "" :
+        #     self.warningMSG("주의", "color를 입력해 주세요.")
+        # elif label == "":
+        if label == "":
             self.warningMSG("주의", "label을 입력해 주세요.")
         else:        
             conn = sqlite3.connect("test2.db")
@@ -166,12 +173,12 @@ class ClassEditWidget(QMainWindow, form_class) :
                 # color는 DB에서 값 불러와서 DB 값 수정 => bg color 재설정
                 # self.classTypeWidget.setItem(x, 1, QTableWidgetItem(""))
                 # self.classTypeWidget.item(x, 1).setBackground(QtGui.QColor(color))
-                color_ = "#1BE6EA" # 컬러는 임시 데이터 ㅜㅜ
+                # color_ = "#1BE6EA" # 컬러는 임시 데이터 ㅜㅜ
                 label_ = self.classTypeWidget.item(row, 2).text()
                 # print("idx - ",idx, "label : ", label_)
 
                 #DB의 데이터 idx는 선택한 Row의 첫번째 셀(0번 Column)의 값에 해당한다.
-                updateSql = "UPDATE classLabel SET `color` = '{}', `label` = '{}' WHERE idx=?".format(color_, label_)
+                updateSql = "UPDATE classLabel SET `label` = '{}' WHERE idx=?".format(label_)
                 cur.execute(updateSql, (idx,))
                 conn.commit()        
                 conn.close()
@@ -185,9 +192,6 @@ class ClassEditWidget(QMainWindow, form_class) :
             #데이터 삭제 후 DB의 내용 불러와서 TableWidget에 넣기 위한 함수 호출
             self.selectData()
 
-
-            
-        
         # delete
         ## 테이블 내부의 셀 클릭과 연결된 이벤트는 기본적으로 셀의 Row, Column을 인자로써 전달받는다.
         ## 삭제 셀이 눌렸을 때, 삭제 셀은 5번째 셀이므로 column 값이 4일 경우만 작동한다.
@@ -208,13 +212,13 @@ class ClassEditWidget(QMainWindow, form_class) :
             #데이터 삭제 후 DB의 내용 불러와서 TableWidget에 넣기 위한 함수 호출
             self.selectData()
 
-    def updateData(self, row, column):
-        if column == 3:
-            print("수정버튼 클릭됨")
-            idx = self.classTypeWidget.item(row, 0).text()
-            color_ = self.classTypeWidget.item(row, 1).text()
-            lable_ = self.classTypeWidget.item(row, 2).text()
-            print(idx, color_, label_)
+    # def updateData(self, row, column):
+    #     if column == 3:
+    #         print("수정버튼 클릭됨")
+    #         idx = self.classTypeWidget.item(row, 0).text()
+    #         # color_ = self.classTypeWidget.item(row, 1).text()
+    #         lable_ = self.classTypeWidget.item(row, 2).text()
+    #         print(idx, label_)
             
 
             # conn = sqlite3.connect("test2.db")
@@ -233,25 +237,6 @@ class ClassEditWidget(QMainWindow, form_class) :
             # #데이터 삭제 후 DB의 내용 불러와서 TableWidget에 넣기 위한 함수 호출
             # self.selectData()
             
-    
-    def edit(self):
-        if (self.txt이름.text() != "") and (self.txt주소.text() != ""):
-            try:
-                self.cmd = "update test2 set `name` = '{}', `addr` = '{}' where `no` = {}"  \
-                    .format(self.txt이름.text(), self.txt주소.text(), self.txt번호.text())
-                print(self.cmd)
-                self.cur.execute(self.cmd)
-                self.conn.commit()
-            except:
-                QMessageBox.information(self, "삽입 오류", "올바른 형식으로 입력하세요.",
-                                        QMessageBox.Yes, QMessageBox.Yes)
-                return
-        else:
-            QMessageBox.information(self, "입력 오류", "빈칸 없이 입력하세요.",
-                                    QMessageBox.Yes, QMessageBox.Yes)
-            return
-        QMessageBox.information(self, "수정 성공", "수정되었습니다.",
-                                QMessageBox.Yes, QMessageBox.Yes)
 
     # # delete
     # def deleteData(self, row, column):
