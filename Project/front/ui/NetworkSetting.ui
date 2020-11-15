@@ -262,7 +262,7 @@ font: 9pt &quot;a스마일L&quot;;</string>
      <rect>
       <x>260</x>
       <y>100</y>
-      <width>1011</width>
+      <width>1021</width>
       <height>611</height>
      </rect>
     </property>
@@ -271,7 +271,7 @@ font: 9pt &quot;a스마일L&quot;;</string>
 font: 12pt &quot;a디딤돌&quot;;</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -541,7 +541,7 @@ color: rgb(255, 238, 228);</string>
         <x>0</x>
         <y>0</y>
         <width>1011</width>
-        <height>321</height>
+        <height>341</height>
        </rect>
       </property>
       <layout class="QFormLayout" name="plotLayout"/>
@@ -598,10 +598,10 @@ font: 13pt &quot;a로케트&quot;;</string>
      <widget class="QTableWidget" name="confusionMatrixTable">
       <property name="geometry">
        <rect>
-        <x>50</x>
-        <y>10</y>
-        <width>871</width>
-        <height>561</height>
+        <x>10</x>
+        <y>0</y>
+        <width>381</width>
+        <height>341</height>
        </rect>
       </property>
      </widget>
@@ -624,7 +624,7 @@ font: 13pt &quot;a로케트&quot;;</string>
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>121</width>
+       <width>161</width>
        <height>31</height>
       </rect>
      </property>
@@ -674,28 +674,12 @@ font: 15pt &quot;a로케트&quot;;</string>
       <string notr="true">background-color: rgb(255, 255, 255);</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnOpenDir">
-     <property name="geometry">
-      <rect>
-       <x>140</x>
-       <y>10</y>
-       <width>41</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="styleSheet">
-      <string notr="true">background-color: rgb(241, 127, 66);</string>
-     </property>
-     <property name="text">
-      <string/>
-     </property>
-    </widget>
    </widget>
    <widget class="QWidget" name="mainWidget" native="true">
     <property name="geometry">
      <rect>
       <x>0</x>
-      <y>0</y>
+      <y>10</y>
       <width>1631</width>
       <height>821</height>
      </rect>

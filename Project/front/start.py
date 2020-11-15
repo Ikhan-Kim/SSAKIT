@@ -212,7 +212,7 @@ class AnotherFormLayout(QDialog):
         self.formLearn.setLayout(layoutLS)
 
         # Train List
-        self.formTrainList = QGroupBox("Train List")
+        self.formTrainList = QGroupBox("previous train parameter")
         self.formTrainList.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255); ")
         self.trainList = QTableWidget()
         self.trainList.setStyleSheet("background-color: rgb(255, 255, 255); color: rgb(0, 0, 0);")
@@ -471,7 +471,7 @@ class WindowClass(QMainWindow, form_class):
         # 기본 설정?>
         self.learnSettingDisplay = AnotherFormLayout()
         self.projectNameDisplay = ProjectNameClass()
-        self.testModelSelectDisplay = TestModelSelect()
+        # self.testModelSelectDisplay = TestModelSelect()
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
         self.btnOpenDir.setIcon(QIcon('./assets/folder.jpg')) 
@@ -652,6 +652,7 @@ class WindowClass(QMainWindow, form_class):
 
     def test(self):
         self.tabWidget.setCurrentIndex(2)
+        self.testModelSelectDisplay = TestModelSelect()
         self.testModelSelectDisplay.show()
         # test_function2.test()
         self.btnColorChange(self.btnTest)
