@@ -115,6 +115,7 @@ class Worker(QRunnable):
             Retrain_model.Retrain(
                 self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow, 'checkpoint/' + self.settingsData[0]
             )
+        myWindow.textBox_terminal.moveCursor(QtGui.QTextCursor.End)
         myWindow.btnEnable()
 
 # preprocess setting popup #train wizard
