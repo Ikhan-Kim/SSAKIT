@@ -283,7 +283,7 @@ font: 9pt &quot;a스마일L&quot;;</string>
 font: 12pt &quot;a디딤돌&quot;;</string>
     </property>
     <property name="currentIndex">
-     <number>2</number>
+     <number>0</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -311,7 +311,7 @@ font: 12pt &quot;a디딤돌&quot;;</string>
         <x>690</x>
         <y>270</y>
         <width>301</width>
-        <height>281</height>
+        <height>311</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -539,6 +539,38 @@ color: rgb(255, 238, 228);</string>
        </property>
        <property name="text">
         <string/>
+       </property>
+      </widget>
+      <widget class="QLabel" name="classNameLabel">
+       <property name="geometry">
+        <rect>
+         <x>20</x>
+         <y>270</y>
+         <width>71</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;a디딤돌&quot;;</string>
+       </property>
+       <property name="text">
+        <string>Class Name</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="className">
+       <property name="geometry">
+        <rect>
+         <x>160</x>
+         <y>270</y>
+         <width>71</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">font: 9pt &quot;a스마일L&quot;;</string>
+       </property>
+       <property name="text">
+        <string>0</string>
        </property>
       </widget>
      </widget>
@@ -1039,7 +1071,7 @@ font: 15pt &quot;a로케트&quot;;</string>
     <property name="geometry">
      <rect>
       <x>-10</x>
-      <y>10</y>
+      <y>0</y>
       <width>1631</width>
       <height>821</height>
      </rect>
