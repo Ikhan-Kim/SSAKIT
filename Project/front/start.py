@@ -274,7 +274,7 @@ class AnotherFormLayout(QDialog):
     # DB 연결, 테이블 생성
     def trainListSqlConnect(self):
         try: 
-            self.conn = sqlite3.connect(dbName, isolation_level=None)
+            self.conn = sqlite3.connect(self.dbName, isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
@@ -517,11 +517,6 @@ class WindowClass(QMainWindow, form_class):
 
         self.setWindowTitle('SSAKIT')
 
-        # sql 연동
-        self.sqlConnect()
-
-        # ClassEditWidget 불러오기
-        self.openClassEditWidget = ClassEditWidget(WindowClass.class_data)
         # class Edit btn 클릭 => 위젯 열기
         self.classEditBtn.clicked.connect(self.ClassEditBtnFunc)
         # edit 금지 모드
@@ -541,6 +536,10 @@ class WindowClass(QMainWindow, form_class):
             b.setStyleSheet("background-color: #ffeee4; font: 12pt 'a로케트'; color: rgb(0, 0, 0);")
 
     def createNameFn(self):
+        # sql 연동
+        self.sqlConnect()
+        # ClassEditWidget 불러오기
+        self.openClassEditWidget = ClassEditWidget(WindowClass.class_data, self.dbName)
         self.setWindowTitle('SSAKIT -' + self.projectName)
         self.learnDataPath = './learnData/' + self.projectName
         create_dir.create_dir_flow(self.projectName)
@@ -686,9 +685,9 @@ class WindowClass(QMainWindow, form_class):
 
     # DB) SQL 연결 및 테이블 생성
     def sqlConnect(self):
-        dbName = WindowClass.projectName + ".db"
+        self.dbName = WindowClass.projectName + ".db"
         try: 
-            self.conn = sqlite3.connect(dbName, isolation_level=None)
+            self.conn = sqlite3.connect(self.dbName, isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
