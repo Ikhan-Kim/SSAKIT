@@ -624,7 +624,7 @@ font: 13pt &quot;a로케트&quot;;</string>
       <rect>
        <x>10</x>
        <y>10</y>
-       <width>161</width>
+       <width>121</width>
        <height>31</height>
       </rect>
      </property>
@@ -672,6 +672,22 @@ font: 15pt &quot;a로케트&quot;;</string>
      </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(255, 255, 255);</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnOpenDir">
+     <property name="geometry">
+      <rect>
+       <x>140</x>
+       <y>10</y>
+       <width>41</width>
+       <height>31</height>
+      </rect>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(241, 127, 66);</string>
+     </property>
+     <property name="text">
+      <string/>
      </property>
     </widget>
    </widget>

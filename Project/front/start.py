@@ -451,6 +451,11 @@ class WindowClass(QMainWindow, form_class):
     {"color": "#61FF33", "label": "4301", "train":50, "val":30, "test": 30},
     {"color": "#EA33FF", "label": "7501", "train":50, "val":30, "test": 30},
     ]
+    class_data = [
+    ["ex01", 10, 10, 10],
+    ["ex01", 10, 10, 10],
+    ["ex01", 10, 10, 10]
+    ]
 
     # colors 리스트
     colors = [
@@ -669,7 +674,7 @@ class WindowClass(QMainWindow, form_class):
     # DB) SQL 연결 및 테이블 생성
     def sqlConnect(self):
         try: 
-            self.conn = sqlite3.connect("test2.db", isolation_level=None)
+            self.conn = sqlite3.connect("SSAKIT_DB.db", isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
@@ -687,20 +692,20 @@ class WindowClass(QMainWindow, form_class):
         self.run()
 
         item_list = [list(item[:]) for item in self.cur.fetchall()]
-        # print(item_list, len(item_list))
-        if len(item_list) == 0:
-            for d in self.data:
-                # print("d", d)
-                self.color = d["color"]
-                self.label = d["label"]
-                self.train = d["train"]
-                self.val = d["val"]
-                self.test = d["test"]
 
-                self.cmd = "insert into classLabel(`color`, `label`, `train`, `val`, `test`) values('{}', '{}', {}, {}, {})"\
-                    .format(self.color, self.label, self.train, self.val, self.test)
-                self.cur.execute(self.cmd)
-                self.conn.commit()
+        if len(item_list) == 0:
+            for class_data_idx, data in enumerate(self.class_data) :
+                print("class_data_idx, data : ", class_data_idx, data)
+                # self.color = d["color"]
+                # self.label = d["label"]
+                # self.train = d["train"]
+                # self.val = d["val"]
+                # self.test = d["test"]
+
+                # self.cmd = "insert into classLabel(`color`, `label`, `train`, `val`, `test`) values('{}', '{}', {}, {}, {})"\
+                #     .format(self.color, self.label, self.train, self.val, self.test)
+                # self.cur.execute(self.cmd)
+                # self.conn.commit()
 
         self.selectData()
 
