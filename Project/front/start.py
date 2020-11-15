@@ -494,6 +494,7 @@ class WindowClass(QMainWindow, form_class):
         self.setupUi(self)
         self.pushButton_5.hide()
         self.label_4.hide()
+        self.setWindowIcon(QtGui.QIcon('./assets/img/main_icon.jpg'))
         # 기본 설정?>
         
         self.projectNameDisplay = ProjectNameClass()
