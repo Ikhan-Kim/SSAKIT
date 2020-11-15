@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1599</width>
+    <width>1618</width>
     <height>848</height>
    </rect>
   </property>
@@ -59,6 +59,9 @@ alternate-background-color: rgb(255, 255, 255);</string>
        <height>61</height>
       </rect>
      </property>
+     <property name="toolTip">
+      <string>학습 전 설정</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">font: 12pt &quot;a로케트&quot;;
 color: rgb(255, 255, 255);
@@ -77,6 +80,9 @@ Wizard</string>
        <width>131</width>
        <height>61</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string/>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 12pt &quot;a로케트&quot;;
@@ -190,6 +196,9 @@ background-color: rgb(255, 238, 228);</string>
        <height>28</height>
       </rect>
      </property>
+     <property name="toolTip">
+      <string>Class 수정하기</string>
+     </property>
      <property name="styleSheet">
       <string notr="true">font: 10pt &quot;a로케트&quot;;
 color: rgb(255, 255, 255);
@@ -225,6 +234,9 @@ color: rgb(255, 238, 228);</string>
        <width>31</width>
        <height>28</height>
       </rect>
+     </property>
+     <property name="toolTip">
+      <string>새로고침</string>
      </property>
      <property name="styleSheet">
       <string notr="true">font: 10pt &quot;a로케트&quot;;
@@ -655,7 +667,7 @@ font: 15pt &quot;a로케트&quot;;</string>
       </rect>
      </property>
      <property name="toolTip">
-      <string>데이터 업로드 버튼</string>
+      <string>데이터 불러오기</string>
      </property>
      <property name="styleSheet">
       <string notr="true">background-color: rgb(241, 127, 66);</string>
@@ -701,7 +713,7 @@ font: 15pt &quot;a로케트&quot;;</string>
     <property name="geometry">
      <rect>
       <x>-10</x>
-      <y>10</y>
+      <y>-10</y>
       <width>1631</width>
       <height>821</height>
      </rect>
