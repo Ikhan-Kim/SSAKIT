@@ -274,7 +274,7 @@ class AnotherFormLayout(QDialog):
     # DB 연결, 테이블 생성
     def trainListSqlConnect(self):
         try: 
-            self.conn = sqlite3.connect("dbName", isolation_level=None)
+            self.conn = sqlite3.connect(dbName, isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
@@ -688,7 +688,7 @@ class WindowClass(QMainWindow, form_class):
     def sqlConnect(self):
         dbName = WindowClass.projectName + ".db"
         try: 
-            self.conn = sqlite3.connect("dbName", isolation_level=None)
+            self.conn = sqlite3.connect(dbName, isolation_level=None)
         except:
             print("문제가 있네요!")
             exit(1)
