@@ -86,12 +86,12 @@ def Retrain(augmentation, input_epochs, train_path, val_path, window, trained_mo
     plotLosses = PlotLosses(input_epochs, window)
 
     callbacks = [
-        tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_accuracy',
+        tf.keras.callbacks.EarlyStopping(patience=10, monitor='val_loss',
                                         #  restore_best_weights=True
                                         ),
         tf.keras.callbacks.ModelCheckpoint(filepath=checkpoint_filepath,
-                                            monitor='val_accuracy',
-                                            mode='max',
+                                            monitor='val_loss',
+                                            mode='min',
                                             save_best_only=True,
                                             # save_weights_only=True,
                                         ),
@@ -102,4 +102,7 @@ def Retrain(augmentation, input_epochs, train_path, val_path, window, trained_mo
     # training model
     history = model.fit(train_generator, epochs=EPOCHS, steps_per_epoch=train_steps_per_epoch, validation_data = validation_generator, validation_steps=val_steps_per_epoch, verbose = 1,  callbacks=callbacks)
     window.textBox_terminal.append("Training Done!")
+    val_loss = history.history['val_loss']
+    message = "Epoch: "+ str(np.argmin(val_loss)+1)+ " , Min val_loss: "+ str(round(np.min(val_loss), 4))
+    window.textBox_terminal.append("MRRRRRRmessage")
     plt.close()
