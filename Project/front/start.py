@@ -11,7 +11,7 @@ from stat import *
 # from back import create_dir, set_directory
 # from back.learning_test import InceptionV3_test1, ResNet152_test1, Vgg16_test1, test_function2, EfficientnetB0_test1
 from mymodules import create_dir, set_directory
-from mymodules import InceptionV3_test1, ResNet152_test1, Vgg16_test1, EfficientnetB0_test1, test_function2
+from mymodules import InceptionV3_test1, ResNet152_test1, Vgg16_test1, EfficientnetB0_test1, test_function2, Retrain_model
 
 import tensorflow as tf
 import numpy as np
@@ -110,11 +110,11 @@ class Worker(QRunnable):
                 print('EfficientnetB0')
                 EfficientnetB0_test1.Learn(
                     self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
-        # elif self.settingsData[4] == 'continue':
-        #     # 여기에 retrain
-        #     Retrain_model.retrain(
-        #         self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow
-        #     )
+        elif self.settingsData[4] == 'continue':
+            # 여기에 retrain
+            Retrain_model.Retrain(
+                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow, 'checkpoint/' + self.settingsData[0]
+            )
         myWindow.btnEnable()
 
 # preprocess setting popup #train wizard
