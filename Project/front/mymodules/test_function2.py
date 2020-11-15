@@ -26,9 +26,9 @@ def test(model_name, window):
     CHANNELS = 3
     INPUT_SHAPE = (INPUT_SIZE, INPUT_SIZE, CHANNELS)
     print(window.learn_num_data)
-    NUM_CLASSES = window.learn_num_data[0]
-    NUM_TRAIN_IMGS = window.learn_num_data[1]
-    NUM_VAL_IMGS = window.learn_num_data[2]
+    # NUM_CLASSES = window.learn_num_data[0]
+    # NUM_TRAIN_IMGS = window.learn_num_data[1]
+    # NUM_VAL_IMGS = window.learn_num_data[2]
     BATCH_SIZE = 32
 
     # Data Preprocessing
@@ -144,28 +144,65 @@ def test(model_name, window):
             widget.installEventFilter(filter)
             return filter.clicked
         
-
         def show_img(i, j):
+            sc = []
+                
             for x in reversed(range(window.testedImageLayout.count())): 
                 window.testedImageLayout.itemAt(x).widget().setParent(None)
             img_path = './learnData/' + window.projectName + '/test/' + classes[i] + '/'
             scrollArea = QScrollArea()
             l = QVBoxLayout()
-            for file in img_info[i][j]:
+            imgLabels = []
+            # for file in enumerate(img_info[i][j]):
+            #     pixmap = QPixmap(os.path.join(img_path, file[0]))
+            #     if not pixmap.isNull():
+            #         pixmap = pixmap.scaled(96, 96)
+            #         imgLabels.append(QLabel(pixmap=pixmap))
+            #         def show_cam():
+            #             VGG16_Grad_cam(classes[i], file[0])
+            #         sc.append([classes[i], file[0]])
+            #         # clickable(imgLabels[-1]).connect(show_cam)
+            #         # clickable(imgLabel).connect(show_cam(classes[i], file[0]))
+            #         imgLabelFileName = QLabel(file[0])
+            #         imgPrediction = QLabel(str(file[1]) + "%")
+            #         l.addWidget(imgLabels[-1])
+            #         l.addWidget(imgLabelFileName)
+            #         l.addWidget(imgPrediction)
+
+            def make_fn(class_name, file_name):
+                def _function():
+                    VGG16_Grad_cam(class_name, file_name)
+                return _function
+
+            # 익한 테스트
+            for idx, file in enumerate(img_info[i][j]):
                 pixmap = QPixmap(os.path.join(img_path, file[0]))
                 if not pixmap.isNull():
                     pixmap = pixmap.scaled(96, 96)
-                    imgLabel = QLabel(pixmap=pixmap)
-                    
-                    def show_cam():
-                        VGG16_Grad_cam(classes[i], file[0])
-                    clickable(imgLabel).connect(show_cam)
-                    # clickable(imgLabel).connect(show_cam(classes[i], file[0]))
+                    globals()['confusion_label{}' .format(idx)] = QLabel(pixmap=pixmap)
+                    # def show_cam():
+                    #     VGG16_Grad_cam(classes[i], file[0])
+                    globals()['confusion_function{}' .format(idx)] = make_fn(classes[i], file[0])
+                    sc.append([classes[i], file[0]])
+                    clickable(globals()['confusion_label{}' .format(idx)]).connect(globals()['confusion_function{}' .format(idx)])
                     imgLabelFileName = QLabel(file[0])
                     imgPrediction = QLabel(str(file[1]) + "%")
-                    l.addWidget(imgLabel)
+                    l.addWidget(globals()['confusion_label{}' .format(idx)])
                     l.addWidget(imgLabelFileName)
                     l.addWidget(imgPrediction)
+            
+            sc2 = []
+            for idx, s in enumerate(sc):
+                sc2.append([idx, s[0], s[1]])
+            print(sc2)
+
+            # for idx, img in enumerate(imgLabels):
+            #     def show_cam():
+            #         VGG16_Grad_cam(sc[idx][0], sc[idx][1])
+            #     clickable(img).connect(show_cam)
+
+            
+
             w = QWidget()
             w.setLayout(l)
             scrollArea.setWidget(w)

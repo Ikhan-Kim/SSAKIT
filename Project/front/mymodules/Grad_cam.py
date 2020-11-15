@@ -53,6 +53,7 @@ def make_gradcam_heatmap(
 
 
 def VGG16_Grad_cam(class_name, image_name):
+    print(class_name, image_name)
     #path
     CLASS_NAME = class_name
     IMAGE_NAME = image_name
@@ -106,10 +107,10 @@ def VGG16_Grad_cam(class_name, image_name):
     # 원본 사진과 heatmap사진을 겹치기
     superimposed_img = jet_heatmap * 0.7 + image_origin
     superimposed_img = tf.keras.preprocessing.image.array_to_img(superimposed_img)
-
-    plt.matshow(superimposed_img)
+    # print( superimposed_img)
+    plt.imshow(superimposed_img)
     plt.show()
-    return superimposed_img
+    # return superimposed_img
 
 
 def EFFICIENTNETB0_Grad_cam(class_name, image_name):
@@ -167,6 +168,6 @@ def EFFICIENTNETB0_Grad_cam(class_name, image_name):
     superimposed_img = jet_heatmap * 0.7 + image_origin
     superimposed_img = tf.keras.preprocessing.image.array_to_img(superimposed_img)
 
-    plt.matshow(superimposed_img)
+    plt.imshow(superimposed_img)
     plt.show()
-    return superimposed_img
+    # return superimposed_img
