@@ -110,7 +110,7 @@ class ClassEditWidget(QMainWindow, form_class) :
             self.classTypeWidget.setItem(x, 0, QTableWidgetItem(str(idx)))
             self.classTypeWidget.setItem(x, 1, QTableWidgetItem(""))
             self.classTypeWidget.item(x, 1).setBackground(QtGui.QColor(color))
-            self.classTypeWidget.setItem(x, 2, QTableWidgetItem(label))
+            self.classTypeWidget.setItem(x, 2, QTableWidgetItem('_'.join(label.split('_')[1:])))
             self.classTypeWidget.setItem(x, 3, QTableWidgetItem("수정"))
             self.classTypeWidget.setItem(x, 4, QTableWidgetItem("❌"))
 
