@@ -21,9 +21,10 @@ from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 
 from ClassEditWidget import ClassEditWidget
 
-
 # DB 연동
 import sqlite3
+
+from datetime import datetime
 
 def resource_path(relative_path):
     """ Get absolute path to resource, works for dev and for PyInstaller """
@@ -128,6 +129,7 @@ class AnotherFormLayout(QDialog):
         super().__init__()
         self.setGeometry(460,200,900,600) #옆, 위,  width, height
         self.createFormGroupBox()
+        self.setTLTables()
 
         self.setStyleSheet("background-color: #847f7f;")
 
@@ -161,9 +163,9 @@ class AnotherFormLayout(QDialog):
         self.continue_learn.clicked.connect(self.continueFn)
         self.setWindowTitle("Train Wizard")
 
+        
         # ???????????
-        # self.setTLTables()
-
+    
     def createFormGroupBox(self):
         # model name
         self.formModelName = QGroupBox("Set Model Name")
@@ -236,7 +238,7 @@ class AnotherFormLayout(QDialog):
             settings_data.append(self.comboBoxNN.currentText())
         else:
             settings_data.append(self.comboBoxContinue.currentText())
-        aug = [False, False, None, 0]
+        aug = [False, False, False, False]
         if self.checkBoxHorizantal.isChecked() == True:
             aug[0] = True
         if self.checkBoxVertical.isChecked() == True:
@@ -271,7 +273,32 @@ class AnotherFormLayout(QDialog):
         self.formContinueNetwork.show()
         self.new_learn.setStyleSheet("background-color: rgb(175, 171, 171); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
         self.continue_learn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+          
+    # 불러온 데이터 table에 보여주기
+    def setTLTables(self):
+        self.trainList.setColumnCount(6)
+        self.trainList.setHorizontalHeaderLabels(['Date', 'Model_Name', 'Augmentation', 'Network',  'Epochs' , 'Loss' , 'Accuracy'])
+        self.trainList.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # print("setTL")
+        rows = WindowClass.train_list_data
+        print("WindowClass.train_list_data",WindowClass.train_list_data)
+        # Table column 수, header 설정+너비
+        print("rows==========================", rows)
 
+        cnt = len(rows)
+        print("~~~~~~~~~~~~~~~", cnt)
+        self.trainList.setRowCount(cnt)
+
+        for x in range(cnt):
+            Date, Model_Name, Augmentation, Network,  Epochs , Loss , Accuracy = rows[x][1:]
+            print(x, "***************************", Date, Model_Name, Augmentation, Network,  Epochs , Loss , Accuracy)
+            self.trainList.setItem(x, 0, QTableWidgetItem(Date))
+            self.trainList.setItem(x, 1, QTableWidgetItem(Model_Name))
+            self.trainList.setItem(x, 2, QTableWidgetItem(Augmentation))
+            self.trainList.setItem(x, 3, QTableWidgetItem(Network))
+            self.trainList.setItem(x, 4, QTableWidgetItem(str(Epochs)))
+            self.trainList.setItem(x, 5, QTableWidgetItem(str(Loss)))
+            self.trainList.setItem(x, 6, QTableWidgetItem(str(Accuracy)))
     
 # open project
 class ProjectNameClass(QDialog):
@@ -408,16 +435,16 @@ class TestModelSelect(QDialog):
         self.listW.itemActivated.connect(self.itemActivated_event)
 
         # 확인버튼
-        buttonBox = QDialogButtonBox(
-            QDialogButtonBox.Save | QDialogButtonBox.Cancel)
-        buttonBox.accepted.connect(self.accept)
-        buttonBox.rejected.connect(self.reject)
-        buttonBox.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+        # buttonBox = QDialogButtonBox(
+        #     QDialogButtonBox.Save | QDialogButtonBox.Cancel)
+        # buttonBox.accepted.connect(self.accept)
+        # buttonBox.rejected.connect(self.reject)
+        # buttonBox.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
 
         vbox = QVBoxLayout()
         vbox.addWidget(self.label)
         vbox.addWidget(self.listW)
-        vbox.addWidget(buttonBox)
+        # vbox.addWidget(buttonBox)
         self.setLayout(vbox)
         # self.setGeometry(300, 300, 300, 300)
 
@@ -437,6 +464,7 @@ class WindowClass(QMainWindow, form_class):
     # class 갯수, train img 갯수, val img 갯수 순임.
     learn_num_data = []
     sIMG = ""
+    train_list_data = []
     # learn_val_path = ''
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
@@ -450,10 +478,10 @@ class WindowClass(QMainWindow, form_class):
     ]
 
     # 임시 데이터
-    horizental__, vertical__, brightness__, rotation__, epochs__, model_name__, loss__, accuracy__ = True, False, False, False, 100, "모델이름", 999, 9999
-    settingsData_DY = ['학습모델', [horizental__, vertical__, brightness__, rotation__], epochs__, model_name__, loss__, accuracy__]
+    # horizental__, vertical__, brightness__, rotation__, epochs__, model_name__, loss__, accuracy__ = True, False, True, 90, 100, "모델이름", 999, 9999
+    # settingsData_DY = ['학습모델', [horizental__, vertical__, brightness__, rotation__], epochs__, model_name__, loss__, accuracy__]
     # Date created at
-
+    
     def __init__(self) :     
         super().__init__()
         # design
@@ -461,8 +489,9 @@ class WindowClass(QMainWindow, form_class):
         self.setStyleSheet("background-color: #847f7f;")
 
         self.setupUi(self)
+        self.pushButton_5.hide()
         # 기본 설정?>
-        self.learnSettingDisplay = AnotherFormLayout()
+        
         self.projectNameDisplay = ProjectNameClass()
         # self.testModelSelectDisplay = TestModelSelect()
         pixmap = QtGui.QPixmap(self.mainImg)
@@ -484,7 +513,7 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         self.btnTraining.clicked.connect(self.training)
         self.projectNameDisplay.nameSignal.connect(self.createNameFn)
-        self.learnSettingDisplay.colorSignal.connect(self.changeColorFn)
+        
         self.btnTest.clicked.connect(self.test)
         self.btnOpenDir.clicked.connect(self.openDirFn)
         # 터미널
@@ -509,6 +538,9 @@ class WindowClass(QMainWindow, form_class):
         # Navigator
         self.loadNavi()
 
+        # TL_insert()
+        self.ResultSave.clicked.connect(self.TL_insert)
+
     def btnColorChange(self, btn):
         # print(" btn change", btn)
         btns = [self.btnLearnSettings,  self.btnTraining, self.btnTest, self.pushButton_5]
@@ -521,6 +553,8 @@ class WindowClass(QMainWindow, form_class):
         # sql 연동
         self.sqlConnect()
         self.trainListSqlConnect()
+        self.learnSettingDisplay = AnotherFormLayout()
+        self.learnSettingDisplay.colorSignal.connect(self.changeColorFn)
         # ClassEditWidget 불러오기
         self.openClassEditWidget = ClassEditWidget(WindowClass.class_data, self.dbName)
         self.setWindowTitle('SSAKIT -' + self.projectName)
@@ -564,7 +598,9 @@ class WindowClass(QMainWindow, form_class):
         else:
             self.warningMSG("주의", "프로젝트를 먼저 생성/선택 해주십시오.")
 
-    def learnSettingsFn(self, checked):
+    def learnSettingsFn(self, checked):        
+        # self.setTLTables(item_list)
+        
         self.tabWidget.setCurrentIndex(0)
         self.class_names = os.listdir(self.learnDataPath + '/train')
         if self.projectName:
@@ -764,58 +800,89 @@ class WindowClass(QMainWindow, form_class):
         except:
             print("TL 문제가 있네요!")
             exit(1)
-        print("연결성공!")
+        print("TL_연결성공!")
         self.cur = self.conn.cursor()
 
         # 테이블 생성
-        self.createSql = "CREATE TABLE IF NOT EXISTS trainList (idx INTEGER PRIMARY KEY, Date TEXT,  Model Name TEXT, Augmentation TEXT, Network TEXT, Epochs INTEGER, Loss INTEGER, Accuracy INTEGER)"
+        self.createSql = "CREATE TABLE IF NOT EXISTS trainList (idx INTEGER PRIMARY KEY, Date TEXT, Model_Name TEXT, Augmentation TEXT, Network TEXT, Epochs INTEGER, Loss INTEGER, Accuracy INTEGER)"
         self.cmd = self.createSql
         self.cur.execute(self.cmd)
         self.conn.commit()
 
-        # self.selectTLData()
+        self.TL_select()
+        
+        # 테스트용 코드 / 돌아가는 거 확인하면 save 버튼 눌렀을 때 DB에 저장될 수 있도록 바꾸기
+        # self.TL_insert()
+
+    def TL_select(self):
+        # 보여주기
+        # DB 연결
+        try: 
+            self.conn = sqlite3.connect(self.dbName, isolation_level=None)
+        except:
+            print("TL 문제가 있네요!2")
+            exit(1)
+        print("연결성공!")
+        self.cur = self.conn.cursor()
+
+        # Data 선택해서 setTables에 보내주기
+        self.selectTLSql = "SELECT * FROM trainList"
+        self.cmd = self.selectTLSql
+        self.cur.execute(self.cmd)
+        self.conn.commit()
+
+        WindowClass.train_list_data = [list(item[:]) for item in self.cur.fetchall()]
+        print(self.train_list_data)
 
     def TL_insert(self):
         # insert
-        self.insertSql = "INSERT INTO classLabel (color, label, train, val, test) VALUES (?,?,0,0,0)"
-        self.cur.execute(insertSql, (color, label))
-        self.conn.commit()
+        # settingsData_DY = [['학습모델', [horizental__, vertical__, brightness__, rotation__], epochs__, model_name__, loss__, accuracy__]
+        print("settingsData : ", self.settingsData)
+        present = datetime.now()
+        month = str(present.month)
+        day = str(present.day)
+        hour = str(present.hour)
+        minute = str(present.minute)
+        # second = str(present.second)
+        # (1) Data 받아오기
+        
+        if self.settingsData[:] == 0:
+            pass
+        else:
+            Date = month +'/' + day +' ' + hour + ':' + minute
+            print(Date)
+            Network, Augmentation, Epochs, Model_Name, Loss , Accuracy = self.settingsData[:]
+            # print("Network, Augmentation, Epochs, Model_Name, Loss , Accuracy", Network, Augmentation, Epochs, Model_Name, Loss , Accuracy)
+
+            Aug_lst = []
+
+            for idx, a in enumerate(Augmentation):
+                if a != False:
+                    if idx == 0:
+                        Aug_lst.append('H')
+                    elif idx == 1:
+                        Aug_lst.append('V')
+                    elif idx == 2:
+                        Aug_lst.append('V')
+                    elif idx == 3:
+                        if a == 90:
+                            Aug_lst.append('R-90')
+                        elif a == 180:
+                            Aug_lst.append('R-180')
+                        else:
+                            continue
+                else:
+                    continue
+
+            Aug_str = ', '.join(Aug_lst)
+            print("==================== Aug_str ==================", Aug_str)
+
+            # (2) insert
+            self.insertSql = "INSERT INTO trainList (Date, Model_Name, Augmentation, Network, Epochs, Loss, Accuracy) VALUES (?,?,?,?,?,?,?)"
+            self.cur.execute(self.insertSql, (Date, Model_Name, Aug_str, Network, Epochs, Loss, Accuracy))
+            self.conn.commit()
 
         # 알림창
-
-
-
-    def selectTLData(self):
-        # Data 선택해서 setTables에 보내주기
-        self.selectTLSql = "SELECT * FROM classLabel"
-        self.cmd = self.selectTLSql
-        self.run()
-
-        item_list = [list(item[:]) for item in self.cur.fetchall()]
-        self.setTLTables(item_list)
-    
-    # 불러온 데이터 table에 보여주기
-    def setTLTables(self, rows):
-        # Table column 수, header 설정+너비
-        print("rows==========================", rows)
-        # self.trainList.setColumnCount(6)
-        # self.trainList.setHorizontalHeaderLabels(['Date', 'Model Name', 'Augmentation', 'Network',  'Epochs' , 'Loss' , 'Accuracy'])
-        # self.trainList.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-
-        cnt = len(rows)
-        # self.trainList.setRowCount(cnt)
-
-        for x in range(cnt):
-            Date = '00-00-00 00:00'
-            Network, Augmentation, Epochs, ModelName, Loss , Accuracy = rows[x][1:]
-            print(x, "***************************", Network, Augmentation, Epochs, ModelName, Loss , Accuracy)
-            # self.trainList.setItem(x, 0, QTableWidgetItem(Date))
-            # self.trainList.setItem(x, 1, QTableWidgetItem(label))
-            # self.trainList.setItem(x, 2, QTableWidgetItem(str(train)))
-            # self.trainList.setItem(x, 3, QTableWidgetItem(str(val)))
-            # self.trainList.setItem(x, 4, QTableWidgetItem(str(test)))
-            # self.trainList.setItem(x, 4, QTableWidgetItem(str(test)))
-            # self.trainList.setItem(x, 4, QTableWidgetItem(str(test)))
 
     # Navigator
     def loadNavi(self):
