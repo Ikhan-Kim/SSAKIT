@@ -240,7 +240,7 @@ class AnotherFormLayout(QDialog):
         else:
             for c in checkString:
                 if c in self.setModelName.text():
-                    myWindow.warningMSG("주의", "모델 이름에 다음 문자들 포함 될 수 없습니다. : \n \\ / : * ? \" < > |")
+                    myWindow.warningMSG("주의", "모델 이름에 다음 문자들은 포함 될 수 없습니다. : \n \\ / : * ? \" < > |")
                     break
             else:
                 if os.path.isfile('./checkpoint/' + self.comboBoxNN.currentText() + '_' + self.setModelName.text() + '.h5'):
@@ -452,12 +452,18 @@ class ProjectNameClass(QDialog):
             self.send_valve_popup_signal.emit(True)
 
     def projectNameFn(self):
+        checkString = '\\/:*?\"<>|'
         if self.lineName.text() == "":
             self.warningMSG("알림", "프로젝트 이름을 입력해주세요")
         else:
-            WindowClass.projectName = self.lineName.text()
-            self.nameSignal.emit()
-            self.hide()
+            for c in checkString:
+                if c in self.lineName.text():
+                    myWindow.warningMSG("주의", "프로젝트 이름에 다음 문자들은 포함 될 수 없습니다. : \n \\ / : * ? \" < > |")
+                    break
+            else:
+                WindowClass.projectName = self.lineName.text()
+                self.nameSignal.emit()
+                self.hide()
 
 
 # Test Model Seclet #영환오빠
