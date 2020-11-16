@@ -319,6 +319,11 @@ class AnotherFormLayout(QDialog):
     def continueFn(self):
         self.sw_new_continue = 'continue'
         self.formNeuralNetwork.hide()
+
+        continue_list = os.listdir('./checkpoint')
+        self.comboBoxContinue.clear()
+        self.comboBoxContinue.addItems(continue_list)
+
         self.formContinueNetwork.show()
         self.new_learn.setStyleSheet("background-color: rgb(175, 171, 171); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
         self.continue_learn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
