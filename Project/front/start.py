@@ -234,32 +234,41 @@ class AnotherFormLayout(QDialog):
         self.formTrainList.setLayout(tableLayout)
 
     def accept(self):
-        settings_data = []
-        if self.sw_new_continue == 'new':
-            settings_data.append(self.comboBoxNN.currentText())
+        checkString = '\\/:*?\"<>|'
+        if self.setModelName.text() == "":
+            myWindow.warningMSG("주의", "모델 이름을 입력해 주세요.")
         else:
-            settings_data.append(self.comboBoxContinue.currentText())
-        aug = [False, False, None, False]
-        if self.checkBoxHorizantal.isChecked() == True:
-            aug[0] = True
-        if self.checkBoxVertical.isChecked() == True:
-            aug[1] = True
-        if self.checkBoxBrightness.isChecked() == True:
-            aug[2] = [0.2, 1.2]
-        if self.checkBoxRotation90.isChecked() == True:
-            aug[3] = 90
-        if self.checkBoxRotation180.isChecked() == True:
-            aug[3] = 180
-        # if self.checkBoxRotation180.isChecked() == True:
-        #     WindowClass.settingsData.append("Rotation 180")
-        settings_data.append(aug)
-        settings_data.append(int(self.lineEpochs.text()))
-        settings_data.append(self.setModelName.text())
-        settings_data.append(self.sw_new_continue)
-        WindowClass.settingsData = settings_data
-        self.colorSignal.emit()
-        print(WindowClass.settingsData)
-        self.hide()
+            for c in checkString:
+                if c in self.setModelName.text():
+                    myWindow.warningMSG("주의", "모델 이름에 다음 문자들 포함 될 수 없습니다. : \n \\ / : * ? \" < > |")
+                    break
+            else:
+                settings_data = []
+                if self.sw_new_continue == 'new':
+                    settings_data.append(self.comboBoxNN.currentText())
+                else:
+                    settings_data.append(self.comboBoxContinue.currentText())
+                aug = [False, False, None, False]
+                if self.checkBoxHorizantal.isChecked() == True:
+                    aug[0] = True
+                if self.checkBoxVertical.isChecked() == True:
+                    aug[1] = True
+                if self.checkBoxBrightness.isChecked() == True:
+                    aug[2] = [0.2, 1.2]
+                if self.checkBoxRotation90.isChecked() == True:
+                    aug[3] = 90
+                if self.checkBoxRotation180.isChecked() == True:
+                    aug[3] = 180
+                # if self.checkBoxRotation180.isChecked() == True:
+                #     WindowClass.settingsData.append("Rotation 180")
+                settings_data.append(aug)
+                settings_data.append(int(self.lineEpochs.text()))
+                settings_data.append(self.setModelName.text())
+                settings_data.append(self.sw_new_continue)
+                WindowClass.settingsData = settings_data
+                self.colorSignal.emit()
+                print(WindowClass.settingsData)
+                self.hide()
 
     def newFn(self):
         self.sw_new_continue = 'new'
