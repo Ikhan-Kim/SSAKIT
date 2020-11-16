@@ -633,19 +633,24 @@ class WindowClass(QMainWindow, form_class):
         pixmap2 = pixmap.scaledToWidth(600)
         self.imgLabel.setPixmap(pixmap2)
 
-        img = Image.open(self.mainImg)
-        # print(img)
-        st = os.stat(self.mainImg)
-        self.fileName.setText(img.filename.split('/')[-1])
-        self.fileSize.setText(str(st[ST_SIZE]))
-        self.extension.setText(img.format)
-        if img.mode == 'RGB':
-            self.channel.setText("3")
-        else:
-            self.channel.setText("1")
-        self.wValue.setText(str(img.width))
-        self.hValue.setText(str(img.height))
-        self.className.setText('_'.join(img.filename.split('/')[-2].split('_')[1:]))
+        try:
+            # do stuff
+            img = Image.open(self.mainImg)
+            st = os.stat(self.mainImg)
+            self.fileName.setText(img.filename.split('/')[-1])
+            self.fileSize.setText(str(st[ST_SIZE]))
+            self.extension.setText(img.format)
+            if img.mode == 'RGB':
+                self.channel.setText("3")
+            else:
+                self.channel.setText("1")
+            self.wValue.setText(str(img.width))
+            self.hValue.setText(str(img.height))
+            self.className.setText('_'.join(img.filename.split('/')[-2].split('_')[1:]))
+        except IOError:
+            # filename not an image file
+            print("\'" + self.mainImg + "\' is not an image file")
+
        
     # ▼▼ codes for multiTrhead ▼▼
     def progress_fn(self, n):
