@@ -645,7 +645,7 @@ class WindowClass(QMainWindow, form_class):
             self.channel.setText("1")
         self.wValue.setText(str(img.width))
         self.hValue.setText(str(img.height))
-        self.className.setText(img.filename.split('/')[-2])
+        self.className.setText('_'.join(img.filename.split('/')[-2].split('_')[1:]))
        
     # ▼▼ codes for multiTrhead ▼▼
     def progress_fn(self, n):
