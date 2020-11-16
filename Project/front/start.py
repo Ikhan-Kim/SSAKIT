@@ -188,6 +188,8 @@ class AnotherFormLayout(QDialog):
         layout.addRow(self.checkBoxVertical)
         self.checkBoxBrightness = QCheckBox("[B] Brightness", self)
         layout.addRow(self.checkBoxBrightness)
+        self.checkBoxCutout = QCheckBox("[C] Cutout", self)
+        layout.addRow(self.checkBoxCutout)
         self.checkBoxRotation90 = QRadioButton("[R-90] Rotation 90", self)
         layout.addRow(self.checkBoxRotation90)
         self.checkBoxRotation180 = QRadioButton("[R-180] Rotation 180", self)
@@ -239,7 +241,7 @@ class AnotherFormLayout(QDialog):
             settings_data.append(self.comboBoxNN.currentText())
         else:
             settings_data.append(self.comboBoxContinue.currentText())
-        aug = [False, False, None, False]
+        aug = [False, False, None, False, False]
         if self.checkBoxHorizantal.isChecked() == True:
             aug[0] = True
         if self.checkBoxVertical.isChecked() == True:
@@ -250,6 +252,8 @@ class AnotherFormLayout(QDialog):
             aug[3] = 90
         if self.checkBoxRotation180.isChecked() == True:
             aug[3] = 180
+        if self.checkBoxCutout.isChecked() == True:
+            aug[4] = True
         # if self.checkBoxRotation180.isChecked() == True:
         #     WindowClass.settingsData.append("Rotation 180")
         settings_data.append(aug)
