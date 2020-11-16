@@ -62,24 +62,38 @@ def Retrain(augmentation, input_epochs, train_path, val_path, window, trained_mo
     VERTICAL_FLIP = augmentation[1]
     BRIGHTNESS_RANGE = augmentation[2]
     ROTATION_RANGE = augmentation[3]
-    CUT_OUT = cutout(p=0.5, s_l=0.02, s_h=0.4, r_1=0.3, r_2=1/0.3, pixel_level=False)
+    if augmentation[4] == True:
+        CUT_OUT = cutout(p=0.5, s_l=0.02, s_h=0.4, r_1=0.3, r_2=1/0.3, pixel_level=False)
+    else :
+        CUT_OUT = None
 
     EPOCHS = input_epochs
     train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE
     val_steps_per_epoch = NUM_VAL_IMGS // BATCH_SIZE
 
     # Data Preprocessing
-    training_datagen = ImageDataGenerator(
-                            rescale = 1./255,
-                            horizontal_flip = HORIZONTAL_FLIP,
-                            vertical_flip = VERTICAL_FLIP,
-                            brightness_range = BRIGHTNESS_RANGE,
-                            rotation_range = ROTATION_RANGE,
-                            preprocessing_function = CUT_OUT,
-                            )
-    validation_datagen = ImageDataGenerator(
-                            rescale = 1./255
-                            )
+    if window.settingsData[0] == "EfficientnetB0":
+    # 이피션넷일 경우
+        training_datagen = ImageDataGenerator(
+                                horizontal_flip = HORIZONTAL_FLIP,
+                                vertical_flip = VERTICAL_FLIP,
+                                brightness_range = BRIGHTNESS_RANGE,
+                                rotation_range = ROTATION_RANGE,
+                                preprocessing_function = CUT_OUT,
+                                )
+        validation_datagen = ImageDataGenerator()
+    else:
+        training_datagen = ImageDataGenerator(
+                                rescale = 1./255,
+                                horizontal_flip = HORIZONTAL_FLIP,
+                                vertical_flip = VERTICAL_FLIP,
+                                brightness_range = BRIGHTNESS_RANGE,
+                                rotation_range = ROTATION_RANGE,
+                                preprocessing_function = CUT_OUT,
+                                )
+        validation_datagen = ImageDataGenerator(
+                                rescale = 1./255
+                                )
 
 
     train_generator = training_datagen.flow_from_directory(

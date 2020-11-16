@@ -32,10 +32,14 @@ def test(model_name, window):
     # NUM_VAL_IMGS = window.learn_num_data[2]
     BATCH_SIZE = 32
 
-    # Data Preprocessing
-    test_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
-                                                            rescale = 1./255
-                                                            )
+    if model_name.split('_')[0] == 'EfficientnetB0':
+        # Data Preprocessing
+        test_datagen = tf.keras.preprocessing.image.ImageDataGenerator()
+    else:
+        # Data Preprocessing
+        test_datagen = tf.keras.preprocessing.image.ImageDataGenerator(
+                                                                rescale = 1./255
+                                                                )
 
     test_generator = test_datagen.flow_from_directory(
         test_dir,

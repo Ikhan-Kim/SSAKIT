@@ -66,7 +66,10 @@ def Learn(augmentation, input_epochs, train_dir, val_dir, window):
     VERTICAL_FLIP = augmentation[1]
     BRIGHTNESS_RANGE = augmentation[2]
     ROTATION_RANGE = augmentation[3]
-    CUT_OUT = cutout(p=0.5, s_l=0.02, s_h=0.4, r_1=0.3, r_2=1/0.3, pixel_level=False)
+    if augmentation[4] == True:
+        CUT_OUT = cutout(p=0.5, s_l=0.02, s_h=0.4, r_1=0.3, r_2=1/0.3, pixel_level=False)
+    else:
+        CUT_OUT = None
 
     EPOCHS = input_epochs
     train_steps_per_epoch = NUM_TRAIN_IMGS // BATCH_SIZE

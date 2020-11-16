@@ -11,7 +11,7 @@ from stat import *
 # from back import create_dir, set_directory
 # from back.learning_test import InceptionV3_test1, ResNet50_test1, Vgg16_test1, test_function2, EfficientnetB0_test1
 from mymodules import create_dir, set_directory
-from mymodules import InceptionV3_test1, ResNet50_test1, Vgg16_test1, EfficientnetB0_test1, test_function2, Retrain_model, test_function3
+from mymodules import InceptionV3_test1, ResNet50_test1, Vgg16_test1, EfficientnetB0_test1, test_function2, Retrain_model
 
 import tensorflow as tf
 import numpy as np
@@ -188,6 +188,8 @@ class AnotherFormLayout(QDialog):
         layout.addRow(self.checkBoxVertical)
         self.checkBoxBrightness = QCheckBox("[B] Brightness", self)
         layout.addRow(self.checkBoxBrightness)
+        self.checkBoxCutout = QCheckBox("[C] Cutout", self)
+        layout.addRow(self.checkBoxCutout)
         self.checkBoxRotation90 = QRadioButton("[R-90] Rotation 90", self)
         layout.addRow(self.checkBoxRotation90)
         self.checkBoxRotation180 = QRadioButton("[R-180] Rotation 180", self)
@@ -234,32 +236,78 @@ class AnotherFormLayout(QDialog):
         self.formTrainList.setLayout(tableLayout)
 
     def accept(self):
-        settings_data = []
-        if self.sw_new_continue == 'new':
-            settings_data.append(self.comboBoxNN.currentText())
+        checkString = '\\/:*?\"<>|'
+        if self.setModelName.text() == "":
+            myWindow.warningMSG("주의", "모델 이름을 입력해 주세요.")
         else:
-            settings_data.append(self.comboBoxContinue.currentText())
-        aug = [False, False, None, False]
-        if self.checkBoxHorizantal.isChecked() == True:
-            aug[0] = True
-        if self.checkBoxVertical.isChecked() == True:
-            aug[1] = True
-        if self.checkBoxBrightness.isChecked() == True:
-            aug[2] = [0.2, 1.2]
-        if self.checkBoxRotation90.isChecked() == True:
-            aug[3] = 90
-        if self.checkBoxRotation180.isChecked() == True:
-            aug[3] = 180
-        # if self.checkBoxRotation180.isChecked() == True:
-        #     WindowClass.settingsData.append("Rotation 180")
-        settings_data.append(aug)
-        settings_data.append(int(self.lineEpochs.text()))
-        settings_data.append(self.setModelName.text())
-        settings_data.append(self.sw_new_continue)
-        WindowClass.settingsData = settings_data
-        self.colorSignal.emit()
-        print(WindowClass.settingsData)
-        self.hide()
+            for c in checkString:
+                if c in self.setModelName.text():
+                    myWindow.warningMSG("주의", "모델 이름에 다음 문자들은 포함 될 수 없습니다. : \n \\ / : * ? \" < > |")
+                    break
+            else:
+                if os.path.isfile('./checkpoint/' + self.comboBoxNN.currentText() + '_' + self.setModelName.text() + '.h5'):
+                    reply = QMessageBox.question(self, 'Message',
+                        "같은 이름이 모델이 있습니다. 덮어 씌우시겠습니까?", QMessageBox.Yes | 
+                        QMessageBox.No, QMessageBox.No)
+
+                    if reply == QMessageBox.Yes:
+                        print("YES")
+                        settings_data = []
+                        if self.sw_new_continue == 'new':
+                            settings_data.append(self.comboBoxNN.currentText())
+                        else:
+                            settings_data.append(self.comboBoxContinue.currentText())
+                        aug = [False, False, None, False, False]
+                        if self.checkBoxHorizantal.isChecked() == True:
+                            aug[0] = True
+                        if self.checkBoxVertical.isChecked() == True:
+                            aug[1] = True
+                        if self.checkBoxBrightness.isChecked() == True:
+                            aug[2] = [0.2, 1.2]
+                        if self.checkBoxRotation90.isChecked() == True:
+                            aug[3] = 90
+                        if self.checkBoxRotation180.isChecked() == True:
+                            aug[3] = 180
+                        if self.checkBoxCutout.isChecked() == True:
+                            aug[4] = True
+                        settings_data.append(aug)
+                        settings_data.append(int(self.lineEpochs.text()))
+                        settings_data.append(self.setModelName.text())
+                        settings_data.append(self.sw_new_continue)
+                        WindowClass.settingsData = settings_data
+                        self.colorSignal.emit()
+                        print(WindowClass.settingsData)
+                        self.hide()
+                        
+                    else:
+                        print("NO")
+                else:
+                    settings_data = []
+                    if self.sw_new_continue == 'new':
+                        settings_data.append(self.comboBoxNN.currentText())
+                    else:
+                        settings_data.append(self.comboBoxContinue.currentText())
+                    aug = [False, False, None, False, False]
+                    if self.checkBoxHorizantal.isChecked() == True:
+                        aug[0] = True
+                    if self.checkBoxVertical.isChecked() == True:
+                        aug[1] = True
+                    if self.checkBoxBrightness.isChecked() == True:
+                        aug[2] = [0.2, 1.2]
+                    if self.checkBoxRotation90.isChecked() == True:
+                        aug[3] = 90
+                    if self.checkBoxRotation180.isChecked() == True:
+                        aug[3] = 180
+                    if self.checkBoxCutout.isChecked() == True:
+                        aug[4] = True
+                    settings_data.append(aug)
+                    settings_data.append(int(self.lineEpochs.text()))
+                    settings_data.append(self.setModelName.text())
+                    settings_data.append(self.sw_new_continue)
+                    WindowClass.settingsData = settings_data
+                    self.colorSignal.emit()
+                    print(WindowClass.settingsData)
+                    self.hide()
 
     def newFn(self):
         self.sw_new_continue = 'new'
@@ -271,6 +319,11 @@ class AnotherFormLayout(QDialog):
     def continueFn(self):
         self.sw_new_continue = 'continue'
         self.formNeuralNetwork.hide()
+
+        continue_list = os.listdir('./checkpoint')
+        self.comboBoxContinue.clear()
+        self.comboBoxContinue.addItems(continue_list)
+
         self.formContinueNetwork.show()
         self.new_learn.setStyleSheet("background-color: rgb(175, 171, 171); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
         self.continue_learn.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
@@ -393,7 +446,7 @@ class ProjectNameClass(QDialog):
                 del_path = './learnData/' + self.project_list[self.clickedRow]
                 shutil.rmtree(del_path)
                 self.project_list = os.listdir('./learnData/')
-                self.hide()
+                self.createTable()
 
 
     def warningMSG(self, title: str, content: str):
@@ -406,12 +459,18 @@ class ProjectNameClass(QDialog):
             self.send_valve_popup_signal.emit(True)
 
     def projectNameFn(self):
+        checkString = '\\/:*?\"<>|'
         if self.lineName.text() == "":
             self.warningMSG("알림", "프로젝트 이름을 입력해주세요")
         else:
-            WindowClass.projectName = self.lineName.text()
-            self.nameSignal.emit()
-            self.hide()
+            for c in checkString:
+                if c in self.lineName.text():
+                    myWindow.warningMSG("주의", "프로젝트 이름에 다음 문자들은 포함 될 수 없습니다. : \n \\ / : * ? \" < > |")
+                    break
+            else:
+                WindowClass.projectName = self.lineName.text()
+                self.nameSignal.emit()
+                self.hide()
 
 
 # Test Model Seclet #영환오빠
@@ -453,15 +512,7 @@ class TestModelSelect(QDialog):
 
     def itemActivated_event(self, item):
         self.hide()
-        # if myWindow.settingsData:
-        if item.text().split('_')[0] == 'EfficientnetB0':
-            print("3")
-            test_function3.test(item.text(), myWindow)
-
-        else:
-            test_function2.test(item.text(), myWindow)
-        # else:
-        #     print("error")
+        test_function2.test(item.text(), myWindow)
 
 # MainWindow
 class WindowClass(QMainWindow, form_class):
@@ -633,19 +684,24 @@ class WindowClass(QMainWindow, form_class):
         pixmap2 = pixmap.scaledToWidth(600)
         self.imgLabel.setPixmap(pixmap2)
 
-        img = Image.open(self.mainImg)
-        # print(img)
-        st = os.stat(self.mainImg)
-        self.fileName.setText(img.filename.split('/')[-1])
-        self.fileSize.setText(str(st[ST_SIZE]))
-        self.extension.setText(img.format)
-        if img.mode == 'RGB':
-            self.channel.setText("3")
-        else:
-            self.channel.setText("1")
-        self.wValue.setText(str(img.width))
-        self.hValue.setText(str(img.height))
-        self.className.setText(img.filename.split('/')[-2])
+        try:
+            # do stuff
+            img = Image.open(self.mainImg)
+            st = os.stat(self.mainImg)
+            self.fileName.setText(img.filename.split('/')[-1])
+            self.fileSize.setText(str(st[ST_SIZE]))
+            self.extension.setText(img.format)
+            if img.mode == 'RGB':
+                self.channel.setText("3")
+            else:
+                self.channel.setText("1")
+            self.wValue.setText(str(img.width))
+            self.hValue.setText(str(img.height))
+            self.className.setText('_'.join(img.filename.split('/')[-2].split('_')[1:]))
+        except IOError:
+            # filename not an image file
+            print("\'" + self.mainImg + "\' is not an image file")
+
        
     # ▼▼ codes for multiTrhead ▼▼
     def progress_fn(self, n):
