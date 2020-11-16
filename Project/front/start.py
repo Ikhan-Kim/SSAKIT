@@ -440,7 +440,6 @@ class ProjectNameClass(QDialog):
                 shutil.rmtree(del_path)
                 self.project_list = os.listdir('./learnData/')
                 self.createTable()
-                # self.hide()
 
 
     def warningMSG(self, title: str, content: str):
