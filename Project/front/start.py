@@ -465,7 +465,7 @@ class TestModelSelect(QDialog):
 
 # MainWindow
 class WindowClass(QMainWindow, form_class):
-    mainImg = "C:/Users/multicampus/Desktop/s03p31c203/Project/front/test_img/test1.png"
+    mainImg = ""
     settingsData = []
     class_names = []
     class_data = []
