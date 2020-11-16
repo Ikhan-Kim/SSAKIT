@@ -1,0 +1,6 @@
+*.png
+*.pyc
+<<<<<<< HEAD
+=======
+*.db
+>>>>>>> feature/wizard_TrainList
