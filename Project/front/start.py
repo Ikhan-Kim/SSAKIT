@@ -360,7 +360,7 @@ class ProjectNameClass(QDialog):
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
     nameSignal = pyqtSignal()
-    project_list = os.listdir('./learnData/')
+    # project_list = os.listdir('./learnData/')
     def __init__(self):
         super().__init__()
 
@@ -369,7 +369,7 @@ class ProjectNameClass(QDialog):
 
         # 기본 구조
         self.setStyleSheet("background-color: #847f7f;")
-        # self.project_list = os.listdir('./learnData/')
+        self.project_list = os.listdir('./learnData/')
         self.setWindowTitle('Open Project')
         self.formLoadProject = QGroupBox("기존 프로젝트 불러오기")
         self.formLoadProject.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255);")
@@ -509,10 +509,31 @@ class TestModelSelect(QDialog):
         # vbox.addWidget(buttonBox)
         self.setLayout(vbox)
         # self.setGeometry(300, 300, 300, 300)
+        
 
     def itemActivated_event(self, item):
         self.hide()
+        myWindow.label_14.hide()
+        myWindow.TestResultWidget.setStyleSheet("background-color : rgb(64, 64, 64);")
+        myWindow.ResultSave.show()
+        myWindow.ResultNo.show()
+
+        myWindow.label_6.show()
+        myWindow.label_8.show()
+        myWindow.label_9.show()
+        myWindow.confusionMatrixTable.show()
+        myWindow.precisionTable.show()
+        myWindow.recallTable.show()
+        myWindow.label_10.show()
+        myWindow.label_11.show()
+        myWindow.accuracyTable.show()
+        myWindow.label_12.show()
+        myWindow.macroPrecisionLabel.show()
+        myWindow.label_13.show()
+        
+
         myWindow.TestResultWidget.show()
+        myWindow.select_test_model = item.text()
         test_function2.test(item.text(), myWindow)
 
 # MainWindow
@@ -528,6 +549,7 @@ class WindowClass(QMainWindow, form_class):
     learn_num_data = []
     sIMG = ""
     train_list_data = []
+    select_test_model = ''
     # learn_val_path = ''
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
@@ -547,12 +569,12 @@ class WindowClass(QMainWindow, form_class):
     
     def __init__(self) :     
         super().__init__()
-        self.tabWidget.setCurrentIndex(0)
         # design
         # changing the background color to yellow 
         self.setStyleSheet("background-color: #847f7f;")
 
         self.setupUi(self)
+        self.tabWidget.setCurrentIndex(0)
         self.pushButton_5.hide()
         self.label_4.hide()
         self.setWindowIcon(QtGui.QIcon('./assets/img/main_icon.jpg'))
@@ -586,7 +608,20 @@ class WindowClass(QMainWindow, form_class):
         self.btnOpenDir.clicked.connect(self.openDirFn)
         # self.btnHome.clicked.connect(self.mainWidget.show())
         self.btnHome.clicked.connect(self.moveHome)
+        self.ResultNo.clicked.connect(self.rmh5file)
         self.TestResultWidget.hide()
+        self.label_6.hide()
+        self.label_8.hide()
+        self.label_9.hide()
+        self.confusionMatrixTable.hide()
+        self.precisionTable.hide()
+        self.recallTable.hide()
+        self.label_10.hide()
+        self.label_11.hide()
+        self.accuracyTable.hide()
+        self.label_12.hide()
+        self.macroPrecisionLabel.hide()
+        self.label_13.hide()
 
         # 터미널
         # self.textBox_terminal.setGeometry(QtCore.QRect(0, 0, 1200, 190))
@@ -612,6 +647,15 @@ class WindowClass(QMainWindow, form_class):
 
         # TL_insert()
         self.ResultSave.clicked.connect(self.TL_insert)
+        self.ResultNo.clicked.connect(self.RMh5file)
+
+    # 체크포인트 삭제_다영 임시
+    def RMh5file(self):
+        self.ResultSave.hide()
+        self.ResultNo.hide()
+        self.TestResultWidget.setStyleSheet("background-color: rgb(132, 127, 127);")
+        self.resultWidgetMSG.setText("학습한 모델이 삭제 되었습니다 !")
+
     def ikhantest(self):
         print(self.settingsData)
     def btnColorChange(self, btn):
@@ -923,6 +967,12 @@ class WindowClass(QMainWindow, form_class):
         print(self.train_list_data)
 
     def TL_insert(self):
+        self.ResultSave.hide()
+        self.ResultNo.hide()
+        self.TestResultWidget.setStyleSheet("background-color: rgb(241, 127, 66);")
+        self.resultWidgetMSG.setText("학습한 모델이 저장 되었습니다 !")
+        # save 버튼, No 버튼 hide
+
         # insert
         # settingsData_DY = [['학습모델', [horizental__, vertical__, brightness__, rotation__], epochs__, model_name__, loss__, accuracy__]
         print("settingsData : ", self.settingsData)
@@ -1009,6 +1059,15 @@ class WindowClass(QMainWindow, form_class):
 
     def openDirFn(self):
         os.startfile(resource_path(self.learnDataPath))
+
+    def rmh5file(self):
+        print(myWindow.select_test_model)
+        rm_path = './checkpoint/' + myWindow.select_test_model
+        try:
+            print(rm_path)
+            os.remove(rm_path)
+        except:
+            print('remove file not found')
 
 if __name__ == "__main__":
     try:
