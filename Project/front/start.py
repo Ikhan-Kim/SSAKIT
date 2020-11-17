@@ -335,12 +335,12 @@ class AnotherFormLayout(QDialog):
         self.trainList.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         # print("setTL")
         rows = WindowClass.train_list_data
-        print("WindowClass.train_list_data",WindowClass.train_list_data)
+        # print("WindowClass.train_list_data",WindowClass.train_list_data)
         # Table column 수, header 설정+너비
         print("rows==========================", rows)
 
         cnt = len(rows)
-        print("~~~~~~~~~~~~~~~", cnt)
+        # print("~~~~~~~~~~~~~~~", cnt)
         self.trainList.setRowCount(cnt)
 
         for x in range(cnt):
@@ -512,6 +512,7 @@ class TestModelSelect(QDialog):
 
     def itemActivated_event(self, item):
         self.hide()
+        myWindow.TestResultWidget.show()
         test_function2.test(item.text(), myWindow)
 
 # MainWindow
@@ -546,6 +547,7 @@ class WindowClass(QMainWindow, form_class):
     
     def __init__(self) :     
         super().__init__()
+        self.tabWidget.setCurrentIndex(0)
         # design
         # changing the background color to yellow 
         self.setStyleSheet("background-color: #847f7f;")
@@ -560,6 +562,8 @@ class WindowClass(QMainWindow, form_class):
         # self.testModelSelectDisplay = TestModelSelect()
         pixmap = QtGui.QPixmap(self.mainImg)
         self.imgLabel.setPixmap(pixmap)
+        self.btnHome.setIcon(QIcon('./assets/img/home.jpg'))
+        self.btnHome.setIconSize(QSize(50, 50)) 
         self.btnOpenDir.setIcon(QIcon('./assets/img/folder.jpg'))
         self.btnOpenDir.setIconSize(QSize(23, 23)) 
         self.btnDataLoad.setIcon(QIcon('./assets/img/imageUpload.jpg'))
@@ -580,6 +584,10 @@ class WindowClass(QMainWindow, form_class):
         self.pushButton_5.clicked.connect(self.ikhantest)
         self.btnTest.clicked.connect(self.test)
         self.btnOpenDir.clicked.connect(self.openDirFn)
+        # self.btnHome.clicked.connect(self.mainWidget.show())
+        self.btnHome.clicked.connect(self.moveHome)
+        self.TestResultWidget.hide()
+
         # 터미널
         # self.textBox_terminal.setGeometry(QtCore.QRect(0, 0, 1200, 190))
         # live loss plot
@@ -647,6 +655,10 @@ class WindowClass(QMainWindow, form_class):
         else:
             self.projectNameDisplay.show()
     
+    def moveHome(self):
+        self.mainWidget.show()
+        self.createProjectFn()
+
     def dataLoadFn(self):
         if self.projectName:
             self.pathName = QFileDialog.getExistingDirectory(self, self.tr("Open Data files"), "./",
@@ -665,7 +677,10 @@ class WindowClass(QMainWindow, form_class):
 
     def learnSettingsFn(self, checked):        
         # self.setTLTables(item_list)
-        
+        self.TL_select()
+        self.learnSettingDisplay.setTLTables()
+        # self.learnSettingDisplay = AnotherFormLayout()
+
         self.tabWidget.setCurrentIndex(0)
         self.class_names = os.listdir(self.learnDataPath + '/train')
         if self.projectName:
