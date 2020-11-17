@@ -513,6 +513,7 @@ class TestModelSelect(QDialog):
     def itemActivated_event(self, item):
         self.hide()
         myWindow.TestResultWidget.show()
+        myWindow.select_test_model = item.text()
         test_function2.test(item.text(), myWindow)
 
 # MainWindow
@@ -528,6 +529,7 @@ class WindowClass(QMainWindow, form_class):
     learn_num_data = []
     sIMG = ""
     train_list_data = []
+    select_test_model = ''
     # learn_val_path = ''
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
@@ -547,12 +549,12 @@ class WindowClass(QMainWindow, form_class):
     
     def __init__(self) :     
         super().__init__()
-        self.tabWidget.setCurrentIndex(0)
         # design
         # changing the background color to yellow 
         self.setStyleSheet("background-color: #847f7f;")
 
         self.setupUi(self)
+        self.tabWidget.setCurrentIndex(0)
         self.pushButton_5.hide()
         self.label_4.hide()
         self.setWindowIcon(QtGui.QIcon('./assets/img/main_icon.jpg'))
@@ -586,6 +588,7 @@ class WindowClass(QMainWindow, form_class):
         self.btnOpenDir.clicked.connect(self.openDirFn)
         # self.btnHome.clicked.connect(self.mainWidget.show())
         self.btnHome.clicked.connect(self.moveHome)
+        self.pushButton.clicked.connect(self.rmh5file)
         self.TestResultWidget.hide()
 
         # 터미널
@@ -1009,6 +1012,15 @@ class WindowClass(QMainWindow, form_class):
 
     def openDirFn(self):
         os.startfile(resource_path(self.learnDataPath))
+
+    def rmh5file(self):
+        print(myWindow.select_test_model)
+        rm_path = './checkpoint/' + myWindow.select_test_model
+        try:
+            print(rm_path)
+            os.remove(rm_path)
+        except:
+            print('remove file not found')
 
 if __name__ == "__main__":
     try:
