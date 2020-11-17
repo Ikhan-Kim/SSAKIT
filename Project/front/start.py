@@ -360,7 +360,7 @@ class ProjectNameClass(QDialog):
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
     nameSignal = pyqtSignal()
-    project_list = []
+    project_list = os.listdir('./learnData/')
     def __init__(self):
         super().__init__()
 
@@ -369,7 +369,7 @@ class ProjectNameClass(QDialog):
 
         # 기본 구조
         self.setStyleSheet("background-color: #847f7f;")
-        self.project_list = os.listdir('./learnData/')
+        # self.project_list = os.listdir('./learnData/')
         self.setWindowTitle('Open Project')
         self.formLoadProject = QGroupBox("기존 프로젝트 불러오기")
         self.formLoadProject.setStyleSheet("font: 12pt 'a디딤돌'; color: rgb(255, 255, 255);")
