@@ -116,7 +116,7 @@ def Learn(augmentation, input_epochs, train_path, val_path, window):
     model.add(base_model)
     model.add(tf.keras.layers.GlobalMaxPooling2D(name="max_pooling2d"))
     model.add(tf.keras.layers.Dropout(0.2, name="dropout_out"))
-    model.add(tf.keras.layers.Dense(10, activation='softmax', name="predictions"))
+    model.add(tf.keras.layers.Dense(NUM_CLASSES, activation='softmax', name="predictions"))
 
 
     model.summary()
