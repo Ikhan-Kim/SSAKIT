@@ -7,9 +7,6 @@ import time
 from PIL import Image
 from stat import *
 
-# sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-# from back import create_dir, set_directory
-# from back.learning_test import InceptionV3_test1, ResNet50_test1, Vgg16_test1, test_function2, EfficientnetB0_test1
 from mymodules import create_dir, set_directory
 from mymodules import InceptionV3_test1, ResNet50_test1, Vgg16_test1, EfficientnetB0_test1, test_function2, Retrain_model
 
@@ -62,7 +59,7 @@ class WorkerSignals(QObject):
     progress = pyqtSignal(int)
 
 
-class Worker(QRunnable):
+class WorkerTraining(QRunnable):
     '''
     Worker thread
 
@@ -77,7 +74,7 @@ class Worker(QRunnable):
     '''
 
     def __init__(self, settingsData, learn_train_path, learn_val_path, *args, **kwargs):
-        super(Worker, self).__init__()
+        super(WorkerTraining, self).__init__()
 
         # Store constructor arguments (re-used for processing)
         self.settingsData = settingsData
@@ -117,6 +114,24 @@ class Worker(QRunnable):
                 self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow, 'checkpoint/' + self.settingsData[0]
             )
         myWindow.textBox_terminal.moveCursor(QtGui.QTextCursor.End)
+        myWindow.btnEnable()
+
+class WorkerTest(QRunnable):
+    def __init__(self, model_name, *args, **kwargs):
+        super(WorkerTest, self).__init__()
+
+        # Store constructor arguments (re-used for processing)
+        self.model_name = model_name
+        self.args = args
+        self.kwargs = kwargs
+        self.signals = WorkerSignals()    
+
+        # Add the callback to our kwargs
+        self.kwargs['progress_callback'] = self.signals.progress        
+
+    @pyqtSlot()
+    def run(self):
+        test_function2.test(self.model_name, myWindow)
         myWindow.btnEnable()
 
 # preprocess setting popup #train wizard
@@ -482,12 +497,8 @@ class TestModelSelect(QDialog):
         self.setWindowTitle("Test Model Select")
 
         self.label = QLabel()
-        # if len(os.listdir("../back/learning_test/checkpoint")) == 0:
-        #     self.label = QLabel("학습된 모델이 없습니다.", self)
-        # else:
         self.label = QLabel("Model Select", self)
         self.label.setStyleSheet("font: 18pt 'a로케트'; color: rgb(255, 238, 228);")
-        # background-color: rgb(241, 127, 66); 
 
         self.listW = QListWidget()
         for i in range(len(os.listdir("./checkpoint"))):
@@ -513,7 +524,16 @@ class TestModelSelect(QDialog):
     def itemActivated_event(self, item):
         self.hide()
         myWindow.TestResultWidget.show()
-        test_function2.test(item.text(), myWindow)
+        
+        myWindow.btnDisable()
+        # Pass the function to execute
+        worker = WorkerTest(item.text()) # Any other args, kwargs are passed to the run function
+        worker.signals.result.connect(myWindow.print_output)
+        worker.signals.finished.connect(myWindow.thread_complete)
+        worker.signals.progress.connect(myWindow.progress_fn)
+
+        # Execute
+        myWindow.threadpool.start(worker)
 
 # MainWindow
 class WindowClass(QMainWindow, form_class):
@@ -547,12 +567,12 @@ class WindowClass(QMainWindow, form_class):
     
     def __init__(self) :     
         super().__init__()
-        self.tabWidget.setCurrentIndex(0)
         # design
         # changing the background color to yellow 
         self.setStyleSheet("background-color: #847f7f;")
 
         self.setupUi(self)
+        self.tabWidget.setCurrentIndex(0)
         self.pushButton_5.hide()
         self.label_4.hide()
         self.setWindowIcon(QtGui.QIcon('./assets/img/main_icon.jpg'))
@@ -761,7 +781,7 @@ class WindowClass(QMainWindow, form_class):
             self.btnDisable()
             self.textBox_terminal.append('Ready for training...')
             # Pass the function to execute
-            worker = Worker(self.settingsData, self.learn_train_path, self.learn_val_path) # Any other args, kwargs are passed to the run function
+            worker = WorkerTraining(self.settingsData, self.learn_train_path, self.learn_val_path) # Any other args, kwargs are passed to the run function
             worker.signals.result.connect(self.print_output)
             worker.signals.finished.connect(self.thread_complete)
             worker.signals.progress.connect(self.progress_fn)
@@ -778,7 +798,6 @@ class WindowClass(QMainWindow, form_class):
         self.tabWidget.setCurrentIndex(2)
         self.testModelSelectDisplay = TestModelSelect()
         self.testModelSelectDisplay.show()
-        # test_function2.test()
         self.btnColorChange(self.btnTest)
         # self.cnt_file()
 
