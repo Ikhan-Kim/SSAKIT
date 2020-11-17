@@ -5,8 +5,9 @@ import keras_preprocessing
 from keras_preprocessing import image
 import matplotlib.pyplot as plt
 import itertools
-from PyQt5.QtWidgets import *
+# from PyQt5 import QtGui
 from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from .Grad_cam import *
 
@@ -233,11 +234,22 @@ def test(model_name, window):
         window.confusionMatrixTable.setColumnCount(len(cm))
         window.confusionMatrixTable.setHorizontalHeaderLabels(classes2)
         window.confusionMatrixTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        window.confusionMatrixTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
         window.confusionMatrixTable.setRowCount(len(cm))
         window.confusionMatrixTable.setVerticalHeaderLabels(classes2)
         for i in range(len(cm)):
             for j in range(len(cm)):
                 window.confusionMatrixTable.setItem(i, j, QTableWidgetItem(str(cm[i][j])))
+                if cm[i][j]/sum(cm[i]) >= 0.8:
+                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#1F4E79"))
+                elif cm[i][j]/sum(cm[i]) >= 0.6:
+                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#2E75B6"))
+                elif cm[i][j]/sum(cm[i]) >= 0.4:
+                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#9DC3E6"))
+                elif cm[i][j]/sum(cm[i]) >= 0.2:
+                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#BDD7EE"))
+                else:
+                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#DEEBF7"))
         
         # show confusion matrix image
         window.confusionMatrixTable.cellClicked.connect(show_img)
@@ -249,7 +261,7 @@ def test(model_name, window):
         window.precisionTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         window.recallTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         window.recallTable.setRowCount(len(cm))
-        window.recallTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        window.recallTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
         tmpPrecision = []
         tmpRecall = []
         for i in range(len(cm)):
