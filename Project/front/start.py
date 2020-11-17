@@ -512,6 +512,7 @@ class TestModelSelect(QDialog):
 
     def itemActivated_event(self, item):
         self.hide()
+        myWindow.TestResultWidget.show()
         test_function2.test(item.text(), myWindow)
 
 # MainWindow
@@ -546,6 +547,7 @@ class WindowClass(QMainWindow, form_class):
     
     def __init__(self) :     
         super().__init__()
+        self.tabWidget.setCurrentIndex(0)
         # design
         # changing the background color to yellow 
         self.setStyleSheet("background-color: #847f7f;")
@@ -584,6 +586,7 @@ class WindowClass(QMainWindow, form_class):
         self.btnOpenDir.clicked.connect(self.openDirFn)
         # self.btnHome.clicked.connect(self.mainWidget.show())
         self.btnHome.clicked.connect(self.moveHome)
+        self.TestResultWidget.hide()
 
         # 터미널
         # self.textBox_terminal.setGeometry(QtCore.QRect(0, 0, 1200, 190))

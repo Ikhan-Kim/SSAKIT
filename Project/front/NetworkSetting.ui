@@ -312,7 +312,7 @@ font: 9pt &quot;a스마일L&quot;;</string>
 font: 12pt &quot;a디딤돌&quot;;</string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -926,7 +926,7 @@ font: 11pt &quot;a디딤돌&quot;;</string>
        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-size:12pt;&quot;&gt;Image Viewer&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
       </property>
      </widget>
-     <widget class="QWidget" name="widget_3" native="true">
+     <widget class="QWidget" name="TestResultWidget" native="true">
       <property name="geometry">
        <rect>
         <x>-20</x>
@@ -1002,7 +1002,7 @@ color: rgb(255, 255, 255);</string>
      <zorder>macroPrecisionLabel</zorder>
      <zorder>label_13</zorder>
      <zorder>label_11</zorder>
-     <zorder>widget_3</zorder>
+     <zorder>TestResultWidget</zorder>
      <zorder>recallTable</zorder>
     </widget>
    </widget>
