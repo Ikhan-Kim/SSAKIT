@@ -230,6 +230,7 @@ def test(model_name, window):
         for c in classes:
             classes2.append('_'.join(c.split('_')[1:]))
         # show confusion matrix
+        print(cm)
         window.confusionMatrixTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         window.confusionMatrixTable.setColumnCount(len(cm))
         window.confusionMatrixTable.setHorizontalHeaderLabels(classes2)
@@ -254,21 +255,28 @@ def test(model_name, window):
         # show confusion matrix image
         window.confusionMatrixTable.cellClicked.connect(show_img)
 
-
         # show precision, recall, accuracy
         window.precisionTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         window.precisionTable.setColumnCount(len(cm))
+        window.precisionTable.setRowCount(1)
         window.precisionTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        window.precisionTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
         window.recallTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         window.recallTable.setRowCount(len(cm))
+        window.recallTable.setColumnCount(1)
+        window.recallTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
         window.recallTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        tmpPrecision = []
-        tmpRecall = []
+        # tmpPrecision = []
+        # tmpRecall = []
         for i in range(len(cm)):
-            tmpPrecision.append(str(precision[i]) + "%")
-            tmpRecall.append(str(recall[i]) + "%")
-        window.precisionTable.setHorizontalHeaderLabels(tmpPrecision)
-        window.recallTable.setVerticalHeaderLabels(tmpRecall)
+            window.precisionTable.setItem(0, i, QTableWidgetItem(str(precision[i]) + "%"))
+            window.recallTable.setItem(i, 0, QTableWidgetItem(str(recall[i]) + "%"))
+        # window.precisionTable.setHorizontalHeaderLabels(tmpPrecision)
+        # window.recallTable.setVerticalHeaderLabels(tmpRecall)
+        window.precisionTable.verticalHeader().setVisible(False)
+        window.precisionTable.horizontalHeader().setVisible(False)
+        window.recallTable.verticalHeader().setVisible(False)
+        window.recallTable.horizontalHeader().setVisible(False)
 
         window.accuracyTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         window.accuracyTable.setColumnCount(1)
