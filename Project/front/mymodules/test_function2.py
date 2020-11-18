@@ -241,15 +241,15 @@ def test(model_name, window):
             for j in range(len(cm)):
                 window.confusionMatrixTable.setItem(i, j, QTableWidgetItem(str(cm[i][j])))
                 if cm[i][j]/sum(cm[i]) >= 0.8:
-                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#1F4E79"))
-                elif cm[i][j]/sum(cm[i]) >= 0.6:
                     window.confusionMatrixTable.item(i, j).setBackground(QColor("#2E75B6"))
-                elif cm[i][j]/sum(cm[i]) >= 0.4:
+                elif cm[i][j]/sum(cm[i]) >= 0.6:
                     window.confusionMatrixTable.item(i, j).setBackground(QColor("#9DC3E6"))
-                elif cm[i][j]/sum(cm[i]) >= 0.2:
+                elif cm[i][j]/sum(cm[i]) >= 0.4:
                     window.confusionMatrixTable.item(i, j).setBackground(QColor("#BDD7EE"))
-                else:
+                elif cm[i][j]/sum(cm[i]) >= 0.2:
                     window.confusionMatrixTable.item(i, j).setBackground(QColor("#DEEBF7"))
+                else:
+                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#FFFFFF"))
         
         # show confusion matrix image
         window.confusionMatrixTable.cellClicked.connect(show_img)
