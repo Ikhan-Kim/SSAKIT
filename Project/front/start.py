@@ -503,6 +503,7 @@ class TestModelSelect(QDialog):
         # buttonBox.rejected.connect(self.reject)
         # buttonBox.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
 
+        # self.label_14.show()
         vbox = QVBoxLayout()
         vbox.addWidget(self.label)
         vbox.addWidget(self.listW)
@@ -697,7 +698,9 @@ class WindowClass(QMainWindow, form_class):
     
     def moveHome(self):
         self.mainWidget.show()
-        self.createProjectFn()
+        # self.createProjectFn()
+        self.tabWidget.setCurrentIndex(0)
+        self.btnColorChange(self.btnLearnSettings)
 
     def dataLoadFn(self):
         if self.projectName:
