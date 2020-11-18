@@ -1,7 +1,7 @@
 import sys, os, traceback, shutil
+from PyQt5 import uic, QtGui, QtCore
 from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
-from PyQt5 import uic, QtGui, QtCore
 from PyQt5.QtGui import *
 import time
 from PIL import Image
@@ -59,7 +59,7 @@ class WorkerSignals(QObject):
     progress = pyqtSignal(int)
 
 
-class WorkerTraining(QRunnable):
+class Worker(QRunnable):
     '''
     Worker thread
 
@@ -73,13 +73,15 @@ class WorkerTraining(QRunnable):
 
     '''
 
-    def __init__(self, settingsData, learn_train_path, learn_val_path, *args, **kwargs):
-        super(WorkerTraining, self).__init__()
+    def __init__(self, order, *args, **kwargs):
+        super(Worker, self).__init__()
 
         # Store constructor arguments (re-used for processing)
-        self.settingsData = settingsData
-        self.learn_train_path = learn_train_path
-        self.learn_val_path = learn_val_path
+        self.order = order
+        self.settingsData = myWindow.settingsData
+        self.learn_train_path = myWindow.learn_train_path
+        self.learn_val_path = myWindow.learn_val_path
+        self.model_name = myWindow.test_model_name
         self.args = args
         self.kwargs = kwargs
         self.signals = WorkerSignals()    
@@ -89,49 +91,34 @@ class WorkerTraining(QRunnable):
 
     @pyqtSlot()
     def run(self):
-        ### retrain test입니다.
-        if self.settingsData[4] == 'new':
-            if self.settingsData[0] == 'VGG':
-                print('VGG')
-                print(self.learn_train_path, self.learn_val_path)
-                Vgg16_test1.Learn(
-                    self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
-            elif self.settingsData[0] == 'InceptionV3':
-                print('Inception')
-                InceptionV3_test1.Learn(
-                    self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
-            elif self.settingsData[0] == 'ResNet50':
-                print('ResNet')
-                ResNet50_test1.Learn(
-                    self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
-            elif self.settingsData[0] == 'EfficientnetB0':
-                print('EfficientnetB0')
-                EfficientnetB0_test1.Learn(
-                    self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
-        elif self.settingsData[4] == 'continue':
-            # 여기에 retrain
-            Retrain_model.Retrain(
-                self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow, 'checkpoint/' + self.settingsData[0]
-            )
-        myWindow.textBox_terminal.moveCursor(QtGui.QTextCursor.End)
-        myWindow.btnEnable()
-
-class WorkerTest(QRunnable):
-    def __init__(self, model_name, *args, **kwargs):
-        super(WorkerTest, self).__init__()
-
-        # Store constructor arguments (re-used for processing)
-        self.model_name = model_name
-        self.args = args
-        self.kwargs = kwargs
-        self.signals = WorkerSignals()    
-
-        # Add the callback to our kwargs
-        self.kwargs['progress_callback'] = self.signals.progress        
-
-    @pyqtSlot()
-    def run(self):
-        test_function2.test(self.model_name, myWindow)
+        myWindow.btnDisable()
+        if self.order == 'training':
+            if self.settingsData[4] == 'new':
+                if self.settingsData[0] == 'VGG':
+                    print('VGG')
+                    print(self.learn_train_path, self.learn_val_path)
+                    Vgg16_test1.Learn(
+                        self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
+                elif self.settingsData[0] == 'InceptionV3':
+                    print('Inception')
+                    InceptionV3_test1.Learn(
+                        self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
+                elif self.settingsData[0] == 'ResNet50':
+                    print('ResNet')
+                    ResNet50_test1.Learn(
+                        self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
+                elif self.settingsData[0] == 'EfficientnetB0':
+                    print('EfficientnetB0')
+                    EfficientnetB0_test1.Learn(
+                        self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow)
+            elif self.settingsData[4] == 'continue':
+                # 여기에 retrain
+                Retrain_model.Retrain(
+                    self.settingsData[1], self.settingsData[2], self.learn_train_path, self.learn_val_path, myWindow, 'checkpoint/' + self.settingsData[0]
+                )
+            myWindow.textBox_terminal.moveCursor(QtGui.QTextCursor.End)
+        elif self.order == 'test':
+            test_function2.test(self.model_name, myWindow)
         myWindow.btnEnable()
 
 # preprocess setting popup #train wizard
@@ -525,9 +512,9 @@ class TestModelSelect(QDialog):
         self.hide()
         myWindow.TestResultWidget.show()
         
-        myWindow.btnDisable()
+        myWindow.test_model_name = item.text()
         # Pass the function to execute
-        worker = WorkerTest(item.text()) # Any other args, kwargs are passed to the run function
+        worker = Worker('test') # Any other args, kwargs are passed to the run function
         worker.signals.result.connect(myWindow.print_output)
         worker.signals.finished.connect(myWindow.thread_complete)
         worker.signals.progress.connect(myWindow.progress_fn)
@@ -548,6 +535,7 @@ class WindowClass(QMainWindow, form_class):
     learn_num_data = []
     sIMG = ""
     train_list_data = []
+    test_model_name = ''
     # learn_val_path = ''
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
@@ -604,12 +592,10 @@ class WindowClass(QMainWindow, form_class):
         self.pushButton_5.clicked.connect(self.ikhantest)
         self.btnTest.clicked.connect(self.test)
         self.btnOpenDir.clicked.connect(self.openDirFn)
-        # self.btnHome.clicked.connect(self.mainWidget.show())
         self.btnHome.clicked.connect(self.moveHome)
         self.TestResultWidget.hide()
 
         # 터미널
-        # self.textBox_terminal.setGeometry(QtCore.QRect(0, 0, 1200, 190))
         # live loss plot
         self.threadpool = QThreadPool()
         print("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
@@ -765,6 +751,8 @@ class WindowClass(QMainWindow, form_class):
         self.btnLearnSettings.setEnabled(False)
         self.btnTraining.setEnabled(False)
         self.btnTest.setEnabled(False)
+        self.btnOpenDir.clicked.connect(False)
+        self.btnHome.clicked.connect(False)
 
     def btnEnable(self):
         self.btnCreateProject.setEnabled(True)
@@ -772,16 +760,17 @@ class WindowClass(QMainWindow, form_class):
         self.btnLearnSettings.setEnabled(True)
         self.btnTraining.setEnabled(True)
         self.btnTest.setEnabled(True)
+        self.btnOpenDir.clicked.connect(True)
+        self.btnHome.clicked.connect(True)
 
     def training(self):
         if self.learn_train_path:
             self.infoMSG.setText("training이 완료되면 Test 버튼을 클릭 해 주세요.")
             self.tabWidget.setCurrentIndex(1)
             self.btnColorChange(self.btnTraining)
-            self.btnDisable()
             self.textBox_terminal.append('Ready for training...')
             # Pass the function to execute
-            worker = WorkerTraining(self.settingsData, self.learn_train_path, self.learn_val_path) # Any other args, kwargs are passed to the run function
+            worker = Worker('training') # Any other args, kwargs are passed to the run function
             worker.signals.result.connect(self.print_output)
             worker.signals.finished.connect(self.thread_complete)
             worker.signals.progress.connect(self.progress_fn)
@@ -894,10 +883,6 @@ class WindowClass(QMainWindow, form_class):
     def closeEvent(self, QCloseEvent):
         print("DB close!")
         self.conn.close()
-
-    def ClassEditBtnFunc(self):
-        # ClassEditWidget띄우기
-        self.openClassEditWidget.show()
 
     ########## TL DB
     # DB 연결, TL 테이블 생성
