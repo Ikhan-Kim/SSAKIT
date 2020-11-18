@@ -119,6 +119,12 @@ class Worker(QRunnable):
             myWindow.textBox_terminal.moveCursor(QtGui.QTextCursor.End)
         elif self.order == 'test':
             test_function2.test(self.model_name, myWindow)
+        elif self.order == 'dataLoad':
+            for idx, dirName in enumerate(myWindow.class_names):
+                set_directory.set_directory(
+                    myWindow.projectName, dirName, myWindow.pathName + '/' + dirName, idx
+                )
+
         myWindow.btnEnable()
 
 # preprocess setting popup #train wizard
@@ -431,7 +437,7 @@ class ProjectNameClass(QDialog):
     
     def pjtSelect(self):
         if self.clickedRow =="":
-            self.warningMSG("알림", "프로젝트를 선택해 주세요")
+            myWindow.warningMSG("알림", "프로젝트를 선택해 주세요")
         else:
             print('선택클릭')
             WindowClass.projectName = self.project_list[self.clickedRow]
@@ -440,7 +446,7 @@ class ProjectNameClass(QDialog):
     
     def pjtDelete(self):
         if self.clickedRow =="":
-            self.warningMSG("알림", "프로젝트를 선택해 주세요")
+            myWindow.warningMSG("알림", "프로젝트를 선택해 주세요")
         else:
             a = QMessageBox.question(self, "삭제 확인", "정말로 삭제 하시겠습니까?",
                                  QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
@@ -450,20 +456,10 @@ class ProjectNameClass(QDialog):
                 self.project_list = os.listdir('./learnData/')
                 self.createTable()
 
-
-    def warningMSG(self, title: str, content: str):
-        msg = QMessageBox()
-        msg.setWindowTitle(title)
-        msg.setText(content)
-        msg.setStandardButtons(QMessageBox.Ok)
-        result = msg.exec_()
-        if result == QMessageBox.Ok:
-            self.send_valve_popup_signal.emit(True)
-
     def projectNameFn(self):
         checkString = '\\/:*?\"<>|'
         if self.lineName.text() == "":
-            self.warningMSG("알림", "프로젝트 이름을 입력해주세요")
+            myWindow.warningMSG("알림", "프로젝트 이름을 입력해주세요")
         else:
             for c in checkString:
                 if c in self.lineName.text():
@@ -536,7 +532,7 @@ class WindowClass(QMainWindow, form_class):
     sIMG = ""
     train_list_data = []
     test_model_name = ''
-    # learn_val_path = ''
+    learn_val_path = ''
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
     # colors 리스트
@@ -674,10 +670,14 @@ class WindowClass(QMainWindow, form_class):
                 print(self.pathName)
                 
                 if self.pathName:
-                    for idx, dirName in enumerate(self.class_names):
-                        set_directory.set_directory(
-                            self.projectName, dirName, self.pathName + '/' + dirName, idx
-                        )
+                    # Pass the function to execute
+                    worker = Worker('dataLoad') # Any other args, kwargs are passed to the run function
+                    worker.signals.result.connect(myWindow.print_output)
+                    worker.signals.finished.connect(myWindow.thread_complete)
+                    worker.signals.progress.connect(myWindow.progress_fn)
+
+                    # Execute
+                    myWindow.threadpool.start(worker)
         else:
             self.warningMSG("주의", "프로젝트를 먼저 생성/선택 해주십시오.")
 
@@ -751,8 +751,8 @@ class WindowClass(QMainWindow, form_class):
         self.btnLearnSettings.setEnabled(False)
         self.btnTraining.setEnabled(False)
         self.btnTest.setEnabled(False)
-        self.btnOpenDir.clicked.connect(False)
-        self.btnHome.clicked.connect(False)
+        self.btnOpenDir.setEnabled(False)
+        self.btnHome.setEnabled(False)
 
     def btnEnable(self):
         self.btnCreateProject.setEnabled(True)
@@ -760,8 +760,8 @@ class WindowClass(QMainWindow, form_class):
         self.btnLearnSettings.setEnabled(True)
         self.btnTraining.setEnabled(True)
         self.btnTest.setEnabled(True)
-        self.btnOpenDir.clicked.connect(True)
-        self.btnHome.clicked.connect(True)
+        self.btnOpenDir.setEnabled(True)
+        self.btnHome.setEnabled(True)
 
     def training(self):
         if self.learn_train_path:
