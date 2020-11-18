@@ -527,10 +527,6 @@ class TestModelSelect(QDialog):
         
 
         myWindow.TestResultWidget.show()
-<<<<<<< HEAD
-        myWindow.select_test_model = item.text()
-        test_function2.test(item.text(), myWindow)
-=======
         
         myWindow.test_model_name = item.text()
         # Pass the function to execute
@@ -541,7 +537,6 @@ class TestModelSelect(QDialog):
 
         # Execute
         myWindow.threadpool.start(worker)
->>>>>>> feature/test_multiThreading
 
 # MainWindow
 class WindowClass(QMainWindow, form_class):
@@ -556,13 +551,8 @@ class WindowClass(QMainWindow, form_class):
     learn_num_data = []
     sIMG = ""
     train_list_data = []
-<<<<<<< HEAD
-    select_test_model = ''
-    # learn_val_path = ''
-=======
     test_model_name = ''
     learn_val_path = ''
->>>>>>> feature/test_multiThreading
     send_valve_popup_signal = pyqtSignal(bool, name='sendValvePopupSignal')
 
     # colors 리스트
