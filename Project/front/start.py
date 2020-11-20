@@ -58,6 +58,8 @@ class WorkerSignals(QObject):
     result = pyqtSignal(object)
     progress = pyqtSignal(int)
 
+    showConfusionMatrix = pyqtSignal()
+
 
 class Worker(QRunnable):
     '''
@@ -119,25 +121,25 @@ class Worker(QRunnable):
             myWindow.textBox_terminal.moveCursor(QtGui.QTextCursor.End)
         elif self.order == 'test':
             test_function2.test(self.model_name, myWindow)
-            myWindow.label_14.hide()
-            myWindow.TestResultWidget.setStyleSheet("background-color : rgb(64, 64, 64);")
-            myWindow.ResultSave.show()
-            myWindow.ResultNo.show()
+            # myWindow.label_14.hide()
+            # myWindow.TestResultWidget.setStyleSheet("background-color : rgb(64, 64, 64);")
+            # myWindow.ResultSave.show()
+            # myWindow.ResultNo.show()
 
-            myWindow.label_6.show()
-            myWindow.label_8.show()
-            myWindow.label_9.show()
-            myWindow.confusionMatrixTable.show()
-            myWindow.precisionTable.show()
-            myWindow.recallTable.show()
-            myWindow.label_10.show()
-            myWindow.label_11.show()
-            myWindow.accuracyTable.show()
-            myWindow.label_12.show()
-            myWindow.macroPrecisionLabel.show()
-            myWindow.label_13.show()
+            # myWindow.label_6.show()
+            # myWindow.label_8.show()
+            # myWindow.label_9.show()
+            # myWindow.confusionMatrixTable.show()
+            # myWindow.precisionTable.show()
+            # myWindow.recallTable.show()
+            # myWindow.label_10.show()
+            # myWindow.label_11.show()
+            # myWindow.accuracyTable.show()
+            # myWindow.label_12.show()
+            # myWindow.macroPrecisionLabel.show()
+            # myWindow.label_13.show()
         
-            myWindow.TestResultWidget.show()
+            # myWindow.TestResultWidget.show()
         elif self.order == 'dataLoad':
             for idx, dirName in enumerate(myWindow.class_names):
                 set_directory.set_directory(
@@ -523,22 +525,123 @@ class TestModelSelect(QDialog):
         # vbox.addWidget(buttonBox)
         self.setLayout(vbox)
         # self.setGeometry(300, 300, 300, 300)
+
+    def showConfusionMatrix(self):
+        # # click 함수가 없는 Widget들을 클릭 가능하게 해주는 함수
+        # def clickable(widget):
+        #     class Filter(QObject):
+        #         clicked = pyqtSignal()	#pyside2 사용자는 pyqtSignal() -> Signal()로 변경
+        #         def eventFilter(self, obj, event):
+        #             if obj == widget:
+        #                 if event.type() == QEvent.MouseButtonRelease:
+        #                     if obj.rect().contains(event.pos()):
+        #                         self.clicked.emit()
+        #                         # The developer can opt for .emit(obj) to get the object within the slot.
+        #                         return True
+                    
+        #             return False
+            
+        #     filter = Filter(widget)
+        #     widget.installEventFilter(filter)
+        #     return filter.clicked
         
+        # def show_img(i, j):
+        #     # 레이아웃 클리어    
+        #     for x in reversed(range(window.testedImageLayout.count())): 
+        #         window.testedImageLayout.itemAt(x).widget().setParent(None)
 
-    def itemActivated_event(self, item):
-        self.hide()
+        #     img_path = './learnData/' + window.projectName + '/test/' + classes[i] + '/'
+        #     scrollArea = QScrollArea()
+        #     l = QVBoxLayout()
+        #     imgLabels = []
 
-        # myWindow.test_model_name = item.text()
-        # # Pass the function to execute
-        # worker = Worker('test') # Any other args, kwargs are passed to the run function
-        # worker.signals.result.connect(myWindow.print_output)
-        # worker.signals.finished.connect(myWindow.thread_complete)
-        # worker.signals.progress.connect(myWindow.progress_fn)
+        #     def make_fn(class_name, file_name):
+        #         def _function():
+        #             if model_name.split('_')[0] == 'VGG':
+        #                 VGG16_Grad_cam(class_name, file_name, window.projectName)
+        #             elif model_name.split('_')[0] == 'ResNet50':
+        #                 RESNET50_Grad_cam(class_name, file_name, window.projectName)
+        #             elif model_name.split('_')[0] == 'EfficientnetB0':
+        #                 EFFICIENTNETB0_Grad_cam(class_name, file_name, window.projectName)
+        #         return _function
 
-        # # Execute
-        # myWindow.threadpool.start(worker)
+        #     # 익한 테스트
+        #     for idx, file in enumerate(img_info[i][j]):
+        #         pixmap = QPixmap(os.path.join(img_path, file[0]))
+        #         if not pixmap.isNull():
+        #             pixmap = pixmap.scaled(96, 96)
+        #             globals()['confusion_label{}' .format(idx)] = QLabel(pixmap=pixmap)
+        #             globals()['confusion_function{}' .format(idx)] = make_fn(classes[i], file[0])
+        #             clickable(globals()['confusion_label{}' .format(idx)]).connect(globals()['confusion_function{}' .format(idx)])
+        #             imgLabelFileName = QLabel(file[0])
+        #             imgPrediction = QLabel(str(file[1]) + "%")
+        #             l.addWidget(globals()['confusion_label{}' .format(idx)])
+        #             l.addWidget(imgLabelFileName)
+        #             l.addWidget(imgPrediction)
+            
+        #     w = QWidget()
+        #     w.setLayout(l)
+        #     scrollArea.setWidget(w)
+        #     window.testedImageLayout.addWidget(scrollArea)
 
-        test_function2.test(item.text(), myWindow)
+        # classes2 = []
+        # for c in classes:
+        #     classes2.append('_'.join(c.split('_')[1:]))
+            
+        # # show confusion matrix
+        # window.confusionMatrixTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # window.confusionMatrixTable.setColumnCount(len(cm))
+        # window.confusionMatrixTable.setHorizontalHeaderLabels(classes2)
+        # window.confusionMatrixTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # window.confusionMatrixTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # window.confusionMatrixTable.setRowCount(len(cm))
+        # window.confusionMatrixTable.setVerticalHeaderLabels(classes2)
+        # for i in range(len(cm)):
+        #     for j in range(len(cm)):
+        #         window.confusionMatrixTable.setItem(i, j, QTableWidgetItem(str(cm[i][j])))
+        #         if cm[i][j]/sum(cm[i]) >= 0.8:
+        #             window.confusionMatrixTable.item(i, j).setBackground(QColor("#2E75B6"))
+        #         elif cm[i][j]/sum(cm[i]) >= 0.6:
+        #             window.confusionMatrixTable.item(i, j).setBackground(QColor("#9DC3E6"))
+        #         elif cm[i][j]/sum(cm[i]) >= 0.4:
+        #             window.confusionMatrixTable.item(i, j).setBackground(QColor("#BDD7EE"))
+        #         elif cm[i][j]/sum(cm[i]) >= 0.2:
+        #             window.confusionMatrixTable.item(i, j).setBackground(QColor("#DEEBF7"))
+        #         else:
+        #             window.confusionMatrixTable.item(i, j).setBackground(QColor("#FFFFFF"))
+        
+        # # show confusion matrix image
+        # window.confusionMatrixTable.cellClicked.connect(show_img)
+
+        # # show precision, recall, accuracy
+        # window.precisionTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # window.precisionTable.setColumnCount(len(cm))
+        # window.precisionTable.setRowCount(1)
+        # window.precisionTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # window.precisionTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # window.recallTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # window.recallTable.setRowCount(len(cm))
+        # window.recallTable.setColumnCount(1)
+        # window.recallTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # window.recallTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # # tmpPrecision = []
+        # # tmpRecall = []
+        # for i in range(len(cm)):
+        #     window.precisionTable.setItem(0, i, QTableWidgetItem(str(precision[i]) + "%"))
+        #     window.recallTable.setItem(i, 0, QTableWidgetItem(str(recall[i]) + "%"))
+        # # window.precisionTable.setHorizontalHeaderLabels(tmpPrecision)
+        # # window.recallTable.setVerticalHeaderLabels(tmpRecall)
+        # window.precisionTable.verticalHeader().setVisible(False)
+        # window.precisionTable.horizontalHeader().setVisible(False)
+        # window.recallTable.verticalHeader().setVisible(False)
+        # window.recallTable.horizontalHeader().setVisible(False)
+
+        # window.accuracyTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # window.accuracyTable.setColumnCount(1)
+        # window.accuracyTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # window.accuracyTable.setHorizontalHeaderLabels([str(acc) + "%"])
+        
+        # window.macroPrecisionLabel.setText(str(macro_precision) + "%")
         myWindow.label_14.hide()
         myWindow.TestResultWidget.setStyleSheet("background-color : rgb(64, 64, 64);")
         myWindow.ResultSave.show()
@@ -558,6 +661,38 @@ class TestModelSelect(QDialog):
         myWindow.label_13.show()
     
         myWindow.TestResultWidget.show()
+
+    def itemActivated_event(self, item):
+        self.hide()
+
+        myWindow.test_model_name = item.text()
+        # Pass the function to execute
+        worker = Worker('test') # Any other args, kwargs are passed to the run function
+        worker.signals.showConfusionMatrix.connect(self.showConfusionMatrix)
+
+        # Execute
+        myWindow.threadpool.start(worker)
+
+        # test_function2.test(item.text(), myWindow)
+        # myWindow.label_14.hide()
+        # myWindow.TestResultWidget.setStyleSheet("background-color : rgb(64, 64, 64);")
+        # myWindow.ResultSave.show()
+        # myWindow.ResultNo.show()
+
+        # myWindow.label_6.show()
+        # myWindow.label_8.show()
+        # myWindow.label_9.show()
+        # myWindow.confusionMatrixTable.show()
+        # myWindow.precisionTable.show()
+        # myWindow.recallTable.show()
+        # myWindow.label_10.show()
+        # myWindow.label_11.show()
+        # myWindow.accuracyTable.show()
+        # myWindow.label_12.show()
+        # myWindow.macroPrecisionLabel.show()
+        # myWindow.label_13.show()
+    
+        # myWindow.TestResultWidget.show()
         
 
 # MainWindow

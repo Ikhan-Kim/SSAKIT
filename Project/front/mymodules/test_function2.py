@@ -130,8 +130,7 @@ def test(model_name, window):
             recall.append(tmp)
         macro_precision = sum(precision) / len(precision)
 
-        # classes = ['airplane', 'bird', 'car', 'cat', 'deer', 'dog', 'horse', 'monkey', 'ship', 'truck']
-
+       
         # confusion matrix에 대응되는 이미지 파일 주소를 저장
         test_classes = os.listdir('./learnData/' + window.projectName + '/test/')
         img_info = [[[] for j in range(len(cm))] for i in range(len(cm))]
@@ -139,151 +138,121 @@ def test(model_name, window):
             for j in range(len(result_labels)//len(cm)):
                 img_info[i][result_labels[i * len(result_labels)//len(cm) + j][1]].append([os.listdir('./learndata/' + window.projectName + '/test/' + classes[i])[j], result_labels[i * len(cm) + j][2]])
         
-        # click 함수가 없는 Widget들을 클릭 가능하게 해주는 함수
-        def clickable(widget):
-            class Filter(QObject):
-                clicked = pyqtSignal()	#pyside2 사용자는 pyqtSignal() -> Signal()로 변경
-                def eventFilter(self, obj, event):
-                    if obj == widget:
-                        if event.type() == QEvent.MouseButtonRelease:
-                            if obj.rect().contains(event.pos()):
-                                self.clicked.emit()
-                                # The developer can opt for .emit(obj) to get the object within the slot.
-                                return True
+        # # click 함수가 없는 Widget들을 클릭 가능하게 해주는 함수
+        # def clickable(widget):
+        #     class Filter(QObject):
+        #         clicked = pyqtSignal()	#pyside2 사용자는 pyqtSignal() -> Signal()로 변경
+        #         def eventFilter(self, obj, event):
+        #             if obj == widget:
+        #                 if event.type() == QEvent.MouseButtonRelease:
+        #                     if obj.rect().contains(event.pos()):
+        #                         self.clicked.emit()
+        #                         # The developer can opt for .emit(obj) to get the object within the slot.
+        #                         return True
                     
-                    return False
+        #             return False
             
-            filter = Filter(widget)
-            widget.installEventFilter(filter)
-            return filter.clicked
+        #     filter = Filter(widget)
+        #     widget.installEventFilter(filter)
+        #     return filter.clicked
         
-        def show_img(i, j):
-            sc = []
-                
-            for x in reversed(range(window.testedImageLayout.count())): 
-                window.testedImageLayout.itemAt(x).widget().setParent(None)
-            img_path = './learnData/' + window.projectName + '/test/' + classes[i] + '/'
-            scrollArea = QScrollArea()
-            l = QVBoxLayout()
-            imgLabels = []
-            # for file in enumerate(img_info[i][j]):
-            #     pixmap = QPixmap(os.path.join(img_path, file[0]))
-            #     if not pixmap.isNull():
-            #         pixmap = pixmap.scaled(96, 96)
-            #         imgLabels.append(QLabel(pixmap=pixmap))
-            #         def show_cam():
-            #             VGG16_Grad_cam(classes[i], file[0])
-            #         sc.append([classes[i], file[0]])
-            #         # clickable(imgLabels[-1]).connect(show_cam)
-            #         # clickable(imgLabel).connect(show_cam(classes[i], file[0]))
-            #         imgLabelFileName = QLabel(file[0])
-            #         imgPrediction = QLabel(str(file[1]) + "%")
-            #         l.addWidget(imgLabels[-1])
-            #         l.addWidget(imgLabelFileName)
-            #         l.addWidget(imgPrediction)
+        # def show_img(i, j):
+        #     # 레이아웃 클리어    
+        #     for x in reversed(range(window.testedImageLayout.count())): 
+        #         window.testedImageLayout.itemAt(x).widget().setParent(None)
 
-            def make_fn(class_name, file_name):
-                def _function():
-                    if model_name.split('_')[0] == 'VGG':
-                        VGG16_Grad_cam(class_name, file_name, window.projectName)
-                    elif model_name.split('_')[0] == 'ResNet50':
-                        RESNET50_Grad_cam(class_name, file_name, window.projectName)
-                    elif model_name.split('_')[0] == 'EfficientnetB0':
-                        EFFICIENTNETB0_Grad_cam(class_name, file_name, window.projectName)
-                return _function
+        #     img_path = './learnData/' + window.projectName + '/test/' + classes[i] + '/'
+        #     scrollArea = QScrollArea()
+        #     l = QVBoxLayout()
+        #     imgLabels = []
 
-            # 익한 테스트
-            for idx, file in enumerate(img_info[i][j]):
-                pixmap = QPixmap(os.path.join(img_path, file[0]))
-                if not pixmap.isNull():
-                    pixmap = pixmap.scaled(96, 96)
-                    globals()['confusion_label{}' .format(idx)] = QLabel(pixmap=pixmap)
-                    # def show_cam():
-                    #     VGG16_Grad_cam(classes[i], file[0])
-                    globals()['confusion_function{}' .format(idx)] = make_fn(classes[i], file[0])
-                    sc.append([classes[i], file[0]])
-                    clickable(globals()['confusion_label{}' .format(idx)]).connect(globals()['confusion_function{}' .format(idx)])
-                    imgLabelFileName = QLabel(file[0])
-                    imgPrediction = QLabel(str(file[1]) + "%")
-                    l.addWidget(globals()['confusion_label{}' .format(idx)])
-                    l.addWidget(imgLabelFileName)
-                    l.addWidget(imgPrediction)
+        #     def make_fn(class_name, file_name):
+        #         def _function():
+        #             if model_name.split('_')[0] == 'VGG':
+        #                 VGG16_Grad_cam(class_name, file_name, window.projectName)
+        #             elif model_name.split('_')[0] == 'ResNet50':
+        #                 RESNET50_Grad_cam(class_name, file_name, window.projectName)
+        #             elif model_name.split('_')[0] == 'EfficientnetB0':
+        #                 EFFICIENTNETB0_Grad_cam(class_name, file_name, window.projectName)
+        #         return _function
+
+        #     # 익한 테스트
+        #     for idx, file in enumerate(img_info[i][j]):
+        #         pixmap = QPixmap(os.path.join(img_path, file[0]))
+        #         if not pixmap.isNull():
+        #             pixmap = pixmap.scaled(96, 96)
+        #             globals()['confusion_label{}' .format(idx)] = QLabel(pixmap=pixmap)
+        #             globals()['confusion_function{}' .format(idx)] = make_fn(classes[i], file[0])
+        #             clickable(globals()['confusion_label{}' .format(idx)]).connect(globals()['confusion_function{}' .format(idx)])
+        #             imgLabelFileName = QLabel(file[0])
+        #             imgPrediction = QLabel(str(file[1]) + "%")
+        #             l.addWidget(globals()['confusion_label{}' .format(idx)])
+        #             l.addWidget(imgLabelFileName)
+        #             l.addWidget(imgPrediction)
             
-            sc2 = []
-            for idx, s in enumerate(sc):
-                sc2.append([idx, s[0], s[1]])
-            print(sc2)
+        #     w = QWidget()
+        #     w.setLayout(l)
+        #     scrollArea.setWidget(w)
+        #     window.testedImageLayout.addWidget(scrollArea)
 
-            # for idx, img in enumerate(imgLabels):
-            #     def show_cam():
-            #         VGG16_Grad_cam(sc[idx][0], sc[idx][1])
-            #     clickable(img).connect(show_cam)
-
+        # classes2 = []
+        # for c in classes:
+        #     classes2.append('_'.join(c.split('_')[1:]))
             
-
-            w = QWidget()
-            w.setLayout(l)
-            scrollArea.setWidget(w)
-            window.testedImageLayout.addWidget(scrollArea)
-
-        classes2 = []
-        for c in classes:
-            classes2.append('_'.join(c.split('_')[1:]))
-        # show confusion matrix
-        print(cm)
-        window.confusionMatrixTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        window.confusionMatrixTable.setColumnCount(len(cm))
-        window.confusionMatrixTable.setHorizontalHeaderLabels(classes2)
-        window.confusionMatrixTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        window.confusionMatrixTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        window.confusionMatrixTable.setRowCount(len(cm))
-        window.confusionMatrixTable.setVerticalHeaderLabels(classes2)
-        for i in range(len(cm)):
-            for j in range(len(cm)):
-                window.confusionMatrixTable.setItem(i, j, QTableWidgetItem(str(cm[i][j])))
-                if cm[i][j]/sum(cm[i]) >= 0.8:
-                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#2E75B6"))
-                elif cm[i][j]/sum(cm[i]) >= 0.6:
-                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#9DC3E6"))
-                elif cm[i][j]/sum(cm[i]) >= 0.4:
-                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#BDD7EE"))
-                elif cm[i][j]/sum(cm[i]) >= 0.2:
-                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#DEEBF7"))
-                else:
-                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#FFFFFF"))
+        # # show confusion matrix
+        # window.confusionMatrixTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # window.confusionMatrixTable.setColumnCount(len(cm))
+        # window.confusionMatrixTable.setHorizontalHeaderLabels(classes2)
+        # window.confusionMatrixTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # window.confusionMatrixTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # window.confusionMatrixTable.setRowCount(len(cm))
+        # window.confusionMatrixTable.setVerticalHeaderLabels(classes2)
+        # for i in range(len(cm)):
+        #     for j in range(len(cm)):
+        #         window.confusionMatrixTable.setItem(i, j, QTableWidgetItem(str(cm[i][j])))
+        #         if cm[i][j]/sum(cm[i]) >= 0.8:
+        #             window.confusionMatrixTable.item(i, j).setBackground(QColor("#2E75B6"))
+        #         elif cm[i][j]/sum(cm[i]) >= 0.6:
+        #             window.confusionMatrixTable.item(i, j).setBackground(QColor("#9DC3E6"))
+        #         elif cm[i][j]/sum(cm[i]) >= 0.4:
+        #             window.confusionMatrixTable.item(i, j).setBackground(QColor("#BDD7EE"))
+        #         elif cm[i][j]/sum(cm[i]) >= 0.2:
+        #             window.confusionMatrixTable.item(i, j).setBackground(QColor("#DEEBF7"))
+        #         else:
+        #             window.confusionMatrixTable.item(i, j).setBackground(QColor("#FFFFFF"))
         
-        # show confusion matrix image
-        window.confusionMatrixTable.cellClicked.connect(show_img)
+        # # show confusion matrix image
+        # window.confusionMatrixTable.cellClicked.connect(show_img)
 
-        # show precision, recall, accuracy
-        window.precisionTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        window.precisionTable.setColumnCount(len(cm))
-        window.precisionTable.setRowCount(1)
-        window.precisionTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        window.precisionTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        window.recallTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        window.recallTable.setRowCount(len(cm))
-        window.recallTable.setColumnCount(1)
-        window.recallTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        window.recallTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        # tmpPrecision = []
-        # tmpRecall = []
-        for i in range(len(cm)):
-            window.precisionTable.setItem(0, i, QTableWidgetItem(str(precision[i]) + "%"))
-            window.recallTable.setItem(i, 0, QTableWidgetItem(str(recall[i]) + "%"))
-        # window.precisionTable.setHorizontalHeaderLabels(tmpPrecision)
-        # window.recallTable.setVerticalHeaderLabels(tmpRecall)
-        window.precisionTable.verticalHeader().setVisible(False)
-        window.precisionTable.horizontalHeader().setVisible(False)
-        window.recallTable.verticalHeader().setVisible(False)
-        window.recallTable.horizontalHeader().setVisible(False)
+        # # show precision, recall, accuracy
+        # window.precisionTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # window.precisionTable.setColumnCount(len(cm))
+        # window.precisionTable.setRowCount(1)
+        # window.precisionTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # window.precisionTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # window.recallTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # window.recallTable.setRowCount(len(cm))
+        # window.recallTable.setColumnCount(1)
+        # window.recallTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # window.recallTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # # tmpPrecision = []
+        # # tmpRecall = []
+        # for i in range(len(cm)):
+        #     window.precisionTable.setItem(0, i, QTableWidgetItem(str(precision[i]) + "%"))
+        #     window.recallTable.setItem(i, 0, QTableWidgetItem(str(recall[i]) + "%"))
+        # # window.precisionTable.setHorizontalHeaderLabels(tmpPrecision)
+        # # window.recallTable.setVerticalHeaderLabels(tmpRecall)
+        # window.precisionTable.verticalHeader().setVisible(False)
+        # window.precisionTable.horizontalHeader().setVisible(False)
+        # window.recallTable.verticalHeader().setVisible(False)
+        # window.recallTable.horizontalHeader().setVisible(False)
 
-        window.accuracyTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
-        window.accuracyTable.setColumnCount(1)
-        window.accuracyTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        window.accuracyTable.setHorizontalHeaderLabels([str(acc) + "%"])
+        # window.accuracyTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
+        # window.accuracyTable.setColumnCount(1)
+        # window.accuracyTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # window.accuracyTable.setHorizontalHeaderLabels([str(acc) + "%"])
         
-        window.macroPrecisionLabel.setText(str(macro_precision) + "%")
+        # window.macroPrecisionLabel.setText(str(macro_precision) + "%")
 
         
 
