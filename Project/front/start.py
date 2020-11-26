@@ -1038,6 +1038,8 @@ class WindowClass(QMainWindow, form_class):
                             Aug_lst.append('R-180')
                         else:
                             continue
+                    elif idx == 4:
+                        Aug_lst.append('C')
                 else:
                     continue
 
