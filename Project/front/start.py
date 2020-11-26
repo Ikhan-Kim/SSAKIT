@@ -819,6 +819,7 @@ class WindowClass(QMainWindow, form_class):
         self.btnTest.setEnabled(False)
         self.btnOpenDir.setEnabled(False)
         self.btnHome.setEnabled(False)
+        self.classEditBtn.setEnabled(False)
 
     def btnEnable(self):
         self.btnCreateProject.setEnabled(True)
@@ -828,6 +829,7 @@ class WindowClass(QMainWindow, form_class):
         self.btnTest.setEnabled(True)
         self.btnOpenDir.setEnabled(True)
         self.btnHome.setEnabled(True)
+        self.classEditBtn.setEnabled(True)
 
     def training(self):
         if self.settingsData:
