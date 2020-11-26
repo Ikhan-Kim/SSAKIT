@@ -407,9 +407,11 @@ class ProjectNameClass(QDialog):
         
         # 기존 프로젝트 불러오기
         self.loadTable = QTableWidget()
+        self.loadTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.loadTable.setStyleSheet("color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);")
         self.createTable()
         self.loadTable.cellClicked.connect(self.cellClick)
+        self.loadTable.cellDoubleClicked.connect(self.cellDoubleClick)
         # self.btnDelete = QPushButton('삭제하기')
         # self.btnDelete.setStyleSheet("font: 12pt 'a디딤돌'; background-color: rgb(175, 171, 171); color: rgb(225, 225, 225);")
         # self.btnSelect = QPushButton(' 불러오기')
@@ -454,6 +456,11 @@ class ProjectNameClass(QDialog):
         self.clickedRow = row
         print(self.clickedRow)
     
+    def cellDoubleClick(self, row, column):
+        WindowClass.projectName = self.project_list[self.clickedRow]
+        self.nameSignal.emit()
+        self.hide()  
+
     def pjtSelect(self):
         if self.clickedRow =="":
             myWindow.warningMSG("알림", "프로젝트를 선택해 주세요")
