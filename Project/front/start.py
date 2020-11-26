@@ -119,6 +119,25 @@ class Worker(QRunnable):
             myWindow.textBox_terminal.moveCursor(QtGui.QTextCursor.End)
         elif self.order == 'test':
             test_function2.test(self.model_name, myWindow)
+            myWindow.label_14.hide()
+            myWindow.TestResultWidget.setStyleSheet("background-color : rgb(64, 64, 64);")
+            myWindow.ResultSave.show()
+            myWindow.ResultNo.show()
+
+            myWindow.label_6.show()
+            myWindow.label_8.show()
+            myWindow.label_9.show()
+            myWindow.confusionMatrixTable.show()
+            myWindow.precisionTable.show()
+            myWindow.recallTable.show()
+            myWindow.label_10.show()
+            myWindow.label_11.show()
+            myWindow.accuracyTable.show()
+            myWindow.label_12.show()
+            myWindow.macroPrecisionLabel.show()
+            myWindow.label_13.show()
+        
+            myWindow.TestResultWidget.show()
         elif self.order == 'dataLoad':
             for idx, dirName in enumerate(myWindow.class_names):
                 set_directory.set_directory(
@@ -497,6 +516,7 @@ class TestModelSelect(QDialog):
         # buttonBox.rejected.connect(self.reject)
         # buttonBox.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
 
+        # self.label_14.show()
         vbox = QVBoxLayout()
         vbox.addWidget(self.label)
         vbox.addWidget(self.listW)
@@ -507,6 +527,18 @@ class TestModelSelect(QDialog):
 
     def itemActivated_event(self, item):
         self.hide()
+
+        # myWindow.test_model_name = item.text()
+        # # Pass the function to execute
+        # worker = Worker('test') # Any other args, kwargs are passed to the run function
+        # worker.signals.result.connect(myWindow.print_output)
+        # worker.signals.finished.connect(myWindow.thread_complete)
+        # worker.signals.progress.connect(myWindow.progress_fn)
+
+        # # Execute
+        # myWindow.threadpool.start(worker)
+
+        test_function2.test(item.text(), myWindow)
         myWindow.label_14.hide()
         myWindow.TestResultWidget.setStyleSheet("background-color : rgb(64, 64, 64);")
         myWindow.ResultSave.show()
@@ -524,19 +556,9 @@ class TestModelSelect(QDialog):
         myWindow.label_12.show()
         myWindow.macroPrecisionLabel.show()
         myWindow.label_13.show()
-        
-
+    
         myWindow.TestResultWidget.show()
         
-        myWindow.test_model_name = item.text()
-        # Pass the function to execute
-        worker = Worker('test') # Any other args, kwargs are passed to the run function
-        worker.signals.result.connect(myWindow.print_output)
-        worker.signals.finished.connect(myWindow.thread_complete)
-        worker.signals.progress.connect(myWindow.progress_fn)
-
-        # Execute
-        myWindow.threadpool.start(worker)
 
 # MainWindow
 class WindowClass(QMainWindow, form_class):
@@ -701,7 +723,9 @@ class WindowClass(QMainWindow, form_class):
     
     def moveHome(self):
         self.mainWidget.show()
-        self.createProjectFn()
+        # self.createProjectFn()
+        self.tabWidget.setCurrentIndex(0)
+        self.btnColorChange(self.btnLearnSettings)
 
     def dataLoadFn(self):
         if self.projectName:
