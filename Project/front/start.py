@@ -634,7 +634,6 @@ class WindowClass(QMainWindow, form_class):
         self.dirTreeView.doubleClicked.connect(self.fileViewFn)
         self.btnTraining.clicked.connect(self.training)
         self.projectNameDisplay.nameSignal.connect(self.createNameFn)
-        self.pushButton_5.clicked.connect(self.ikhantest)
         self.btnTest.clicked.connect(self.test)
         self.btnOpenDir.clicked.connect(self.openDirFn)
         self.btnHome.clicked.connect(self.moveHome)
@@ -685,8 +684,6 @@ class WindowClass(QMainWindow, form_class):
         self.TestResultWidget.setStyleSheet("background-color: rgb(132, 127, 127);")
         self.resultWidgetMSG.setText("학습한 모델이 삭제 되었습니다 !")
 
-    def ikhantest(self):
-        print(self.settingsData)
     def btnColorChange(self, btn):
         # print(" btn change", btn)
         btns = [self.btnLearnSettings,  self.btnTraining, self.btnTest]
