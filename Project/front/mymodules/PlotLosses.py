@@ -52,11 +52,11 @@ class PlotLosses(keras.callbacks.Callback):
         ax2.legend()
         ax2.set_title("loss")
 
-        if self.i == self.input_epochs:
-            now = time.gmtime(time.time())
-            file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
-                str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
-            self.fig.savefig('result_logs\\'+file_name)
-            print("figure saved!")
+        # if self.i == self.input_epochs:
+        #     now = time.gmtime(time.time())
+        #     file_name = str(now.tm_year) + str(now.tm_mon) + str(now.tm_mday) + \
+        #         str(now.tm_hour) + str(now.tm_min) + str(now.tm_sec)
+        #     self.fig.savefig('result_logs\\'+file_name)
+        #     print("figure saved!")
 
         self.canvas.draw()
