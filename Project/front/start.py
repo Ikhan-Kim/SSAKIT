@@ -698,8 +698,8 @@ class WindowClass(QMainWindow, form_class):
         self.trainListSqlConnect()
         self.learnSettingDisplay = AnotherFormLayout()
         self.learnSettingDisplay.colorSignal.connect(self.changeColorFn)
-        # ClassEditWidget 불러오기
-        self.openClassEditWidget = ClassEditWidget(WindowClass.class_data, self.dbName)
+        # # ClassEditWidget 불러오기
+        # self.openClassEditWidget = ClassEditWidget(WindowClass.class_data, self.dbName)
         self.setWindowTitle('SSAKIT -' + self.projectName)
         self.learnDataPath = './learnData/' + self.projectName
         create_dir.create_dir_flow(self.projectName)
@@ -756,6 +756,9 @@ class WindowClass(QMainWindow, form_class):
         self.TL_select()
         self.learnSettingDisplay.setTLTables()
         # self.learnSettingDisplay = AnotherFormLayout()
+
+        # ClassEditWidget 불러오기
+        self.openClassEditWidget = ClassEditWidget(WindowClass.class_data, self.dbName)
 
         self.tabWidget.setCurrentIndex(0)
         self.class_names = os.listdir(self.learnDataPath + '/train')
@@ -864,6 +867,8 @@ class WindowClass(QMainWindow, form_class):
 
     # ClassEditWidget띄우기
     def ClassEditBtnFunc(self):
+        # ClassEditWidget 불러오기
+        self.openClassEditWidget = ClassEditWidget(WindowClass.class_data, self.dbName)
         self.openClassEditWidget.show()
 
     def f5BtnFunc(self):
