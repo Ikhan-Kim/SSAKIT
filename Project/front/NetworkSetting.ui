@@ -312,7 +312,7 @@ font: 9pt &quot;a스마일L&quot;;</string>
 font: 12pt &quot;a디딤돌&quot;;</string>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="movable">
      <bool>false</bool>
@@ -750,7 +750,7 @@ font: 13pt &quot;a로케트&quot;;</string>
         <x>670</x>
         <y>60</y>
         <width>51</width>
-        <height>381</height>
+        <height>371</height>
        </rect>
       </property>
       <property name="styleSheet">
@@ -842,7 +842,7 @@ font: 13pt &quot;a로케트&quot;;</string>
      <widget class="QWidget" name="formLayoutWidget_2">
       <property name="geometry">
        <rect>
-        <x>800</x>
+        <x>810</x>
         <y>50</y>
         <width>151</width>
         <height>381</height>
@@ -956,7 +956,7 @@ color: rgb(255, 255, 255);</string>
         <string>Save</string>
        </property>
       </widget>
-      <widget class="QPushButton" name="pushButton">
+      <widget class="QPushButton" name="ResultNo">
        <property name="geometry">
         <rect>
          <x>930</x>
@@ -970,15 +970,15 @@ color: rgb(255, 255, 255);</string>
 color: rgb(255, 255, 255);</string>
        </property>
        <property name="text">
-        <string>No</string>
+        <string>Delete</string>
        </property>
       </widget>
-      <widget class="QLabel" name="label_7">
+      <widget class="QLabel" name="resultWidgetMSG">
        <property name="geometry">
         <rect>
-         <x>250</x>
+         <x>30</x>
          <y>10</y>
-         <width>331</width>
+         <width>781</width>
          <height>21</height>
         </rect>
        </property>
@@ -986,9 +986,34 @@ color: rgb(255, 255, 255);</string>
         <string notr="true">color: rgb(255, 255, 255);</string>
        </property>
        <property name="text">
-        <string>학습한 모델을 DB에 저장하시겠습니까? </string>
+        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;학습한 모델을 DB에 저장하시겠습니까? &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
        </property>
       </widget>
+     </widget>
+     <widget class="QLabel" name="label_14">
+      <property name="geometry">
+       <rect>
+        <x>300</x>
+        <y>160</y>
+        <width>381</width>
+        <height>161</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>a로케트</family>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
+        <italic>false</italic>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: 12pt &quot;a로케트&quot;;</string>
+      </property>
+      <property name="text">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:18pt; color:#f17f42;&quot;&gt;Test 중 입니다.&lt;/span&gt;&lt;/p&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; font-size:18pt; color:#f17f42;&quot;&gt;잠시만 기다려 주세요 :)&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
      </widget>
      <zorder>confusionMatrixTable</zorder>
      <zorder>label_6</zorder>
@@ -1004,6 +1029,7 @@ color: rgb(255, 255, 255);</string>
      <zorder>label_11</zorder>
      <zorder>TestResultWidget</zorder>
      <zorder>recallTable</zorder>
+     <zorder>label_14</zorder>
     </widget>
    </widget>
    <widget class="QWidget" name="directory_widget" native="true">

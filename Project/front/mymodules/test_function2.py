@@ -5,8 +5,9 @@ import keras_preprocessing
 from keras_preprocessing import image
 import matplotlib.pyplot as plt
 import itertools
-from PyQt5.QtWidgets import *
+# from PyQt5 import QtGui
 from PyQt5.QtGui import *
+from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from .Grad_cam import *
 
@@ -229,34 +230,53 @@ def test(model_name, window):
         for c in classes:
             classes2.append('_'.join(c.split('_')[1:]))
         # show confusion matrix
+        print(cm)
         window.confusionMatrixTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         window.confusionMatrixTable.setColumnCount(len(cm))
         window.confusionMatrixTable.setHorizontalHeaderLabels(classes2)
         window.confusionMatrixTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        window.confusionMatrixTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
         window.confusionMatrixTable.setRowCount(len(cm))
         window.confusionMatrixTable.setVerticalHeaderLabels(classes2)
         for i in range(len(cm)):
             for j in range(len(cm)):
                 window.confusionMatrixTable.setItem(i, j, QTableWidgetItem(str(cm[i][j])))
+                if cm[i][j]/sum(cm[i]) >= 0.8:
+                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#2E75B6"))
+                elif cm[i][j]/sum(cm[i]) >= 0.6:
+                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#9DC3E6"))
+                elif cm[i][j]/sum(cm[i]) >= 0.4:
+                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#BDD7EE"))
+                elif cm[i][j]/sum(cm[i]) >= 0.2:
+                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#DEEBF7"))
+                else:
+                    window.confusionMatrixTable.item(i, j).setBackground(QColor("#FFFFFF"))
         
         # show confusion matrix image
         window.confusionMatrixTable.cellClicked.connect(show_img)
 
-
         # show precision, recall, accuracy
         window.precisionTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         window.precisionTable.setColumnCount(len(cm))
+        window.precisionTable.setRowCount(1)
         window.precisionTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        window.precisionTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
         window.recallTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         window.recallTable.setRowCount(len(cm))
+        window.recallTable.setColumnCount(1)
         window.recallTable.horizontalHeader().setSectionResizeMode(QHeaderView.Stretch)
-        tmpPrecision = []
-        tmpRecall = []
+        window.recallTable.verticalHeader().setSectionResizeMode(QHeaderView.Stretch)
+        # tmpPrecision = []
+        # tmpRecall = []
         for i in range(len(cm)):
-            tmpPrecision.append(str(precision[i]) + "%")
-            tmpRecall.append(str(recall[i]) + "%")
-        window.precisionTable.setHorizontalHeaderLabels(tmpPrecision)
-        window.recallTable.setVerticalHeaderLabels(tmpRecall)
+            window.precisionTable.setItem(0, i, QTableWidgetItem(str(precision[i]) + "%"))
+            window.recallTable.setItem(i, 0, QTableWidgetItem(str(recall[i]) + "%"))
+        # window.precisionTable.setHorizontalHeaderLabels(tmpPrecision)
+        # window.recallTable.setVerticalHeaderLabels(tmpRecall)
+        window.precisionTable.verticalHeader().setVisible(False)
+        window.precisionTable.horizontalHeader().setVisible(False)
+        window.recallTable.verticalHeader().setVisible(False)
+        window.recallTable.horizontalHeader().setVisible(False)
 
         window.accuracyTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         window.accuracyTable.setColumnCount(1)
