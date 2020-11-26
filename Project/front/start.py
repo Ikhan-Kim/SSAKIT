@@ -407,9 +407,11 @@ class ProjectNameClass(QDialog):
         
         # 기존 프로젝트 불러오기
         self.loadTable = QTableWidget()
+        self.loadTable.setEditTriggers(QAbstractItemView.NoEditTriggers)
         self.loadTable.setStyleSheet("color: rgb(0, 0, 0); background-color: rgb(255, 255, 255);")
         self.createTable()
         self.loadTable.cellClicked.connect(self.cellClick)
+        self.loadTable.cellDoubleClicked.connect(self.cellDoubleClick)
         # self.btnDelete = QPushButton('삭제하기')
         # self.btnDelete.setStyleSheet("font: 12pt 'a디딤돌'; background-color: rgb(175, 171, 171); color: rgb(225, 225, 225);")
         # self.btnSelect = QPushButton(' 불러오기')
@@ -454,6 +456,11 @@ class ProjectNameClass(QDialog):
         self.clickedRow = row
         print(self.clickedRow)
     
+    def cellDoubleClick(self, row, column):
+        WindowClass.projectName = self.project_list[self.clickedRow]
+        self.nameSignal.emit()
+        self.hide()  
+
     def pjtSelect(self):
         if self.clickedRow =="":
             myWindow.warningMSG("알림", "프로젝트를 선택해 주세요")
@@ -819,6 +826,7 @@ class WindowClass(QMainWindow, form_class):
         self.btnTest.setEnabled(False)
         self.btnOpenDir.setEnabled(False)
         self.btnHome.setEnabled(False)
+        self.classEditBtn.setEnabled(False)
 
     def btnEnable(self):
         self.btnCreateProject.setEnabled(True)
@@ -828,9 +836,10 @@ class WindowClass(QMainWindow, form_class):
         self.btnTest.setEnabled(True)
         self.btnOpenDir.setEnabled(True)
         self.btnHome.setEnabled(True)
+        self.classEditBtn.setEnabled(True)
 
     def training(self):
-        if self.learn_train_path:
+        if self.settingsData:
             self.infoMSG.setText("training이 완료되면 Test 버튼을 클릭 해 주세요.")
             self.tabWidget.setCurrentIndex(1)
             self.btnColorChange(self.btnTraining)
@@ -1036,6 +1045,8 @@ class WindowClass(QMainWindow, form_class):
                             Aug_lst.append('R-180')
                         else:
                             continue
+                    elif idx == 4:
+                        Aug_lst.append('C')
                 else:
                     continue
 
