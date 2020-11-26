@@ -830,7 +830,7 @@ class WindowClass(QMainWindow, form_class):
         self.btnHome.setEnabled(True)
 
     def training(self):
-        if self.learn_train_path:
+        if self.settingsData:
             self.infoMSG.setText("training이 완료되면 Test 버튼을 클릭 해 주세요.")
             self.tabWidget.setCurrentIndex(1)
             self.btnColorChange(self.btnTraining)
