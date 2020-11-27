@@ -190,9 +190,6 @@ class AnotherFormLayout(QDialog):
         self.new_learn.clicked.connect(self.newFn)
         self.continue_learn.clicked.connect(self.continueFn)
         self.setWindowTitle("Train Wizard")
-
-        
-        # ???????????
     
     def createFormGroupBox(self):
         # model name
@@ -412,10 +409,6 @@ class ProjectNameClass(QDialog):
         self.createTable()
         self.loadTable.cellClicked.connect(self.cellClick)
         self.loadTable.cellDoubleClicked.connect(self.cellDoubleClick)
-        # self.btnDelete = QPushButton('삭제하기')
-        # self.btnDelete.setStyleSheet("font: 12pt 'a디딤돌'; background-color: rgb(175, 171, 171); color: rgb(225, 225, 225);")
-        # self.btnSelect = QPushButton(' 불러오기')
-        # self.btnSelect.setStyleSheet("font: 12pt 'a디딤돌'; background-color: rgb(241, 127, 66); color: rgb(225, 225, 225);")
         buttonBox = QDialogButtonBox()
         buttonBox.addButton('삭제하기', QDialogButtonBox.AcceptRole)
         buttonBox.addButton('불러오기', QDialogButtonBox.RejectRole)
@@ -480,6 +473,7 @@ class ProjectNameClass(QDialog):
                 del_path = './learnData/' + self.project_list[self.clickedRow]
                 shutil.rmtree(del_path)
                 self.project_list = os.listdir('./learnData/')
+                self.clickedRow = ""
                 self.createTable()
 
     def projectNameFn(self):
@@ -501,6 +495,7 @@ class ProjectNameClass(QDialog):
 class TestModelSelect(QDialog):
     def __init__(self):
         super().__init__()
+        self.clickedRow = ""
         self.setGeometry(760,300,400,400)
         self.setStyleSheet("background-color: #847f7f;")
         self.setWindowTitle("Test Model Select")
@@ -514,23 +509,68 @@ class TestModelSelect(QDialog):
             self.listW.addItem(os.listdir("./checkpoint")[i])
         self.listW.setStyleSheet("background-color: rgb(255, 255, 255); font: 14pt 'a디딤돌'; color: rgb(0, 0,0);")
         
+        self.listW.itemClicked.connect(self.itemClick)
         self.listW.itemActivated.connect(self.itemActivated_event)
 
+
         # 확인버튼
-        # buttonBox = QDialogButtonBox(
-        #     QDialogButtonBox.Save | QDialogButtonBox.Cancel)
-        # buttonBox.accepted.connect(self.accept)
-        # buttonBox.rejected.connect(self.reject)
-        # buttonBox.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+        buttonBox = QDialogButtonBox()
+        buttonBox.addButton('불러오기', QDialogButtonBox.AcceptRole)
+        buttonBox.addButton('삭제하기', QDialogButtonBox.RejectRole)
+        buttonBox.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+        buttonBox.accepted.connect(self.load)
+        buttonBox.rejected.connect(self.delete)
 
         # self.label_14.show()
         vbox = QVBoxLayout()
         vbox.addWidget(self.label)
         vbox.addWidget(self.listW)
-        # vbox.addWidget(buttonBox)
+        vbox.addWidget(buttonBox)
         self.setLayout(vbox)
         # self.setGeometry(300, 300, 300, 300)
         
+    def itemClick(self, item):
+        self.clickedRow = item.text()
+
+    def load(self):
+        if self.clickedRow =="":
+            myWindow.warningMSG("알림", "모델을 선택해 주세요")
+        else:
+            self.hide()
+            test_function2.test(self.clickedRow, myWindow)
+            myWindow.label_14.hide()
+            myWindow.TestResultWidget.setStyleSheet("background-color : rgb(64, 64, 64);")
+            myWindow.ResultSave.show()
+            myWindow.ResultNo.show()
+
+            myWindow.label_6.show()
+            myWindow.label_8.show()
+            myWindow.label_9.show()
+            myWindow.confusionMatrixTable.show()
+            myWindow.precisionTable.show()
+            myWindow.recallTable.show()
+            myWindow.label_10.show()
+            myWindow.label_11.show()
+            myWindow.accuracyTable.show()
+            myWindow.label_12.show()
+            myWindow.macroPrecisionLabel.show()
+            myWindow.label_13.show()
+        
+            myWindow.TestResultWidget.show()  
+
+    def delete(self):
+        if self.clickedRow =="":
+            myWindow.warningMSG("알림", "모델을 선택해 주세요")
+        else:
+            a = QMessageBox.question(self, "삭제 확인", "정말로 삭제 하시겠습니까?",
+                                 QMessageBox.Yes|QMessageBox.No, QMessageBox.Yes)
+            if a == QMessageBox.Yes:
+                del_path = './checkpoint/' + self.clickedRow
+                os.remove(del_path)
+                self.clickedRow = ""
+                self.listW.clear()
+                for i in range(len(os.listdir("./checkpoint"))):
+                    self.listW.addItem(os.listdir("./checkpoint")[i])
 
     def itemActivated_event(self, item):
         self.hide()
