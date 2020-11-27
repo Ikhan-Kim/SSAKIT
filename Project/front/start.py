@@ -190,9 +190,6 @@ class AnotherFormLayout(QDialog):
         self.new_learn.clicked.connect(self.newFn)
         self.continue_learn.clicked.connect(self.continueFn)
         self.setWindowTitle("Train Wizard")
-
-        
-        # ???????????
     
     def createFormGroupBox(self):
         # model name
@@ -412,10 +409,6 @@ class ProjectNameClass(QDialog):
         self.createTable()
         self.loadTable.cellClicked.connect(self.cellClick)
         self.loadTable.cellDoubleClicked.connect(self.cellDoubleClick)
-        # self.btnDelete = QPushButton('삭제하기')
-        # self.btnDelete.setStyleSheet("font: 12pt 'a디딤돌'; background-color: rgb(175, 171, 171); color: rgb(225, 225, 225);")
-        # self.btnSelect = QPushButton(' 불러오기')
-        # self.btnSelect.setStyleSheet("font: 12pt 'a디딤돌'; background-color: rgb(241, 127, 66); color: rgb(225, 225, 225);")
         buttonBox = QDialogButtonBox()
         buttonBox.addButton('삭제하기', QDialogButtonBox.AcceptRole)
         buttonBox.addButton('불러오기', QDialogButtonBox.RejectRole)
@@ -516,21 +509,28 @@ class TestModelSelect(QDialog):
         
         self.listW.itemActivated.connect(self.itemActivated_event)
 
+
         # 확인버튼
-        # buttonBox = QDialogButtonBox(
-        #     QDialogButtonBox.Save | QDialogButtonBox.Cancel)
-        # buttonBox.accepted.connect(self.accept)
-        # buttonBox.rejected.connect(self.reject)
-        # buttonBox.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+        buttonBox = QDialogButtonBox()
+        buttonBox.addButton('불러오기', QDialogButtonBox.AcceptRole)
+        buttonBox.addButton('삭제하기', QDialogButtonBox.RejectRole)
+        buttonBox.setStyleSheet("background-color: rgb(241, 127, 66); font: 12pt 'a디딤돌'; color: rgb(255, 255,255);")
+        buttonBox.accepted.connect(self.load)
+        buttonBox.rejected.connect(self.delete)
 
         # self.label_14.show()
         vbox = QVBoxLayout()
         vbox.addWidget(self.label)
         vbox.addWidget(self.listW)
-        # vbox.addWidget(buttonBox)
+        vbox.addWidget(buttonBox)
         self.setLayout(vbox)
         # self.setGeometry(300, 300, 300, 300)
         
+    def load(self):
+        pass
+
+    def delete(self):
+        pass
 
     def itemActivated_event(self, item):
         self.hide()
